@@ -1,0 +1,30 @@
+<html>
+<head>
+  <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.custom.css" rel="stylesheet" />
+  <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.8.custom.min.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+    $(function() {
+      $(".tile").draggable();
+      $("#droppable").droppable({
+        drop: function(event, ui) {
+          $(this).find('p').html('Dropped!');
+        }
+      });
+
+    });
+  </script>
+
+
+<div id="draggable" class="tile">
+  <p>Drag me to my target</p>
+</div>
+
+<div id="droppable">
+  <p>Drop here</p>
+</div>
+
+</body>
+</html>
