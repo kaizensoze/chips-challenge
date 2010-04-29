@@ -4,24 +4,19 @@ $(document).ready(function() {
     configure_tiles();
 });
 
-/*
-    TODO: fix so that the generated html is valid
-*/
 function load_tiles() {
     $.getJSON('php/chip.php?action=tiles', function(data) {
         var tile_cols = 10;
-        var tile_section = $('#tile_section');
-        var div, img;
+        var tiles = '';
         jQuery.each(data, function(i, val) {
             if (i % tile_cols == 0) {
-                tile_section.append('<br />');
+                tiles += '<br />';
             }
-            img = $('<img src="' + val + '"/></div>');
-            div = $('<div></div>');
-            div.append(img);
-            div.addClass('tile');
-            tile_section.append(div);
+            tiles += '<div class="tile">'
+                  +  '  <img src="' + val + '"/>';
+                  +  '</div>';
         });
+        $('body').append(tiles);
     });
 }
 

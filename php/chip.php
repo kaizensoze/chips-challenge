@@ -18,7 +18,9 @@ function load_tiles() {
     $images = array();
     $it = new RecursiveDirectoryIterator('../images/tiles');
     foreach (new RecursiveIteratorIterator($it) as $file) {
-        array_push($images, 'images/tiles/' . $file->getFilename());
+        if (!$it->isDot()) {
+            array_push($images, 'images/tiles/' . $file->getFilename());
+        }
     }
     sort($images);
     echo json_encode($images);
