@@ -1,3 +1,7 @@
 .tile {
-    display: inline;
+  display: inline;
+}
+
+table {
+  border-collapse: collapse;
 }

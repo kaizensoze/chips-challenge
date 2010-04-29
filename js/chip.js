@@ -12,7 +12,7 @@ function generate_map() {
     for (var i=0; i < rows; i++) {
         map += '<tr>';
         for (var j=0; j < cols; j++) {
-            map += '<td><img src="' + default_tile + '"/></td>';
+            map += '<td class="map_tile"><img src="' + default_tile + '"/></td>';
         }
         map += '</tr>';
     }
@@ -27,9 +27,12 @@ function configure_tiles() {
         helper: 'clone',
         cursorAt: {left: tile_width/2, top: tile_height/2}
     });
-    $("#droppable").droppable({
+    $(".map_tile").droppable({
         drop: function(event, ui) {
-            $(this).find('p').html('Dropped!');
+            var dragged_tile_src = $(ui.draggable).children(':first').attr('src');
+            var map_tile = $(this).children(':first');
+            map_tile.attr('src', dragged_tile_src);
+            //console.log(map_tile);
         }
     });
 }

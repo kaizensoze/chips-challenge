@@ -2,8 +2,7 @@ do small sample of dynamically loaded image being draggable/droppable [DONE]
 get jquery version to work [Did not work. Going with php approach]
 get tile to clone itself on drag [DONE]
 generate initial 10x10 floor grid [DONE]
-insert tile(s) into floor grid
-  grid, helper, snap*
+insert tile(s) into floor grid [DONE]
 
 add logic to tiles in table map
 when done, iterate over table to generate canvas
