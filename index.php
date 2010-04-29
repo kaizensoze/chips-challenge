@@ -5,13 +5,11 @@
 
   <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
   <script type="text/javascript" src="js/jquery-ui-1.8.custom.min.js"></script>
+  
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
-  <div id="droppable">
-    <p>Drop here</p>
-  </div>
-  
+  <br /><br />
   <!-- Load tile images. -->
   <?php
     $tile_str = '';
