@@ -11,14 +11,17 @@ function load_tiles() {
     $.getJSON('php/chip.php?action=tiles', function(data) {
         var tile_cols = 10;
         var tile_section = $('#tile_section');
-        var tile_subsection = '';
+        var div, img;
         jQuery.each(data, function(i, val) {
             if (i % tile_cols == 0) {
-                tile_subsection += '<br />';
+                tile_section.append('<br />');
             }
-            tile_subsection += '<div class="tile"><img src="' + val + '"/></div>';
+            img = $('<img src="' + val + '"/></div>');
+            div = $('<div></div>');
+            div.append(img);
+            div.addClass('tile');
+            tile_section.append(div);
         });
-        $(tile_section).append(tile_subsection);
     });
 }
 
