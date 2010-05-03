@@ -4,6 +4,22 @@ get tile to clone itself on drag [DONE]
 generate initial 10x10 floor grid [DONE]
 insert tile(s) into floor grid [DONE]
 
+generate level, save resulting bitmap:
+  canvas2Image
+  toDataURL
+
+chip:
+  keys
+  chips
+
+level
+time
+chips_left
+inventory
+
+think about how/why to convert map to canvas
+is canvas even approprate for this?
+
 add logic to tiles in table map
 when done, iterate over table to generate canvas
 

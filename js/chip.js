@@ -8,7 +8,7 @@ function generate_map() {
     var default_tile = 'images/tiles/floor_normal.png';
     var rows = 10;
     var cols = 10;
-    var map = '<table id="map" border="1">';
+    var map = '<table id="map">';
     for (var i=0; i < rows; i++) {
         map += '<tr>';
         for (var j=0; j < cols; j++) {

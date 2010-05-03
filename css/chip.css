@@ -5,3 +5,7 @@
 table {
   border-collapse: collapse;
 }
+
+td {
+  padding: 0px;
+}
