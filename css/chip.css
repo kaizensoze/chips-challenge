@@ -1,3 +1,4 @@
+
 .tile {
   display: inline;
 }
@@ -8,4 +9,8 @@ table {
 
 td {
   padding: 0px;
+}
+
+#map_output {
+	display: block;
 }

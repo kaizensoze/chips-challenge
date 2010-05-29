@@ -5,11 +5,16 @@
 
   <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
   <script type="text/javascript" src="js/jquery-ui-1.8.custom.min.js"></script>
-  
+  <script type="text/javascript" src="js/base64.js"></script>
+  <script type="text/javascript" src="js/canvas2image.js"></script>
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
+
+  <!-- Save map. -->
+  <input type="button" onClick="save_map()" value="Save" />
   <br /><br />
+
   <!-- Load tile images. -->
   <?php
     $tile_str = '';
@@ -36,5 +41,6 @@
     }
     echo $tile_str;
   ?>
+  <br /><br />
 </body>
 </html>
