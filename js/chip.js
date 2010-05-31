@@ -1,12 +1,8 @@
 
 // Map.
 function Map() {
-	this.rows = 20;
-    this.cols = 20;
-	this.data;
-
+	this.data = [];
     this.tile_width = 32;
-	this.viewport_width = 9*tile_width + .5*tile_width;
 
 	this.level_number;
 	this.time;
@@ -36,7 +32,7 @@ var Color = {
 var ItemType = {
 	ENEMY: 0,
 	INVENTORY: 1,
-	CHIP: 2
+	CHIP: 2 // The item, not the protagonist.
 };
 
 var SourceType = {
@@ -56,12 +52,13 @@ var Source = {
 	CHIP : 8,
 	CLEAR : 9,
 	DASH : 10,
-	ENEMY_BALL : 11,
-	ENEMY_BOMB : 12,
-	ENEMY_BUG : 13,
-	ENEMY_FIREBALL : 14,
-	ENEMY_GHOST : 15,
-	ENEMY_TANK : 16,
+	DASH_BOOTS : 35,
+	BALL : 11,
+	BOMB : 12,
+	BUG : 13,
+	FIREBALL : 14,
+	GHOST : 15,
+	TANK : 16,
 	FIRE_BOOTS : 17,
 	FIRE : 18,
 	FIREBALL_GENERATOR : 19,
@@ -83,84 +80,102 @@ var Source = {
 };
 
 var FileToSource = {
-	'block_mud.png' : BLOCK_MUD,
-	'block_normal.png' : BLOCK_NORMAL,
-	'block_questionable.png' : BLOCK_QUESTIONABLE, 
-	'block_switchable.png' : BLOCK_SWITCHABLE,
-	'chip_down.png' : CHIP_DOWN,
-	'chip_left.png' : CHIP_LEFT,
-	'chip_right.png' : CHIP_RIGHT,
-	'chip_up.png' : CHIP_UP,
-	'chip.png' : CHIP,
-	'clear.png' : CLEAR,
-	'dash.png' : DASH,
-	'enemy_ball.png' : ENEMY_BALL,
-	'enemy_bomb.png' : ENEMY_BOMB,
-	'enemy_bug.png' : ENEMY_BUG,
-	'enemy_fireball.png' : ENEMY_FIREBALL,
-	'enemy_ghost.png' : ENEMY_GHOST,
-	'enemy_tank.png' : ENEMY_TANK,
-	'fire_boots.png' : FIRE_BOOTS,
-	'fire.png' : FIRE,
-	'fireball_generator.png' : FIREBALL_GENERATOR,
-	'flippers.png' : FLIPPERS,
-	'floor_mud.png' : FLOOR_MUD,
-	'floor_normal.png' : FLOOR_NORMAL,
-	'gate_goal.png' : GATE_GOAL,
-	'gate.png' : GATE,
-	'goal.png' : GOAL,
-	'help.png' : HELP,
-	'ice_center.png' : ICE_CENTER,
-	'ice_corner.png' : ICE_CORNER,
-	'ice_skates.png' : ICE_SKATES,
-	'key.png' : KEY,
-	'splash.png' : SPLASH,
-	'switch.png' : SWITCH_,
-	'teleporter.png' : TELEPORTER,
-	'trap.png' : TRAP,
+	'block_mud.png' : Source.BLOCK_MUD,
+	'block_normal.png' : Source.BLOCK_NORMAL,
+	'block_questionable.png' : Source.BLOCK_QUESTIONABLE, 
+	'block_switchable.png' : Source.BLOCK_SWITCHABLE,
+	'chip_down.png' : Source.CHIP_DOWN,
+	'chip_left.png' : Source.CHIP_LEFT,
+	'chip_right.png' : Source.CHIP_RIGHT,
+	'chip_up.png' : Source.CHIP_UP,
+	'chip.png' : Source.CHIP,
+	'clear.png' : Source.CLEAR,
+	'dash.png' : Source.DASH,
+	'dash_boots.png' : Source.DASH_BOOTS,
+	'ball.png' : Source.BALL,
+	'bomb.png' : Source.BOMB,
+	'bug.png' : Source.BUG,
+	'fireball.png' : Source.FIREBALL,
+	'ghost.png' : Source.GHOST,
+	'tank.png' : Source.TANK,
+	'fire_boots.png' : Source.FIRE_BOOTS,
+	'fire.png' : Source.FIRE,
+	'fireball_generator.png' : Source.FIREBALL_GENERATOR,
+	'flippers.png' : Source.FLIPPERS,
+	'floor_mud.png' : Source.FLOOR_MUD,
+	'floor_normal.png' : Source.FLOOR_NORMAL,
+	'gate_goal.png' : Source.GATE_GOAL,
+	'gate.png' : Source.GATE,
+	'goal.png' : Source.GOAL,
+	'help.png' : Source.HELP,
+	'ice_center.png' : Source.ICE_CENTER,
+	'ice_corner.png' : Source.ICE_CORNER,
+	'ice_skates.png' : Source.ICE_SKATES,
+	'key.png' : Source.KEY,
+	'splash.png' : Source.SPLASH,
+	'switch.png' : Source.SWITCH_,
+	'teleporter.png' : Source.TELEPORTER,
+	'trap.png' : Source.TRAP,
 };
 
 var Floors = new Array(
-	BLOCK_MUD,
-	BLOCK_NORMAL,
-	BLOCK_QUESTIONABLE,
-	BLOCK_SWITCHABLE,
-	CLEAR,
-	DASH,
-	FIRE,
-	FIREBALL_GENERATOR,
-	FLOOR_MUD,
-	FLOOR_NORMAL,
-	GOAL,
-	HELP,
-	ICE_CENTER,
-	ICE_CORNER,
-	SPLASH,
-	SWITCH_,
-	TELEPORTER,
-	TRAP
+	Source.BLOCK_MUD,
+	Source.BLOCK_NORMAL,
+	Source.BLOCK_QUESTIONABLE,
+	Source.BLOCK_SWITCHABLE,
+	Source.CLEAR,
+	Source.DASH,
+	Source.FIRE,
+	Source.FIREBALL_GENERATOR,
+	Source.FLOOR_MUD,
+	Source.FLOOR_NORMAL,
+	Source.GOAL,
+	Source.HELP,
+	Source.ICE_CENTER,
+	Source.ICE_CORNER,
+	Source.SPLASH,
+	Source.SWITCH_,
+	Source.TELEPORTER,
+	Source.TRAP
 );
 
 var Items = new Array(
-	CHIP_DOWN,
-	CHIP_LEFT,
-	CHIP_RIGHT,
-	CHIP_UP,
-	CHIP,
-	ENEMY_BALL,
-	ENEMY_BOMB,
-	ENEMY_BUG,
-	ENEMY_FIREBALL,
-	ENEMY_GHOST,
-	ENEMY_TANK,
-	FIRE_BOOTS,
-	FLIPPERS,
-	GATE_GOAL,
-	GATE,
-	ICE_SKATES,
-	KEY
+	Source.CHIP_DOWN,
+	Source.CHIP_LEFT,
+	Source.CHIP_RIGHT,
+	Source.CHIP_UP,
+	Source.CHIP,
+	Source.DASH_BOOTS,
+	Source.BALL,
+	Source.BOMB,
+	Source.BUG,
+	Source.FIREBALL,
+	Source.GHOST,
+	Source.TANK,
+	Source.FIRE_BOOTS,
+	Source.FLIPPERS,
+	Source.GATE_GOAL,
+	Source.GATE,
+	Source.ICE_SKATES,
+	Source.KEY
 );
 
+var InventoryItems = new Array(
+	Source.DASH_BOOTS,
+	Source.FIRE_BOOTS,
+	Source.FLIPPERS,
+	Source.ICE_SKATES,
+	Source.KEY
+)
+
+var Enemies = new Array(
+	Source.BALL,
+	Source.BOMB,
+	Source.BUG,
+	Source.FIREBALL,
+	Source.GHOST,
+	Source.TANK
+);
 
 // Objects.
 function Item() {
@@ -173,44 +188,89 @@ function Item() {
 function Tile() {
 	this.source = Source.FLOOR_NORMAL;
 	this.items = new Array();
-	this.effect_target = []; // map location of effect
 }
 
 
 // On load.
 $(document).ready(function() {
-    generate_map();
-    configure_tiles();
+	var m = new Map();
+	generate_map(m);
+    configure(m);
 });
 
 
 // Methods.
-function generate_map() {
-    var default_tile = 'images/tiles/floor_normal.png';
-    var map = '<!--<div style="height:'+viewport_width+'; width:'+viewport_width+'; overflow:auto;">--><table id="map">';
-    for (var i=0; i < rows; i++) {
-        map += '<tr>';
-        for (var j=0; j < cols; j++) {
-            map += '<td class="map_tile"><img src="' + default_tile + '"/></td>';
-        }
-        map += '</tr>';
-    }
-    map += '</table><!--</div>-->';
-    $('body').prepend(map);
+function generate_map(m) {
+	var map = $("#map");
+
+	var ctx = map[0].getContext('2d');
+	ctx.fillStyle = "rgb(255,0,0)";
+	ctx.strokeRect(0, 0, m.tile_width, m.tile_width);
 }
 
-function configure_tiles() {
+function configure(m) {
     $(".tile").draggable({
         helper: 'clone',
-        cursorAt: {left: tile_width/2, top: tile_width/2}
+        cursorAt: {left: m.tile_width/2, top: m.tile_width/2}
     });
 
-    $(".map_tile").droppable({
+    $("#map").droppable({
         drop: function(event, ui) {
+			var top = ui.position.top;
+			var left = ui.position.left;
+			var map_tile_top = Math.floor(top / m.tile_width);
+			var map_tile_left = Math.floor(left / m.tile_width);
+
             var dragged_tile_src = $(ui.draggable).children(':first').attr('src');
-            var map_tile = $(this).children(':first');
-            map_tile.attr('src', dragged_tile_src);
-            //console.log(map_tile);
+			var img = new Image();
+			img.src = dragged_tile_src;
+
+			src_filename = img.src.split("/").pop();
+			src_input = FileToSource[src_filename];
+
+			/* Configure tile. */
+			t = new Tile();
+
+			/* Read item[/floor] configuration. */
+			orientation_input = $('#orientation').val().toUpperCase();
+			orientation = Orientation[orientation_input];
+
+			color_input = $('#color').val().toUpperCase();
+			color = Color[color_input];
+
+			if ($.inArray(src_input, Floors) != -1) {
+				/* Set floor. */
+				t.source = src_input;
+			} else {
+				/* Configure and add item to tile. */
+				i = new Item();
+				i.orientation = orientation;
+				i.color = color;
+				i.source = src_input;
+				if ($.inArray(src_input, Enemies) != -1) {
+					i.type = ItemType.ENEMY;
+				} else if ($.inArray(src_input, InventoryItems) != -1) {
+					i.type = ItemType.INVENTORY;
+				} else if (src_input == Source.CHIP) {
+					i.type = ItemType.CHIP;
+				}
+
+
+				t.items.push(i);
+			}
+
+			var ctx = $(this)[0].getContext('2d');
+			// TODO: edit image according to config
+			ctx.save();
+			ctx.translate(32, 0); //map_tile_left * m.tile_width * 0.5, map_tile_top * m.tile_width * 0.5);
+			ctx.rotate(orientation * Math.PI / 180);
+			ctx.drawImage(img, map_tile_left * m.tile_width, map_tile_top * m.tile_width);
+			ctx.restore();
+
+			if (!m.data[map_tile_top]) {
+				m.data[map_tile_top] = [];
+			}
+			m.data[map_tile_top][map_tile_left] = t;
         }
     });
 }

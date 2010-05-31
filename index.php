@@ -10,6 +10,8 @@
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
+  <!-- Map. -->
+  <canvas id="map"></canvas>
 
   <!-- Save map. -->
   <input type="button" onClick="save_map()" value="Save" />
@@ -42,5 +44,9 @@
     echo $tile_str;
   ?>
   <br /><br />
+
+  <!-- Item configuration -->
+  Orientation: <input id="orientation" type="text" value="" />
+  Color: <input id="color" type="text" value="" />
 </body>
 </html>
