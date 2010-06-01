@@ -17,9 +17,9 @@ function Chip() {
 // Enums.
 var Orientation = {
 	UP : 0,
-	LEFT : 90,
+	LEFT : 270,
 	DOWN : 180,
-	RIGHT : 270
+	RIGHT : 90
 };
 
 var Color = {
@@ -194,21 +194,16 @@ function Tile() {
 // On load.
 $(document).ready(function() {
 	var m = new Map();
-	generate_map(m);
-    configure(m);
+	var map = $("#map");
+    var ctx = map[0].getContext('2d');
+	ctx.fillStyle = "rgb(255,0,0)";
+	ctx.strokeRect(0, 0, m.tile_width, m.tile_width);
+    configure(m, ctx);
 });
 
 
 // Methods.
-function generate_map(m) {
-	var map = $("#map");
-
-	var ctx = map[0].getContext('2d');
-	ctx.fillStyle = "rgb(255,0,0)";
-	ctx.strokeRect(0, 0, m.tile_width, m.tile_width);
-}
-
-function configure(m) {
+function configure(m, ctx) {
     $(".tile").draggable({
         helper: 'clone',
         cursorAt: {left: m.tile_width/2, top: m.tile_width/2}
@@ -255,16 +250,20 @@ function configure(m) {
 					i.type = ItemType.CHIP;
 				}
 
-
 				t.items.push(i);
 			}
 
-			var ctx = $(this)[0].getContext('2d');
 			// TODO: edit image according to config
 			ctx.save();
-			ctx.translate(32, 0); //map_tile_left * m.tile_width * 0.5, map_tile_top * m.tile_width * 0.5);
+
+            translate_x = map_tile_left * m.tile_width + m.tile_width/2;
+            translate_y = map_tile_top * m.tile_width + m.tile_width/2;
+
+			ctx.translate(translate_x, translate_y);
 			ctx.rotate(orientation * Math.PI / 180);
-			ctx.drawImage(img, map_tile_left * m.tile_width, map_tile_top * m.tile_width);
+
+            // TODO: figure out how to fix this
+			ctx.drawImage(img, -1 * translate_x, -1 * translate_y, m.tile_width, m.tile_width);
 			ctx.restore();
 
 			if (!m.data[map_tile_top]) {

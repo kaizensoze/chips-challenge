@@ -1,29 +1,43 @@
-<html>
-<head>
-  <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.custom.css" rel="stylesheet" />
-  <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
-  <script type="text/javascript" src="js/jquery-ui-1.8.custom.min.js"></script>
-</head>
-<body>
-  <script type="text/javascript">
-    $(function() {
-      $(".tile").draggable();
-      $("#droppable").droppable({
-        drop: function(event, ui) {
-          $(this).find('p').html('Dropped!');
-        }
-      });
+ <html>
+  <head>
+   <script type="application/javascript">
+ function drawBowtie(ctx, fillStyle) {
+ 
+   ctx.fillStyle = "rgba(200,200,200,0.3)";
+   ctx.fillRect(-30, -30, 60, 60);
+ 
+   ctx.fillStyle = fillStyle;
+   ctx.globalAlpha = 1.0;
+   ctx.beginPath();
+   ctx.moveTo(25, 25);
+   ctx.lineTo(-25, -25);
+   ctx.lineTo(25, -25);
+   ctx.lineTo(-25, 25);
+   ctx.closePath();
+   ctx.fill();
+ }
+ 
+ function draw() {
+   var canvas = document.getElementById("canvas");
+   var ctx = canvas.getContext("2d");
 
-    });
-  </script>
+   // note that all other translates are relative to this
+   // one
+   ctx.translate(42, 42);
 
-<div id="draggable" class="tile">
-  <p>Drag me to my target</p>
-</div>
-
-<div id="droppable">
-  <p>Drop here</p>
-</div>
-
-</body>
-</html>
+   ctx.save();
+   drawBowtie(ctx, "red");
+   ctx.restore();
+ 
+   ctx.save();
+   ctx.translate(85, 0);
+   ctx.rotate(45 * Math.PI / 180);
+   drawBowtie(ctx, "green");
+   ctx.restore();
+ }
+    </script>
+  </head>
+  <body onload="draw()">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+ </html>
