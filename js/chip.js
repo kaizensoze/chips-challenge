@@ -23,10 +23,10 @@ var Orientation = {
 };
 
 var Color = {
-	RED : '#FF0000',
-	TURQUOISE : '#00FFFF',
-	DARK_BLUE : '#0000FF',
-	GREEN : '#00FF00'
+	RED :    '#FF0000',
+	BLUE :   '#00FFFF',
+	GREEN :  '#00FF00',
+	YELLOW : '#FFFF00'
 };
 
 var ItemType = {
@@ -256,14 +256,16 @@ function configure(m, ctx) {
 			// TODO: edit image according to config
 			ctx.save();
 
+			/* Tile config. */
             translate_x = map_tile_left * m.tile_width + m.tile_width/2;
             translate_y = map_tile_top * m.tile_width + m.tile_width/2;
 
 			ctx.translate(translate_x, translate_y);
 			ctx.rotate(orientation * Math.PI / 180);
 
-            // TODO: figure out how to fix this
-			ctx.drawImage(img, -16, -16, /*-1 * translate_x, -1 * translate_y,*/ m.tile_width, m.tile_width);
+			ctx.fillStyle = color;
+			ctx.fillRect(-16, -16, m.tile_width, m.tile_width);
+			ctx.drawImage(img, -16, -16, m.tile_width, m.tile_width);
 			ctx.restore();
 
 			if (!m.data[map_tile_top]) {
