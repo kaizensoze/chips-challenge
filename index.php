@@ -46,7 +46,7 @@
   <br /><br />
 
   <!-- Item configuration -->
-  Orientation: <input id="orientation" type="text" value="" />
-  Color: <input id="color" type="text" value="" />
+  Orientation: <select id="orientation"></select>
+  Color: <select id="color"></select>
 </body>
 </html>

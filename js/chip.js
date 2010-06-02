@@ -23,10 +23,13 @@ var Orientation = {
 };
 
 var Color = {
+	WHITE :  '#FFFFFF',
 	RED :    '#FF0000',
 	BLUE :   '#00FFFF',
 	GREEN :  '#00FF00',
-	YELLOW : '#FFFF00'
+	YELLOW : '#FFFF00',
+	DBLUE :  '#0000FF',
+	BROWN :  '#808000'
 };
 
 var ItemType = {
@@ -204,6 +207,14 @@ $(document).ready(function() {
 
 // Methods.
 function configure(m, ctx) {
+	for (var color in Color) {
+		$('#color').append($("<option></option>").attr("value", color).text(color));
+	}
+
+	for (var orientation in Orientation) {
+		$('#orientation').append($("<option></option>").attr("value", orientation).text(orientation));
+	}
+
     $(".tile").draggable({
         helper: 'clone',
         cursorAt: {left: m.tile_width/2, top: m.tile_width/2}
@@ -253,7 +264,6 @@ function configure(m, ctx) {
 				t.items.push(i);
 			}
 
-			// TODO: edit image according to config
 			ctx.save();
 
 			/* Tile config. */
@@ -278,19 +288,3 @@ function configure(m, ctx) {
 
 function save_map() {
 }
-
-/*
-var canvas = document.getElementById("map_output");
-var context = canvas.getContext('2d');
-canvas.width = cols * tile_width;
-canvas.height = rows * tile_width; 
-
-$('#map td').each(function() {
-	var col = $(this).parent().children().index($(this));
-	var row = $(this).parent().parent().children().index($(this).parent());
-	var img = new Image();
-	img.src = $(this).find("img").attr("src");
-	context.drawImage(img, col*tile_width, row*tile_width);
-});
-Canvas2Image.saveAsPNG(canvas);
-*/
