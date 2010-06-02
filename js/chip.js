@@ -263,7 +263,7 @@ function configure(m, ctx) {
 			ctx.rotate(orientation * Math.PI / 180);
 
             // TODO: figure out how to fix this
-			ctx.drawImage(img, -1 * translate_x, -1 * translate_y, m.tile_width, m.tile_width);
+			ctx.drawImage(img, -16, -16, /*-1 * translate_x, -1 * translate_y,*/ m.tile_width, m.tile_width);
 			ctx.restore();
 
 			if (!m.data[map_tile_top]) {
