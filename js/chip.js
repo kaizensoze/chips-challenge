@@ -316,7 +316,33 @@ function configure(m, ctx) {
 				if (go_color) {
 					ctx.fill();
 				}
-
+				ctx.beginPath();
+				ctx.moveTo(8, 7);
+				ctx.lineTo(15, 7);
+				ctx.lineTo(15, 10);
+				ctx.lineTo(8, 10);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
+				ctx.beginPath();
+				ctx.moveTo(6, 9);
+				ctx.lineTo(9, 9);
+				ctx.lineTo(9, 15);
+				ctx.lineTo(6, 15);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
+				ctx.beginPath();
+				ctx.moveTo(7, 15);
+				ctx.lineTo(13, 15);
+				ctx.lineTo(13, 18);
+				ctx.lineTo(7, 18);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
 			} else {
 				if (go_color) {
 					ctx.fillRect(map_tile_left * m.tile_width, map_tile_top * m.tile_width, m.tile_width, m.tile_width);
