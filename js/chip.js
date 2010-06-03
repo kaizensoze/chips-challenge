@@ -235,7 +235,12 @@ function configure(m, ctx) {
 			src_input = FileToSource[src_filename];
 
 			/* Configure tile. */
-			t = new Tile();
+			var t;
+			if (m.data[map_tile_top] && m.data[map_tile_top][map_tile_left]) {
+				t = m.data[map_tile_top][map_tile_left];
+			} else {
+				t = new Tile();
+			}
 
 			/* Read item[/floor] configuration. */
 			orientation_input = $('#orientation').val().toUpperCase();
@@ -262,6 +267,7 @@ function configure(m, ctx) {
 				}
 
 				t.items.push(i);
+				console.log(t);
 			}
 
 			ctx.save();
@@ -367,6 +373,7 @@ function configure(m, ctx) {
 				m.data[map_tile_top] = [];
 			}
 			m.data[map_tile_top][map_tile_left] = t;
+			//console.log(t);
         }
     });
 }
