@@ -1,5 +1,7 @@
 
-// Map.
+var m;
+
+/* Map. */
 function Map() {
 	this.data = [];
     this.tile_width = 32;
@@ -9,12 +11,12 @@ function Map() {
 	this.chips_left;
 }
 
-// Chip.
+/* Chip. */
 function Chip() {
 	this.inventory = new Array();
 }
 
-// Enums.
+/* Enums. */
 var Orientation = {
 	UP : 0,
 	LEFT : 270,
@@ -179,7 +181,7 @@ var Enemies = new Array(
 	Source.TANK
 );
 
-// Objects.
+/* Objects. */
 function Item() {
 	this.orientation = Orientation.UP;
 	this.color;
@@ -193,9 +195,8 @@ function Tile() {
 }
 
 
-// On load.
 $(document).ready(function() {
-	var m = new Map();
+	m = new Map();
 	var map = $("#map");
     var ctx = map[0].getContext('2d');
 	ctx.fillStyle = "rgb(255,0,0)";
@@ -204,7 +205,7 @@ $(document).ready(function() {
 });
 
 
-// Methods.
+/* Methods. */
 function configure(m, ctx) {
 	for (var color in Color) {
 		$('#color').append($("<option></option>").attr("value", color).text(color));
@@ -267,10 +268,9 @@ function configure(m, ctx) {
 				}
 
 				t.items.push(i);
-				console.log(t);
 			}
 
-			ctx.save();
+            ctx.save();
 
 			/* Color. */
 			var go_color = false;
@@ -365,7 +365,7 @@ function configure(m, ctx) {
 			ctx.translate(translate_x, translate_y);
 			ctx.rotate(orientation * Math.PI / 180);
 
-			ctx.drawImage(img, -16, -16, m.tile_width, m.tile_width);
+			ctx.drawImage(img, -m.tile_width/2, -m.tile_width/2, m.tile_width, m.tile_width);
 
 			ctx.restore();
 
@@ -373,8 +373,16 @@ function configure(m, ctx) {
 				m.data[map_tile_top] = [];
 			}
 			m.data[map_tile_top][map_tile_left] = t;
-			//console.log(t);
         }
     });
 }
 
+function save_map() {
+    var dataString = JSON.stringify(m);
+    $.post(
+        'http://localhost/chip/php/chip.php?action=save_map', 
+        {data: dataString}, 
+        function(res) { 
+        }
+    );
+}
