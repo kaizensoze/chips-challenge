@@ -23,7 +23,6 @@ var Orientation = {
 };
 
 var Color = {
-	WHITE :  '#FFFFFF',
 	RED :    '#FF0000',
 	BLUE :   '#00FFFF',
 	GREEN :  '#00FF00',
@@ -210,6 +209,7 @@ function configure(m, ctx) {
 	for (var color in Color) {
 		$('#color').append($("<option></option>").attr("value", color).text(color));
 	}
+	$('#color').prepend($("<option></option>").attr("value", "").text(""));
 
 	for (var orientation in Orientation) {
 		$('#orientation').append($("<option></option>").attr("value", orientation).text(orientation));
@@ -266,16 +266,72 @@ function configure(m, ctx) {
 
 			ctx.save();
 
-			/* Tile config. */
+			/* Color. */
+			var go_color = false;
+			for (var color_check in Color) {
+				if (color == Color[color_check]) {
+					go_color = true;
+					ctx.fillStyle = color;
+				}
+			}
+
+			if (src_input == Source.KEY) {
+				ctx.beginPath();
+				ctx.moveTo(16, 16);
+				ctx.lineTo(26, 23);
+				ctx.lineTo(26, 26);
+				ctx.lineTo(23, 26);
+				ctx.lineTo(14, 17);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
+
+				ctx.beginPath();
+				ctx.moveTo(20, 23);
+				ctx.lineTo(23, 20);
+				ctx.lineTo(25, 22);
+				ctx.lineTo(22, 24);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
+
+				// ring
+				ctx.beginPath();
+				ctx.moveTo(13, 14);
+				ctx.lineTo(16, 14);
+				ctx.lineTo(16, 17);
+				ctx.lineTo(13, 17);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
+				ctx.beginPath();
+				ctx.moveTo(14, 9);
+				ctx.lineTo(17, 9);
+				ctx.lineTo(17, 15);
+				ctx.lineTo(14, 15);
+				ctx.closePath();
+				if (go_color) {
+					ctx.fill();
+				}
+
+			} else {
+				if (go_color) {
+					ctx.fillRect(map_tile_left * m.tile_width, map_tile_top * m.tile_width, m.tile_width, m.tile_width);
+				}
+			}
+
+			/* Rotate. */
             translate_x = map_tile_left * m.tile_width + m.tile_width/2;
             translate_y = map_tile_top * m.tile_width + m.tile_width/2;
 
 			ctx.translate(translate_x, translate_y);
 			ctx.rotate(orientation * Math.PI / 180);
 
-			ctx.fillStyle = color;
-			ctx.fillRect(-16, -16, m.tile_width, m.tile_width);
 			ctx.drawImage(img, -16, -16, m.tile_width, m.tile_width);
+
 			ctx.restore();
 
 			if (!m.data[map_tile_top]) {
@@ -286,5 +342,3 @@ function configure(m, ctx) {
     });
 }
 
-function save_map() {
-}
