@@ -276,22 +276,25 @@ function configure(m, ctx) {
 			}
 
 			if (src_input == Source.KEY) {
+				base_x = map_tile_left * m.tile_width;
+				base_y = map_tile_top * m.tile_width;
+
 				ctx.beginPath();
-				ctx.moveTo(16, 16);
-				ctx.lineTo(26, 23);
-				ctx.lineTo(26, 26);
-				ctx.lineTo(23, 26);
-				ctx.lineTo(14, 17);
+				ctx.moveTo(base_x+16, base_y+16);
+				ctx.lineTo(base_x+26, base_y+23);
+				ctx.lineTo(base_x+26, base_y+26);
+				ctx.lineTo(base_x+23, base_y+26);
+				ctx.lineTo(base_x+14, base_y+17);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 
 				ctx.beginPath();
-				ctx.moveTo(20, 23);
-				ctx.lineTo(23, 20);
-				ctx.lineTo(25, 22);
-				ctx.lineTo(22, 24);
+				ctx.moveTo(base_x+20, base_y+23);
+				ctx.lineTo(base_x+23, base_y+20);
+				ctx.lineTo(base_x+25, base_y+22);
+				ctx.lineTo(base_x+22, base_y+24);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
@@ -299,46 +302,46 @@ function configure(m, ctx) {
 
 				// ring
 				ctx.beginPath();
-				ctx.moveTo(13, 14);
-				ctx.lineTo(16, 14);
-				ctx.lineTo(16, 17);
-				ctx.lineTo(13, 17);
+				ctx.moveTo(base_x+13, base_y+14);
+				ctx.lineTo(base_x+16, base_y+14);
+				ctx.lineTo(base_x+16, base_y+17);
+				ctx.lineTo(base_x+13, base_y+17);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(14, 9);
-				ctx.lineTo(17, 9);
-				ctx.lineTo(17, 15);
-				ctx.lineTo(14, 15);
+				ctx.moveTo(base_x+14, base_y+9);
+				ctx.lineTo(base_x+17, base_y+9);
+				ctx.lineTo(base_x+17, base_y+15);
+				ctx.lineTo(base_x+14, base_y+15);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(8, 7);
-				ctx.lineTo(15, 7);
-				ctx.lineTo(15, 10);
-				ctx.lineTo(8, 10);
+				ctx.moveTo(base_x+8, base_y+7);
+				ctx.lineTo(base_x+15, base_y+7);
+				ctx.lineTo(base_x+15, base_y+10);
+				ctx.lineTo(base_x+8, base_y+10);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(6, 9);
-				ctx.lineTo(9, 9);
-				ctx.lineTo(9, 15);
-				ctx.lineTo(6, 15);
+				ctx.moveTo(base_x+6, base_y+9);
+				ctx.lineTo(base_x+9, base_y+9);
+				ctx.lineTo(base_x+9, base_y+15);
+				ctx.lineTo(base_x+6, base_y+15);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(7, 15);
-				ctx.lineTo(13, 15);
-				ctx.lineTo(13, 18);
-				ctx.lineTo(7, 18);
+				ctx.moveTo(base_x+7, base_y+15);
+				ctx.lineTo(base_x+13, base_y+15);
+				ctx.lineTo(base_x+13, base_y+18);
+				ctx.lineTo(base_x+7, base_y+18);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
