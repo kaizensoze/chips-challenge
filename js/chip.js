@@ -272,6 +272,13 @@ function configure(m, ctx) {
 
             ctx.save();
 
+			/* Rotate. */
+            translate_x = map_tile_left * m.tile_width + m.tile_width/2;
+            translate_y = map_tile_top * m.tile_width + m.tile_width/2;
+
+			ctx.translate(translate_x, translate_y);
+			ctx.rotate(orientation * Math.PI / 180);
+
 			/* Color. */
 			var go_color = false;
 			for (var color_check in Color) {
@@ -286,21 +293,21 @@ function configure(m, ctx) {
 				base_y = map_tile_top * m.tile_width;
 
 				ctx.beginPath();
-				ctx.moveTo(base_x+16, base_y+16);
-				ctx.lineTo(base_x+26, base_y+23);
-				ctx.lineTo(base_x+26, base_y+26);
-				ctx.lineTo(base_x+23, base_y+26);
-				ctx.lineTo(base_x+14, base_y+17);
+				ctx.moveTo(base_x+16-translate_x, base_y+16-translate_y);
+				ctx.lineTo(base_x+26-translate_x, base_y+23-translate_y);
+				ctx.lineTo(base_x+26-translate_x, base_y+26-translate_y);
+				ctx.lineTo(base_x+23-translate_x, base_y+26-translate_y);
+				ctx.lineTo(base_x+14-translate_x, base_y+17-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 
 				ctx.beginPath();
-				ctx.moveTo(base_x+20, base_y+23);
-				ctx.lineTo(base_x+23, base_y+20);
-				ctx.lineTo(base_x+25, base_y+22);
-				ctx.lineTo(base_x+22, base_y+24);
+				ctx.moveTo(base_x+20-translate_x, base_y+23-translate_y);
+				ctx.lineTo(base_x+23-translate_x, base_y+20-translate_y);
+				ctx.lineTo(base_x+25-translate_x, base_y+22-translate_y);
+				ctx.lineTo(base_x+22-translate_x, base_y+24-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
@@ -308,46 +315,46 @@ function configure(m, ctx) {
 
 				// ring
 				ctx.beginPath();
-				ctx.moveTo(base_x+13, base_y+14);
-				ctx.lineTo(base_x+16, base_y+14);
-				ctx.lineTo(base_x+16, base_y+17);
-				ctx.lineTo(base_x+13, base_y+17);
+				ctx.moveTo(base_x+13-translate_x, base_y+14-translate_y);
+				ctx.lineTo(base_x+16-translate_x, base_y+14-translate_y);
+				ctx.lineTo(base_x+16-translate_x, base_y+17-translate_y);
+				ctx.lineTo(base_x+13-translate_x, base_y+17-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(base_x+14, base_y+9);
-				ctx.lineTo(base_x+17, base_y+9);
-				ctx.lineTo(base_x+17, base_y+15);
-				ctx.lineTo(base_x+14, base_y+15);
+				ctx.moveTo(base_x+14-translate_x, base_y+9-translate_y);
+				ctx.lineTo(base_x+17-translate_x, base_y+9-translate_y);
+				ctx.lineTo(base_x+17-translate_x, base_y+15-translate_y);
+				ctx.lineTo(base_x+14-translate_x, base_y+15-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(base_x+8, base_y+7);
-				ctx.lineTo(base_x+15, base_y+7);
-				ctx.lineTo(base_x+15, base_y+10);
-				ctx.lineTo(base_x+8, base_y+10);
+				ctx.moveTo(base_x+8-translate_x, base_y+7-translate_y);
+				ctx.lineTo(base_x+15-translate_x, base_y+7-translate_y);
+				ctx.lineTo(base_x+15-translate_x, base_y+10-translate_y);
+				ctx.lineTo(base_x+8-translate_x, base_y+10-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(base_x+6, base_y+9);
-				ctx.lineTo(base_x+9, base_y+9);
-				ctx.lineTo(base_x+9, base_y+15);
-				ctx.lineTo(base_x+6, base_y+15);
+				ctx.moveTo(base_x+6-translate_x, base_y+9-translate_y);
+				ctx.lineTo(base_x+9-translate_x, base_y+9-translate_y);
+				ctx.lineTo(base_x+9-translate_x, base_y+15-translate_y);
+				ctx.lineTo(base_x+6-translate_x, base_y+15-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
 				}
 				ctx.beginPath();
-				ctx.moveTo(base_x+7, base_y+15);
-				ctx.lineTo(base_x+13, base_y+15);
-				ctx.lineTo(base_x+13, base_y+18);
-				ctx.lineTo(base_x+7, base_y+18);
+				ctx.moveTo(base_x+7-translate_x, base_y+15-translate_y);
+				ctx.lineTo(base_x+13-translate_x, base_y+15-translate_y);
+				ctx.lineTo(base_x+13-translate_x, base_y+18-translate_y);
+				ctx.lineTo(base_x+7-translate_x, base_y+18-translate_y);
 				ctx.closePath();
 				if (go_color) {
 					ctx.fill();
@@ -357,13 +364,6 @@ function configure(m, ctx) {
 					ctx.fillRect(map_tile_left * m.tile_width, map_tile_top * m.tile_width, m.tile_width, m.tile_width);
 				}
 			}
-
-			/* Rotate. */
-            translate_x = map_tile_left * m.tile_width + m.tile_width/2;
-            translate_y = map_tile_top * m.tile_width + m.tile_width/2;
-
-			ctx.translate(translate_x, translate_y);
-			ctx.rotate(orientation * Math.PI / 180);
 
 			ctx.drawImage(img, -m.tile_width/2, -m.tile_width/2, m.tile_width, m.tile_width);
 
@@ -379,10 +379,6 @@ function configure(m, ctx) {
 
 function save_map() {
     var dataString = JSON.stringify(m);
-    $.post(
-        'http://localhost/chip/php/chip.php?action=save_map', 
-        {data: dataString}, 
-        function(res) { 
-        }
-    );
+    $.post('http://localhost/chip/php/chip.php?action=save_map', {data: dataString}, function(res) {});
 }
+

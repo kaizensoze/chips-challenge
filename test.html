@@ -1,40 +1,24 @@
  <html>
   <head>
    <script type="application/javascript">
- function drawBowtie(ctx, fillStyle) {
- 
-   ctx.fillStyle = "rgba(200,200,200,0.3)";
-   ctx.fillRect(-30, -30, 60, 60);
- 
-   ctx.fillStyle = fillStyle;
-   ctx.globalAlpha = 1.0;
-   ctx.beginPath();
-   ctx.moveTo(25, 25);
-   ctx.lineTo(-25, -25);
-   ctx.lineTo(25, -25);
-   ctx.lineTo(-25, 25);
-   ctx.closePath();
-   ctx.fill();
- }
- 
- function draw() {
-   var canvas = document.getElementById("canvas");
-   var ctx = canvas.getContext("2d");
+     function draw() {
+       var canvas = document.getElementById("canvas");
+       var ctx = canvas.getContext("2d");
 
-   // note that all other translates are relative to this
-   // one
-   ctx.translate(42, 42);
+       var translate_x = 12.5;
+       var translate_y = 12.5;
 
-   ctx.save();
-   drawBowtie(ctx, "red");
-   ctx.restore();
- 
-   ctx.save();
-   ctx.translate(85, 0);
-   ctx.rotate(45 * Math.PI / 180);
-   drawBowtie(ctx, "green");
-   ctx.restore();
- }
+       ctx.translate(12.5, 12.5);
+       ctx.rotate(90 * Math.PI / 180);
+
+       ctx.fillStyle = "red";
+       ctx.beginPath();
+       ctx.moveTo(0-translate_x, 25-translate_y);
+       ctx.lineTo(25-translate_x, 25-translate_y);
+       ctx.lineTo(25-translate_x, 0-translate_y);
+       ctx.closePath();
+       ctx.fill();
+     }
     </script>
   </head>
   <body onload="draw()">

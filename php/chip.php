@@ -15,7 +15,7 @@ function main() {
 main();
 
 function save_map($m) {
-    $f = 'test.json';
+    $f = '../maps/test.json';
     $fh = fopen($f, 'w');
     fwrite($fh, $m);
     fclose($fh);
