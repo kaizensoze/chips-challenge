@@ -232,8 +232,8 @@ function save_map(overwrite) {
 function load_map(map_to_load) {
     $.getJSON('http://localhost/chip/php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
         var loaded_map = res;
-        m = JSON.parse(loaded_map);
-        draw_map(loaded_map);
+        map = JSON.parse(loaded_map);
+        draw_map(map);
     });
 }
 
