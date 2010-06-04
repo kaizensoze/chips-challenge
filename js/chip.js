@@ -215,7 +215,7 @@ function show_maps() {
 }
 
 function save_map(overwrite) {
-    var dataString = JSON.stringify(m);
+    var dataString = JSON.stringify(map);
     var level_number = $('#level_number').val();
     map.level_number = level_number;
     $.post('http://localhost/chip/php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
@@ -237,6 +237,6 @@ function load_map(map_to_load) {
     });
 }
 
-function test(loaded_map) {
+function draw_map(loaded_map) {
     console.log(loaded_map);
 }
