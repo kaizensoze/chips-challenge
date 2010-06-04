@@ -10,10 +10,11 @@
 </head>
 <body>
   <!-- Map. -->
-  <canvas id="map"></canvas>
+  <canvas id="map"></canvas><br />
 
   <!-- Save map. -->
-  <input type="button" onClick="save_map()" value="Save" />
+  Level number: <input id="level_number" size="5" type="text" />
+  <input type="button" onClick="save_map(0)" value="Save" />
   <br /><br />
 
   <!-- Load tile images. -->

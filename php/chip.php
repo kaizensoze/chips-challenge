@@ -1,11 +1,11 @@
 <?php
 
 function main() {
-    $action = $_GET['action'];
+    $action = $_REQUEST['action'];
     if (isset($action)) {
         switch ($action) {
             case "save_map":
-                save_map($_REQUEST['data']);
+                save_map($_REQUEST);
                 break;
             default:
                 echo 'invalid action';
@@ -14,11 +14,18 @@ function main() {
 }
 main();
 
-function save_map($m) {
-    $f = '../maps/test.json';
-    $fh = fopen($f, 'w');
-    fwrite($fh, $m);
-    fclose($fh);
+function save_map($r) {
+    $map = $r['map'];
+    $level = $r['level'];
+    $overwrite = $r['overwrite'];
+    $f = '../maps/' . $level . '.json';
+    if (file_exists($f) && !$overwrite) {
+        echo 'file exists.';
+    } else {
+        $fh = fopen($f, 'w');
+        fwrite($fh, $map);
+        fclose($fh);
+    }
 }
 
 ?>

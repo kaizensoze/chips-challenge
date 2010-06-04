@@ -361,7 +361,7 @@ function configure(m, ctx) {
 				}
 			} else {
 				if (go_color) {
-					ctx.fillRect(map_tile_left * m.tile_width, map_tile_top * m.tile_width, m.tile_width, m.tile_width);
+					ctx.fillRect(map_tile_left * m.tile_width - translate_x, map_tile_top * m.tile_width - translate_y, m.tile_width, m.tile_width);
 				}
 			}
 
@@ -377,8 +377,18 @@ function configure(m, ctx) {
     });
 }
 
-function save_map() {
+function save_map(overwrite) {
     var dataString = JSON.stringify(m);
-    $.post('http://localhost/chip/php/chip.php?action=save_map', {data: dataString}, function(res) {});
+    var level_number = $('#level_number').val();
+    m.level_number = level_number;
+    $.post('http://localhost/chip/php/chip.php', {action: 'save_map', map: dataString, level: m.level_number, overwrite: overwrite},
+            function(res) {
+                if (res.indexOf('exists') != -1) {
+                    if (confirm("Map already exists. Overwrite?")) {
+                        save_map(1);
+                    }
+                }
+            }
+    );
 }
 
