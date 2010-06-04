@@ -202,6 +202,7 @@ $(document).ready(function() {
 	ctx.fillStyle = "rgb(255,0,0)";
 	ctx.strokeRect(0, 0, m.tile_width, m.tile_width);
     configure(m, ctx);
+    show_maps();
 });
 
 
@@ -377,6 +378,18 @@ function configure(m, ctx) {
     });
 }
 
+function show_maps() {
+    $.getJSON('http://localhost/chip/php/chip.php?action=show_maps', function(res) {
+        console.log(res);
+        var list = '<ul>';
+        for (var i in res) {
+            var searchResult = res[i];
+            alert(searchResult);
+        }
+        */
+    });
+}
+
 function save_map(overwrite) {
     var dataString = JSON.stringify(m);
     var level_number = $('#level_number').val();
@@ -392,3 +405,5 @@ function save_map(overwrite) {
     );
 }
 
+function load_map() {
+}

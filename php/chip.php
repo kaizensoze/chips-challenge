@@ -7,6 +7,9 @@ function main() {
             case "save_map":
                 save_map($_REQUEST);
                 break;
+            case "show_maps":
+                show_maps();
+                break;
             default:
                 echo 'invalid action';
         }
@@ -26,6 +29,17 @@ function save_map($r) {
         fwrite($fh, $map);
         fclose($fh);
     }
+}
+
+function show_maps() {
+     $maps = array();
+     $it = new RecursiveDirectoryIterator('../maps');
+     foreach (new RecursiveIteratorIterator($it) as $file) {
+        if (!$it->isDot()) {
+            array_push($maps, basename($file));
+        }
+     }
+     echo json_encode($maps);
 }
 
 ?>

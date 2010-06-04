@@ -15,6 +15,9 @@
   <!-- Save map. -->
   Level number: <input id="level_number" size="5" type="text" />
   <input type="button" onClick="save_map(0)" value="Save" />
+  <div style="float: right; width: 300; height: 250; overflow: auto;">
+    Choose a map to load.
+  </div>
   <br /><br />
 
   <!-- Load tile images. -->
