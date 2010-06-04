@@ -6,6 +6,7 @@
   <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
   <script type="text/javascript" src="js/jquery-ui-1.8.custom.min.js"></script>
   <script type="text/javascript" src="js/json2.js"></script>
+  <script type="text/javascript" src="js/chip_data.js"></script>
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
@@ -15,7 +16,7 @@
   <!-- Save map. -->
   Level number: <input id="level_number" size="5" type="text" />
   <input type="button" onClick="save_map(0)" value="Save" />
-  <div style="float: right; width: 300; height: 250; overflow: auto;">
+  <div id="maps" style="float: right; width: 300; height: 250; overflow: auto;">
     Choose a map to load.
   </div>
   <br /><br />

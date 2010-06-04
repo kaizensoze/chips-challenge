@@ -10,6 +10,9 @@ function main() {
             case "show_maps":
                 show_maps();
                 break;
+            case "load_map":
+                load_map($_REQUEST['map']);
+                break;
             default:
                 echo 'invalid action';
         }
@@ -40,6 +43,16 @@ function show_maps() {
         }
      }
      echo json_encode($maps);
+}
+
+function load_map($map_to_load) {
+    $f = '../maps/' . $map_to_load . '.json';
+    if (file_exists($f)) {
+        $fh = fopen($f, 'r');
+        $data = fread($fh, filesize($f));
+        fclose($fh);
+    }
+    echo json_encode($data);
 }
 
 ?>
