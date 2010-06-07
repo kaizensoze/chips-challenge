@@ -1,6 +1,6 @@
 
 var tile_width = 32;
-var tile_path = '../images/tiles/';
+var tile_path = 'images/tiles/';
 
 /* Map. */
 function Map() {

@@ -33,14 +33,20 @@ function set_event_handlers() {
 
             var dragged_tile_src = $(ui.draggable).children(':first').attr('src');
 
-            add_tile_part(map_tile_left, map_tile_top, dragged_tile_src);
-            draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src);
+            var orientation_input = orientation_input = $('#orientation').val().toUpperCase();
+            var color_input = color_input = $('#color').val().toUpperCase();
+
+            add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
+            draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
         }
     });
 }
 
-function add_tile_part(map_tile_left, map_tile_top, tile_src) {
-    var tile;
+function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
+    var orientation_input, orientation;
+    var color_input, color;
+    var src_filename, src_input;
+    var tile, item;
 
     if (map.data[map_tile_top] && map.data[map_tile_top][map_tile_left]) {
         tile = map.data[map_tile_top][map_tile_left];
@@ -48,10 +54,7 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src) {
         tile = new Tile();
     }
 
-    orientation_input = $('#orientation').val().toUpperCase();
     orientation = Orientation[orientation_input];
-
-    color_input = $('#color').val().toUpperCase();
     color = Color[color_input];
 
     src_filename = tile_src.split("/").pop();
@@ -61,8 +64,8 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src) {
         tile.source = src_filename;  // floor
     } else {
         item = new Item();  // item
-        item.orientation = orientation;
-        item.color = color;
+        item.orientation = orientation_input;
+        item.color = color_input;
         item.source = src_filename;
         if ($.inArray(src_input, Enemies) != -1) {
             item.type = ItemType.ENEMY;
@@ -79,15 +82,21 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src) {
         map.data[map_tile_top] = [];
     }
     map.data[map_tile_top][map_tile_left] = tile;
-    console.log(map);
 }
 
-function draw_tile_part(map_tile_left, map_tile_top, tile_src) {
+function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
     var map_canvas = $("#map");
     var ctx = map_canvas[0].getContext('2d');
 
+    var src_filename, src_input;
+    var translate_x, translate_y;
+    var base_x, base_y;
+
     src_filename = tile_src.split("/").pop();
     src_input = FileToSource[src_filename];
+
+    orientation = Orientation[orientation_input];
+    color = Color[color_input];
     
     ctx.save();
 
@@ -99,21 +108,14 @@ function draw_tile_part(map_tile_left, map_tile_top, tile_src) {
     ctx.rotate(orientation * Math.PI / 180);
 
     /* Color. */
-    var go_color = false;
-    for (var color_check in Color) {
-        if (color == Color[color_check]) {
-            go_color = true;
-            ctx.fillStyle = color;
-        }
-    }
+    if (color) {
+        ctx.fillStyle = color;
+        if (src_input == Source.KEY) {
+            base_x = map_tile_left * tile_width;
+            base_y = map_tile_top * tile_width;
 
-    if (src_input == Source.KEY) {
-        base_x = map_tile_left * tile_width;
-        base_y = map_tile_top * tile_width;
-
-        color_key(ctx, base_x, base_y, translate_x, translate_y, go_color);
-    } else {
-        if (go_color) {
+            color_key(ctx, base_x, base_y, translate_x, translate_y);
+        } else {
             ctx.fillRect(map_tile_left * tile_width - translate_x, map_tile_top * tile_width - translate_y, tile_width, tile_width);
         }
     }
@@ -125,10 +127,12 @@ function draw_tile_part(map_tile_left, map_tile_top, tile_src) {
     ctx.restore();
 }
 
-function add_tile() {
-}
-
-function draw_tile() {
+function draw_tile(left, top, tile) {
+    draw_tile_part(left, top, tile_path + tile.source);
+    for (var i=0; i < tile.items.length; i++) {
+        item = tile.items[i];
+        draw_tile_part(left, top, tile_path + item.source, item.orientation, item.color);
+    }
 }
 
 function load_config_options() {
@@ -142,7 +146,7 @@ function load_config_options() {
 	}
 }
 
-function color_key(ctx, base_x, base_y, translate_x, translate_y, go_color) {
+function color_key(ctx, base_x, base_y, translate_x, translate_y) {
     ctx.beginPath();
     ctx.moveTo(base_x+16-translate_x, base_y+16-translate_y);
     ctx.lineTo(base_x+26-translate_x, base_y+23-translate_y);
@@ -150,9 +154,7 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y, go_color) {
     ctx.lineTo(base_x+23-translate_x, base_y+26-translate_y);
     ctx.lineTo(base_x+14-translate_x, base_y+17-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
 
     ctx.beginPath();
     ctx.moveTo(base_x+20-translate_x, base_y+23-translate_y);
@@ -160,9 +162,7 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y, go_color) {
     ctx.lineTo(base_x+25-translate_x, base_y+22-translate_y);
     ctx.lineTo(base_x+22-translate_x, base_y+24-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
 
     // ring
     ctx.beginPath();
@@ -171,45 +171,39 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y, go_color) {
     ctx.lineTo(base_x+16-translate_x, base_y+17-translate_y);
     ctx.lineTo(base_x+13-translate_x, base_y+17-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
+
     ctx.beginPath();
     ctx.moveTo(base_x+14-translate_x, base_y+9-translate_y);
     ctx.lineTo(base_x+17-translate_x, base_y+9-translate_y);
     ctx.lineTo(base_x+17-translate_x, base_y+15-translate_y);
     ctx.lineTo(base_x+14-translate_x, base_y+15-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
+
     ctx.beginPath();
     ctx.moveTo(base_x+8-translate_x, base_y+7-translate_y);
     ctx.lineTo(base_x+15-translate_x, base_y+7-translate_y);
     ctx.lineTo(base_x+15-translate_x, base_y+10-translate_y);
     ctx.lineTo(base_x+8-translate_x, base_y+10-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
+
     ctx.beginPath();
     ctx.moveTo(base_x+6-translate_x, base_y+9-translate_y);
     ctx.lineTo(base_x+9-translate_x, base_y+9-translate_y);
     ctx.lineTo(base_x+9-translate_x, base_y+15-translate_y);
     ctx.lineTo(base_x+6-translate_x, base_y+15-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
+
     ctx.beginPath();
     ctx.moveTo(base_x+7-translate_x, base_y+15-translate_y);
     ctx.lineTo(base_x+13-translate_x, base_y+15-translate_y);
     ctx.lineTo(base_x+13-translate_x, base_y+18-translate_y);
     ctx.lineTo(base_x+7-translate_x, base_y+18-translate_y);
     ctx.closePath();
-    if (go_color) {
-        ctx.fill();
-    }
+    ctx.fill();
 }
 
 function show_maps() {
@@ -249,6 +243,14 @@ function load_map(map_to_load) {
 }
 
 function draw_map(loaded_map) {
-    console.log(loaded_map);
+    var map_canvas = $("#map");
+    var ctx = map_canvas[0].getContext('2d');
+    
+    for (var i=0; i < map.data.length; i++) {
+        for (var j=0; j < map.data[i].length; j++) {
+            tile = map.data[i][j];
+            draw_tile(j, i, tile);
+        }
+    }
 }
 
