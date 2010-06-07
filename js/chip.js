@@ -238,9 +238,17 @@ function show_maps() {
 }
 
 function save_map(overwrite) {
-    var dataString = JSON.stringify(map);
+    var dataString;
     var level_number = $('#level_number').val();
+    var chips = $('#chips').val();
+    var time = $('#time').val();
+
     map.level_number = level_number;
+    map.chips_left = chips;
+    map.time = time;
+
+    dataString = JSON.stringify(map);
+
     $.post('http://localhost/chip/php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
             function(res) {
                 if (res.indexOf('exists') != -1) {
@@ -256,6 +264,12 @@ function load_map(map_to_load) {
     $.getJSON('http://localhost/chip/php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
         var loaded_map = res;
         map = JSON.parse(loaded_map);
+
+        console.log(map.level_number);
+        $('#level_number').val(map.level_number);
+        $('#chips').val(map.chips_left);
+        $('#time').val(map.time);
+
         draw_map(map);
     });
 }

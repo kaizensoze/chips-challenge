@@ -14,7 +14,9 @@
   <canvas id="map"></canvas><br />
 
   <!-- Save map. -->
-  Level number: <input id="level_number" size="5" type="text" />
+  Level #: <input id="level_number" size="5" type="text" />
+  Chips: <input id="chips" size="5" type="text" />
+  Time: <input id="time" size="5" type="text" />
   <input type="button" onClick="save_map(0)" value="Save" />
   <div id="maps" style="float: right; width: 300; height: 250; overflow: auto;">
     Choose a map to load.
