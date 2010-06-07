@@ -36,8 +36,15 @@ function set_event_handlers() {
             var orientation_input = orientation_input = $('#orientation').val().toUpperCase();
             var color_input = color_input = $('#color').val().toUpperCase();
 
-            add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
-            draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
+            src_filename = dragged_tile_src.split("/").pop();
+            src_input = FileToSource[src_filename];
+
+            if (src_input == Source.CLEAR_TILE) {
+                clear_tile(map_tile_left, map_tile_top);
+            } else {
+                add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
+                draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
+            }
         }
     });
 }
@@ -133,6 +140,17 @@ function draw_tile(left, top, tile) {
         item = tile.items[i];
         draw_tile_part(left, top, tile_path + item.source, item.orientation, item.color);
     }
+}
+
+function clear_tile(left, top) {
+	var map_canvas = $("#map");
+    var ctx = map_canvas[0].getContext('2d');
+	ctx.fillStyle = "rgb(255,255,255)";
+	ctx.fillRect(left * tile_width, top * tile_width, tile_width, tile_width);
+	ctx.fillStyle = "rgb(255,0,0)";
+	ctx.strokeRect(left * tile_width, top * tile_width, tile_width, tile_width);
+
+    delete map.data[top][left];  // TODO: make sure this actually works properly and doesn't cause any problems
 }
 
 function load_config_options() {

@@ -80,7 +80,8 @@ var Source = {
 	SPLASH : 31,
 	SWITCH_ : 32,
 	TELEPORTER : 33,
-	TRAP : 34
+	TRAP : 34,
+    CLEAR_TILE: 40
 };
 
 var FileToSource = {
@@ -94,6 +95,7 @@ var FileToSource = {
 	'chip_up.png' : Source.CHIP_UP,
 	'chip.png' : Source.CHIP,
 	'clear.png' : Source.CLEAR,
+    'clear_tile.png' : Source.CLEAR_TILE,
 	'dash.png' : Source.DASH,
 	'dash_boots.png' : Source.DASH_BOOTS,
 	'ball.png' : Source.BALL,
