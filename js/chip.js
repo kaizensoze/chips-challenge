@@ -2,29 +2,22 @@
 var map;
 
 $(document).ready(function() {
-    vals = init_map();
-    map = vals[0];
-    ctx = vals[1];
-    configure(map, ctx);
+    init_map();
+    load_config_options();
+    set_event_handlers();
     show_maps();
 });
 
-
-/* Methods. */
 function init_map() {
-	map = new Map();
-
 	var map_canvas = $("#map");
     var ctx = map_canvas[0].getContext('2d');
 	ctx.fillStyle = "rgb(255,0,0)";
 	ctx.strokeRect(0, 0, tile_width, tile_width);
 
-    return [map, ctx];
+	map = new Map();
 }
 
-function configure(map, ctx) {
-    load_config_options();
-
+function set_event_handlers() {
     $(".tile").draggable({
         helper: 'clone',
         cursorAt: {left: tile_width/2, top: tile_width/2}
@@ -32,92 +25,110 @@ function configure(map, ctx) {
 
     $("#map").droppable({
         drop: function(event, ui) {
-			var top = ui.position.top;
 			var left = ui.position.left;
-			var map_tile_top = Math.floor(top / tile_width);
+			var top = ui.position.top;
+
 			var map_tile_left = Math.floor(left / tile_width);
+			var map_tile_top = Math.floor(top / tile_width);
 
             var dragged_tile_src = $(ui.draggable).children(':first').attr('src');
-			var img = new Image();
-			img.src = dragged_tile_src;
 
-			src_filename = img.src.split("/").pop();
-			src_input = FileToSource[src_filename];
-
-			/* Configure tile. */
-			var tile;
-			if (map.data[map_tile_top] && map.data[map_tile_top][map_tile_left]) {
-				tile = map.data[map_tile_top][map_tile_left];
-			} else {
-				tile = new Tile();
-			}
-
-			/* Read item[/floor] configuration. */
-			orientation_input = $('#orientation').val().toUpperCase();
-			orientation = Orientation[orientation_input];
-
-			color_input = $('#color').val().toUpperCase();
-			color = Color[color_input];
-
-			if ($.inArray(src_input, Floors) != -1) {
-				/* Set floor. */
-				tile.source = src_input;
-			} else {
-				/* Configure and add item to tile. */
-				item = new Item();
-				item.orientation = orientation;
-				item.color = color;
-				item.source = src_input;
-				if ($.inArray(src_input, Enemies) != -1) {
-					item.type = ItemType.ENEMY;
-				} else if ($.inArray(src_input, InventoryItems) != -1) {
-					item.type = ItemType.INVENTORY;
-				} else if (src_input == Source.CHIP) {
-					item.type = ItemType.CHIP;
-				}
-
-				tile.items.push(item);
-			}
-
-            ctx.save();
-
-			/* Rotate. */
-            translate_x = map_tile_left * tile_width + tile_width/2;
-            translate_y = map_tile_top * tile_width + tile_width/2;
-
-			ctx.translate(translate_x, translate_y);
-			ctx.rotate(orientation * Math.PI / 180);
-
-			/* Color. */
-			var go_color = false;
-			for (var color_check in Color) {
-				if (color == Color[color_check]) {
-					go_color = true;
-					ctx.fillStyle = color;
-				}
-			}
-
-			if (src_input == Source.KEY) {
-				base_x = map_tile_left * tile_width;
-				base_y = map_tile_top * tile_width;
-
-                color_key(ctx, base_x, base_y, translate_x, translate_y, go_color);
-			} else {
-				if (go_color) {
-					ctx.fillRect(map_tile_left * tile_width - translate_x, map_tile_top * tile_width - translate_y, tile_width, tile_width);
-				}
-			}
-
-			ctx.drawImage(img, -tile_width/2, -tile_width/2, tile_width, tile_width);
-
-			ctx.restore();
-
-			if (!map.data[map_tile_top]) {
-				map.data[map_tile_top] = [];
-			}
-			map.data[map_tile_top][map_tile_left] = tile;
+            add_tile_part(map_tile_left, map_tile_top, dragged_tile_src);
+            draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src);
         }
     });
+}
+
+function add_tile_part(map_tile_left, map_tile_top, tile_src) {
+    var tile;
+
+    if (map.data[map_tile_top] && map.data[map_tile_top][map_tile_left]) {
+        tile = map.data[map_tile_top][map_tile_left];
+    } else {
+        tile = new Tile();
+    }
+
+    orientation_input = $('#orientation').val().toUpperCase();
+    orientation = Orientation[orientation_input];
+
+    color_input = $('#color').val().toUpperCase();
+    color = Color[color_input];
+
+    src_filename = tile_src.split("/").pop();
+    src_input = FileToSource[src_filename];
+
+    if ($.inArray(src_input, Floors) != -1) {
+        tile.source = src_filename;  // floor
+    } else {
+        item = new Item();  // item
+        item.orientation = orientation;
+        item.color = color;
+        item.source = src_filename;
+        if ($.inArray(src_input, Enemies) != -1) {
+            item.type = ItemType.ENEMY;
+        } else if ($.inArray(src_input, InventoryItems) != -1) {
+            item.type = ItemType.INVENTORY;
+        } else if (src_input == Source.CHIP) {
+            item.type = ItemType.CHIP;
+        }
+
+        tile.items.push(item);
+    }
+
+    if (!map.data[map_tile_top]) {
+        map.data[map_tile_top] = [];
+    }
+    map.data[map_tile_top][map_tile_left] = tile;
+    console.log(map);
+}
+
+function draw_tile_part(map_tile_left, map_tile_top, tile_src) {
+    var map_canvas = $("#map");
+    var ctx = map_canvas[0].getContext('2d');
+
+    src_filename = tile_src.split("/").pop();
+    src_input = FileToSource[src_filename];
+    
+    ctx.save();
+
+    /* Rotate. */
+    translate_x = map_tile_left * tile_width + tile_width/2;
+    translate_y = map_tile_top * tile_width + tile_width/2;
+
+    ctx.translate(translate_x, translate_y);
+    ctx.rotate(orientation * Math.PI / 180);
+
+    /* Color. */
+    var go_color = false;
+    for (var color_check in Color) {
+        if (color == Color[color_check]) {
+            go_color = true;
+            ctx.fillStyle = color;
+        }
+    }
+
+    if (src_input == Source.KEY) {
+        base_x = map_tile_left * tile_width;
+        base_y = map_tile_top * tile_width;
+
+        color_key(ctx, base_x, base_y, translate_x, translate_y, go_color);
+    } else {
+        if (go_color) {
+            ctx.fillRect(map_tile_left * tile_width - translate_x, map_tile_top * tile_width - translate_y, tile_width, tile_width);
+        }
+    }
+
+    var img = new Image();
+    img.src = tile_src;
+
+    ctx.drawImage(img, -tile_width/2, -tile_width/2, tile_width, tile_width);
+    ctx.restore();
+}
+
+function add_tile() {
+}
+
+function draw_tile() {
 }
 
 function load_config_options() {
@@ -240,3 +251,4 @@ function load_map(map_to_load) {
 function draw_map(loaded_map) {
     console.log(loaded_map);
 }
+

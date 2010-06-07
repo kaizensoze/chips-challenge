@@ -1,5 +1,6 @@
 
 var tile_width = 32;
+var tile_path = '../images/tiles/';
 
 /* Map. */
 function Map() {
@@ -182,14 +183,14 @@ var Enemies = new Array(
 
 /* Objects. */
 function Item() {
-	this.orientation = Orientation.UP;
+	this.orientation;
 	this.color;
 	this.source;
 	this.type;
 }
 
 function Tile() {
-	this.source = Source.FLOOR_NORMAL;
+	this.source;
 	this.items = new Array();
 }
 
