@@ -14,3 +14,29 @@ td {
 #map_output {
 	display: block;
 }
+
+#maps {
+    float: right;
+    width: 300;
+    height: 250;
+    overflow: auto;
+}
+
+#map_region {
+    border-style: outset;
+    border-width: 10px;
+    width: 256;
+    height: 256;
+}
+
+#temp_region {
+    border-style: outset;
+    border-width: 10px;
+    width: 256;
+    height: 256;
+}
+
+#temp {
+    /*display: none;*/
+}
+

@@ -11,14 +11,15 @@
 </head>
 <body>
   <!-- Map. -->
-  <canvas id="map"></canvas><br />
+  <div id="map_region"><canvas id="map" width="256" height="256"></canvas></div><br />
+  <div id="temp_region"><canvas id="temp" width="256" height="256"></canvas></div><br />
 
   <!-- Save map. -->
   Level #: <input id="level_number" size="5" type="text" />
   Chips: <input id="chips" size="5" type="text" />
   Time: <input id="time" size="5" type="text" />
   <input type="button" onClick="save_map(0)" value="Save" />
-  <div id="maps" style="float: right; width: 300; height: 250; overflow: auto;">
+  <div id="maps">
     Choose a map to load.
   </div>
   <br /><br />

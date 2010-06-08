@@ -2,20 +2,11 @@
 var map;
 
 $(document).ready(function() {
-    init_map();
+	map = new Map();
     load_config_options();
     set_event_handlers();
     show_maps();
 });
-
-function init_map() {
-	var map_canvas = $("#map");
-    var ctx = map_canvas[0].getContext('2d');
-	ctx.fillStyle = "rgb(255,0,0)";
-	ctx.strokeRect(0, 0, tile_width, tile_width);
-
-	map = new Map();
-}
 
 function set_event_handlers() {
     $(".tile").draggable({
@@ -23,10 +14,13 @@ function set_event_handlers() {
         cursorAt: {left: tile_width/2, top: tile_width/2}
     });
 
-    $("#map").droppable({
+    $('#map_region').droppable({
         drop: function(event, ui) {
 			var left = ui.position.left;
 			var top = ui.position.top;
+
+            var map_width = $('#map').width();
+            var map_height = $('#map').height();
 
 			var map_tile_left = Math.floor(left / tile_width);
 			var map_tile_top = Math.floor(top / tile_width);
@@ -38,6 +32,16 @@ function set_event_handlers() {
 
             src_filename = dragged_tile_src.split("/").pop();
             src_input = FileToSource[src_filename];
+
+            if (left > map_width || left < 0 || top > map_height || top < 0) {
+                if (left < 0) {
+                    map_tile_left = 0;
+                }
+                if (top < 0) {
+                    map_tile_top = 0;
+                }
+                expand_map(left, top);
+            }
 
             if (src_input == Source.CLEAR_TILE) {
                 clear_tile(map_tile_left, map_tile_top);
@@ -91,9 +95,77 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
     map.data[map_tile_top][map_tile_left] = tile;
 }
 
+function expand_map(left, top) {
+    var map_width = $('#map').width();
+    var map_height = $('#map').height();
+
+    var canvas = document.getElementById('map');
+    var ctx = canvas.getContext('2d');
+
+    var temp = document.getElementById('temp');
+    var temp_ctx = temp.getContext('2d');
+
+    var div_width = $('#map_region').width();
+    var div_height = $('#map_region').height();
+
+    var map_tile_left = Math.floor(left / tile_width);
+    var map_tile_top = Math.floor(top / tile_width);
+
+    if (left < 0 || left > map_width) {
+        $('#temp_region').width(div_width + tile_width);
+        temp.width = map_width + tile_width;
+
+        // copy canvas over to temp
+        temp_ctx.drawImage(canvas, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+
+        $('#map_region').width(div_width + tile_width);  // add col to div
+        canvas.width = map_width + tile_width;  // add col to canvas
+
+        // draw temp back to canvas
+        ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+
+        // if left < 0: shift all tiles in row to right
+        if (left < 0) {
+            sx = 0;
+            sy = map_tile_top * tile_width;
+            s_width = map_width;
+            s_height = tile_width;
+            dx = tile_width;
+            dy = sy;
+            d_width = s_width;
+            d_height = s_height;
+
+            console.log(sx, sy, s_width, s_height, dx, dy, d_width, d_height);
+
+            // copy canvas over to temp
+            temp_ctx.drawImage(canvas, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+
+            // draw subsection from temp over to canvas
+            ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
+        }
+    }
+
+    if (top < 0 || top > map_height) {
+        $('#map_region').height(div_height + tile_width);  // add row to div
+        canvas.height = map_height + tile_width;  // add row to canvas
+
+        // if top < 0: shift all tiles in col down
+        if (top < 0) {
+            sx = (map_tile_left - 1) * tile_width;
+            sy = 0;
+            s_width = tile_width;
+            s_height = map_height;
+            dx = sx;
+            dy = tile_width;
+            d_width = tile_width;
+            d_height = s_height;
+        }
+    }
+}
+
 function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
-    var map_canvas = $("#map");
-    var ctx = map_canvas[0].getContext('2d');
+    var canvas = document.getElementById('map');
+    var ctx = canvas.getContext('2d');
 
     var src_filename, src_input;
     var translate_x, translate_y;
@@ -143,12 +215,10 @@ function draw_tile(left, top, tile) {
 }
 
 function clear_tile(left, top) {
-	var map_canvas = $("#map");
-    var ctx = map_canvas[0].getContext('2d');
+	var canvas = document.getElementById('map');
+    var ctx = canvas.getContext('2d');
 	ctx.fillStyle = "rgb(255,255,255)";
 	ctx.fillRect(left * tile_width, top * tile_width, tile_width, tile_width);
-	ctx.fillStyle = "rgb(255,0,0)";
-	ctx.strokeRect(left * tile_width, top * tile_width, tile_width, tile_width);
 
     delete map.data[top][left];  // TODO: make sure this actually works properly and doesn't cause any problems
 }
@@ -265,7 +335,6 @@ function load_map(map_to_load) {
         var loaded_map = res;
         map = JSON.parse(loaded_map);
 
-        console.log(map.level_number);
         $('#level_number').val(map.level_number);
         $('#chips').val(map.chips_left);
         $('#time').val(map.time);
@@ -275,8 +344,8 @@ function load_map(map_to_load) {
 }
 
 function draw_map(loaded_map) {
-    var map_canvas = $("#map");
-    var ctx = map_canvas[0].getContext('2d');
+    var canvas = document.getElementById('map');
+    var ctx = canvas.getContext('2d');
     
     for (var i=0; i < map.data.length; i++) {
         for (var j=0; j < map.data[i].length; j++) {
