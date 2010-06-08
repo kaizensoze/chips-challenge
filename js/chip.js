@@ -112,19 +112,21 @@ function expand_map(left, top) {
     var map_tile_top = Math.floor(top / tile_width);
 
     if (left < 0 || left > map_width) {
+        // resize temp
         $('#temp_region').width(div_width + tile_width);
         temp.width = map_width + tile_width;
 
-        // copy canvas over to temp
+        // copy canvas to temp before resize (necessary for both < 0 and > max cases)
         temp_ctx.drawImage(canvas, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
 
+        // resize
         $('#map_region').width(div_width + tile_width);  // add col to div
         canvas.width = map_width + tile_width;  // add col to canvas
 
-        // draw temp back to canvas
-        ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+        if (left > map_width) {
+            ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+        }
 
-        // if left < 0: shift all tiles in row to right
         if (left < 0) {
             sx = 0;
             sy = map_tile_top * tile_width;
@@ -135,30 +137,42 @@ function expand_map(left, top) {
             d_width = s_width;
             d_height = s_height;
 
-            console.log(sx, sy, s_width, s_height, dx, dy, d_width, d_height);
-
-            // copy canvas over to temp
-            temp_ctx.drawImage(canvas, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
-
-            // draw subsection from temp over to canvas
+            ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+            ctx.fillStyle = "rgb(256, 256, 256)";
+            ctx.fillRect(dx, dy, d_width, d_height);  // clear row
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
         }
     }
 
     if (top < 0 || top > map_height) {
-        $('#map_region').height(div_height + tile_width);  // add row to div
-        canvas.height = map_height + tile_width;  // add row to canvas
+        $('#temp_region').height(div_height + tile_width);
+        temp.height = map_height + tile_width;
 
-        // if top < 0: shift all tiles in col down
+        // copy canvas to temp before resize (necessary for both < 0 and > max cases)
+        temp_ctx.drawImage(canvas, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+
+        // resize
+        $('#map_region').height(div_height + tile_width);  // add col to div
+        canvas.height = map_height + tile_width;  // add col to canvas
+
+        if (top > map_height) {
+            ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+        }
+
         if (top < 0) {
-            sx = (map_tile_left - 1) * tile_width;
+            sx = map_tile_left * tile_width;
             sy = 0;
             s_width = tile_width;
             s_height = map_height;
             dx = sx;
             dy = tile_width;
-            d_width = tile_width;
+            d_width = s_width;
             d_height = s_height;
+
+            ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+            ctx.fillStyle = "rgb(256, 256, 256)";
+            ctx.fillRect(dx, dy, d_width, d_height);  // clear col
+            ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
         }
     }
 }
