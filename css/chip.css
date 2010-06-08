@@ -36,7 +36,7 @@ td {
     height: 256;
 }
 
-#temp {
-    /*display: none;*/
+#temp_region {
+    display: none;
 }
 

@@ -12,7 +12,7 @@
 <body>
   <!-- Map. -->
   <div id="map_region"><canvas id="map" width="256" height="256"></canvas></div><br />
-  <div id="temp_region"><canvas id="temp" width="256" height="256"></canvas></div><br />
+  <div id="temp_region"><canvas id="temp" width="256" height="256"></canvas></div>
 
   <!-- Save map. -->
   Level #: <input id="level_number" size="5" type="text" />

@@ -2,11 +2,21 @@
 var map;
 
 $(document).ready(function() {
-	map = new Map();
+    init_map();
     load_config_options();
     set_event_handlers();
     show_maps();
 });
+
+function init_map() {
+    var canvas = document.getElementById('map');
+    var height = canvas.height;
+
+	map = new Map();
+    for (var i=0; i < height; i++) {
+        map.data[i] = [];
+    }
+}
 
 function set_event_handlers() {
     $(".tile").draggable({
@@ -139,8 +149,13 @@ function expand_map(left, top) {
 
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             ctx.fillStyle = "rgb(256, 256, 256)";
-            ctx.fillRect(dx, dy, d_width, d_height);  // clear row
+            ctx.fillRect(0, dy, d_width, d_height);  // clear row
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
+
+            for (var i=map.data[map_tile_top].length - 1; i > 0; i--) {
+                var tile_to_be_shifted = map.data[map_tile_top][i-1];
+                map.data[map_tile_top][i] = tile_to_be_shifted;
+            }
         }
     }
 
@@ -171,10 +186,19 @@ function expand_map(left, top) {
 
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             ctx.fillStyle = "rgb(256, 256, 256)";
-            ctx.fillRect(dx, dy, d_width, d_height);  // clear col
+            ctx.fillRect(dx, 0, d_width, d_height);  // clear col
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
+
+            for (var i=canvas.height/tile_width; i > 0; i--) {
+                if (!map.data[i]) {
+                    map.data[i] = [];
+                }
+                var tile_to_be_shifted = map.data[i-1][map_tile_left];
+                map.data[i][map_tile_left] = tile_to_be_shifted;
+            }
         }
     }
+    console.log(map);
 }
 
 function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
