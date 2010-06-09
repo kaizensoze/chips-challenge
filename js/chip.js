@@ -2,19 +2,25 @@
 var map;
 
 $(document).ready(function() {
-    init_map();
     load_config_options();
     set_event_handlers();
     show_maps();
 });
 
+$(window).load(function() {
+    init_map();  // IMPORTANT: the draw part of init only works using window.load()
+});
+
 function init_map() {
     var canvas = document.getElementById('map');
-    var height = canvas.height;
 
 	map = new Map();
-    for (var i=0; i < height/tile_width; i++) {
+    for (var i=0; i < canvas.height/tile_width; i++) {
         map.data[i] = [];
+        for (var j=0; j < canvas.width/tile_width; j++) {
+            add_tile_part(j, i, tile_path + 'floor_normal.png', 'UP', '');
+            draw_tile_part(j, i, tile_path + 'floor_normal.png', 'UP', '');
+        }
     }
 }
 
@@ -59,8 +65,6 @@ function set_event_handlers() {
                 add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
                 draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
             }
-
-            console.log(map);
         }
     });
 }
