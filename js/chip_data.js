@@ -9,6 +9,8 @@ function Map() {
 	this.level_number;
 	this.time;
 	this.chips_left;
+
+    this.starting_point;  // x,y
 }
 
 /* Chip. */
@@ -181,6 +183,13 @@ var Enemies = new Array(
 	Source.FIREBALL,
 	Source.GHOST,
 	Source.TANK
+);
+
+var ChipPoses = new Array(
+    Source.CHIP_DOWN,
+    Source.CHIP_UP,
+    Source.CHIP_LEFT,
+    Source.CHIP_RIGHT
 );
 
 /* Objects. */

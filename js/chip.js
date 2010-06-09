@@ -19,7 +19,6 @@ function init_map() {
         map.data[i] = [];
         for (var j=0; j < canvas.width/tile_width; j++) {
             add_tile_part(j, i, tile_path + 'floor_normal.png', 'UP', '');
-            draw_tile_part(j, i, tile_path + 'floor_normal.png', 'UP', '');
         }
     }
 }
@@ -63,9 +62,7 @@ function set_event_handlers() {
                 clear_tile(map_tile_left, map_tile_top);
             } else {
                 add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
-                draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
             }
-            console.log(map);
         }
     });
 }
@@ -103,6 +100,15 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
             item.type = ItemType.CHIP;
         }
 
+        // if chip is placed on map, set the starting point
+        if ($.inArray(src_input, ChipPoses) != -1) {
+            if (map.starting_point) {
+                alert("There can be only one chip!");
+                return;
+            }
+            map.starting_point = [map_tile_left, map_tile_top];
+        }
+
         tile.items.push(item);
     }
 
@@ -110,10 +116,11 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
         map.data[map_tile_top] = [];
     }
     map.data[map_tile_top][map_tile_left] = tile;
+
+    draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input);
 }
 
 function expand_map(left, top) {
-
     var map_width = $('#map').width();
     var map_height = $('#map').height();
 
@@ -269,7 +276,16 @@ function clear_tile(left, top) {
 	ctx.fillStyle = "rgb(255,255,255)";
 	ctx.fillRect(left * tile_width, top * tile_width, tile_width, tile_width);
 
-    delete map.data[top][left];  // TODO: make sure this actually works properly and doesn't cause any problems
+    tile = map.data[top][left];
+
+    // clear map's starting point if tile being deleted contains chip (protagonist)
+    for (var i=0; i < tile.items.length; i++) {
+        item = tile.items[i];
+        if ($.inArray(FileToSource[item.source], ChipPoses) != -1) {
+            map.starting_point = null;
+        }
+    }
+    delete tile;  // TODO: make sure this actually works properly and doesn't cause any problems
 }
 
 function load_config_options() {
