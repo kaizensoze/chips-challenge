@@ -18,6 +18,7 @@
   Level #: <input id="level_number" size="5" type="text" />
   Chips: <input id="chips" size="5" type="text" />
   Time: <input id="time" size="5" type="text" />
+  Password: <input id="password" size="5" type="text" />
   <input type="button" onClick="save_map(0)" value="Save" />
   <div id="maps">
     Choose a map to load.

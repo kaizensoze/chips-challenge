@@ -9,8 +9,8 @@ function Map() {
 	this.level_number;
 	this.time;
 	this.chips_left;
-
     this.starting_point;  // x,y
+    this.password;
 }
 
 /* Chip. */

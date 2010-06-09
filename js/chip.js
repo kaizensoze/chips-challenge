@@ -107,6 +107,7 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
                 return;
             }
             map.starting_point = [map_tile_left, map_tile_top];
+            console.log(map.starting_point);
         }
 
         tile.items.push(item);
@@ -170,6 +171,11 @@ function expand_map(left, top) {
             for (var i=(canvas.width/tile_width)-1; i > 0; i--) {
                 var tile_to_be_shifted = map.data[map_tile_top][i-1];
                 map.data[map_tile_top][i] = tile_to_be_shifted;
+
+                // update map's starting point if it's one of tiles being shifted
+                if (map.starting_point[0] == i-1 && map.starting_point[1] == map_tile_top) {
+                    map.starting_point = [i, map_tile_top];
+                }
             }
         }
     }
@@ -210,9 +216,15 @@ function expand_map(left, top) {
                 }
                 var tile_to_be_shifted = map.data[i-1][map_tile_left];
                 map.data[i][map_tile_left] = tile_to_be_shifted;
+
+                // update map's starting point if it's one of tiles being shifted
+                if (map.starting_point[0] == map_tile_left && map.starting_point[1] == i-1) {
+                    map.starting_point = [map_tile_left, i];
+                }
             }
         }
     }
+    console.log(map.starting_point);
 }
 
 function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
@@ -377,10 +389,12 @@ function save_map(overwrite) {
     var level_number = $('#level_number').val();
     var chips = $('#chips').val();
     var time = $('#time').val();
+    var password = $('#password').val();
 
     map.level_number = level_number;
     map.chips_left = chips;
     map.time = time;
+    map.password = password;
 
     dataString = JSON.stringify(map);
 
