@@ -152,7 +152,7 @@ function expand_map(left, top) {
             ctx.fillRect(0, dy, d_width, d_height);  // clear row
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
-            for (var i=map.data[map_tile_top].length - 1; i > 0; i--) {
+            for (var i=canvas.width/tile_width; i > 0; i--) {
                 var tile_to_be_shifted = map.data[map_tile_top][i-1];
                 map.data[map_tile_top][i] = tile_to_be_shifted;
             }
