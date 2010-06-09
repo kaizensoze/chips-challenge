@@ -125,24 +125,8 @@ var FileToSource = {
 };
 
 var Floors = new Array(
-	Source.BLOCK_MUD,
-	Source.BLOCK_NORMAL,
-	Source.BLOCK_QUESTIONABLE,
-	Source.BLOCK_SWITCHABLE,
-	Source.CLEAR,
-	Source.DASH,
-	Source.FIRE,
-	Source.FIREBALL_GENERATOR,
 	Source.FLOOR_MUD,
-	Source.FLOOR_NORMAL,
-	Source.GOAL,
-	Source.HELP,
-	Source.ICE_CENTER,
-	Source.ICE_CORNER,
-	Source.SPLASH,
-	Source.SWITCH_,
-	Source.TELEPORTER,
-	Source.TRAP
+	Source.FLOOR_NORMAL
 );
 
 var Items = new Array(
@@ -163,7 +147,23 @@ var Items = new Array(
 	Source.GATE_GOAL,
 	Source.GATE,
 	Source.ICE_SKATES,
-	Source.KEY
+	Source.KEY,
+	Source.BLOCK_MUD,
+	Source.BLOCK_NORMAL,
+	Source.BLOCK_QUESTIONABLE,
+	Source.BLOCK_SWITCHABLE,
+	Source.CLEAR,
+	Source.DASH,
+	Source.FIRE,
+	Source.FIREBALL_GENERATOR,
+	Source.GOAL,
+	Source.HELP,
+	Source.ICE_CENTER,
+	Source.ICE_CORNER,
+	Source.SPLASH,
+	Source.SWITCH_,
+	Source.TELEPORTER,
+	Source.TRAP
 );
 
 var InventoryItems = new Array(

@@ -65,6 +65,7 @@ function set_event_handlers() {
                 add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
                 draw_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
             }
+            console.log(map);
         }
     });
 }
