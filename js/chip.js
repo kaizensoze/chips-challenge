@@ -172,8 +172,7 @@ function expand_map(left, top) {
             d_height = s_height;
 
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
-            ctx.fillStyle = "rgb(256, 256, 256)";
-            ctx.fillRect(0, 0, tile_width, map_height);  // clear col
+            ctx.clearRect(0, 0, tile_width, map_height);  // clear col
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
@@ -232,8 +231,7 @@ function expand_map(left, top) {
             d_height = s_height;
 
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
-            ctx.fillStyle = "rgb(256, 256, 256)";
-            ctx.fillRect(0, 0, map_width, tile_width);  // clear row
+            ctx.clearRect(0, 0, map_width, tile_width);  // clear row
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
