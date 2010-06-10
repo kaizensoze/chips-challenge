@@ -16,6 +16,7 @@ function Map() {
 /* Chip. */
 function Chip() {
 	this.inventory = new Array();
+    this.orientation = Direction.UP;
     this.position_x;
     this.position_y;
 }
@@ -27,9 +28,6 @@ function GameData(map) {
 
     this.chips_left = map.chips;
     this.time_remaining = map.time;
-
-    this.viewport_x = map.start_point[0] - 4;
-    this.viewport_y = map.start_point[1] - 4;
 }
 
 /* Enums. */
@@ -213,18 +211,11 @@ var ChipPoses = new Array(
     Source.CHIP_RIGHT
 );
 
-var KeyToPose = {
-    Direction.LEFT : Source.CHIP_LEFT,
-    Direction.UP : Source.CHIP_UP,
-    Direction.RIGHT : Source.CHIP_RIGHT,
-    Dirction.DOWN : Source.CHIP_DOWN
-};
-
-var PoseToFile = {
-    Source.CHIP_LEFT : 'chip_left.png',
-    Source.CHIP_UP : 'chip_up.png',
-    Source.CHIP_RIGHT : 'chip_right.png',
-    Source.CHIP_DOWN : 'chip_down.png'
+var DirectionToFile = {
+    0 : 'chip_left.png',
+    1 : 'chip_up.png',
+    2 : 'chip_right.png',
+    3 : 'chip_down.png'
 };
 
 /* Objects. */

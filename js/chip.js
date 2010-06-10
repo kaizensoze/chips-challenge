@@ -513,24 +513,16 @@ function play_map() {
 }
 
 function move(direction) {
-    var chip_x = game_data.chip.position_x;
-    var chip_y = game_data.chip.position_y;
-    var orientation;
-
-    clear_tile(chip_x, chip_y);
-
-    orientation = PoseToFile[KeyToPose[direction]];
-
-    if (can_move()) {
-        change position;
-    }
-
-    draw_move(orientation, new_position);
+    update_chip(direction);
     update_viewport();
 }
 
-function can_move(direction) {
-    return false;
+function update_chip(direction) {
+    var chip = game_data.chip;
+    // TODO: check for obstacles that would prevent chip from moving
+    // TODO: take into consideration objects such as teleporters
+    clear_tile(chip.position_x, chip.position_y);
+    add_tile_part(chip.position_x, chip.position_y, tile_path + DirectionToFile[direction], 'UP', '');
 }
 
 function update_viewport() {
@@ -539,8 +531,8 @@ function update_viewport() {
     var map_canvas = document.getElementById('map');
     var map_ctx = map_canvas.getContext('2d');
 
-    sx = game_data.viewport_x * tile_width;
-    sy = game_data.viewport_y * tile_width;
+    sx = (game_data.chip.position_x - 4) * tile_width;
+    sy = (game_data.chip.position_y - 4) * tile_width;
     s_width = viewport.width;
     s_height = viewport.height;
     d_width = s_width;
