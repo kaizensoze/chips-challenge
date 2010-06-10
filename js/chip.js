@@ -5,7 +5,7 @@ var game_data;
 $(document).ready(function() {
     sync_canvas_stuff();
     load_config_options();
-    set_play_event_handlers();
+    set_editor_event_handlers();
     show_maps();
 });
 
