@@ -174,7 +174,7 @@ function expand_map(left, top) {
 
             // update map data structure as result of shift
             for (var i=(canvas.height/tile_width)-1; i >= 0; i--) {
-                for (var j=(canvas.width/tile_width)-1; j > 0; j--) {
+                for (var j=(canvas.width/tile_width)-1; j >= 0; j--) {
                     var tile_to_be_shifted = map.data[i][j-1];
                     map.data[i][j] = tile_to_be_shifted;
 
@@ -233,7 +233,7 @@ function expand_map(left, top) {
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
-            for (var i=(canvas.height/tile_width)-1; i > 0; i--) {
+            for (var i=(canvas.height/tile_width)-1; i >= 0; i--) {
                 for (var j=(canvas.width/tile_width)-1; j >= 0; j--) {
                     var tile_to_be_shifted = map.data[i-1][j];
                     map.data[i][j] = tile_to_be_shifted;
@@ -251,6 +251,8 @@ function expand_map(left, top) {
             }
         }
     }
+    console.log('blah');
+    console.log(map);
 }
 
 function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
@@ -323,7 +325,8 @@ function clear_tile(left, top) {
             map.starting_point = null;
         }
     }
-    delete tile;  // TODO: make sure this actually works properly and doesn't cause any problems
+    map.data[top][left] = null;
+    add_tile_part(left, top, tile_path + 'floor_normal.png', 'UP', '');
 }
 
 function load_config_options() {
@@ -443,6 +446,7 @@ function load_map(map_to_load) {
         $('#level_number').val(map.level_number);
         $('#chips').val(map.chips_left);
         $('#time').val(map.time);
+        $('#password').val(map.password);
 
         draw_map(map);
     });

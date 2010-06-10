@@ -10,20 +10,24 @@
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
-  <!-- Map. -->
-  <div id="map_region"><canvas id="map" width="256" height="256"></canvas></div><br />
-  <div id="temp_region"><canvas id="temp" width="256" height="256"></canvas></div>
-
   <!-- Save map. -->
   Level #: <input id="level_number" size="5" type="text" />
   Chips: <input id="chips" size="5" type="text" />
   Time: <input id="time" size="5" type="text" />
   Password: <input id="password" size="5" type="text" />
   <input type="button" onClick="save_map(0)" value="Save" />
+
+  <!-- Map. -->
+  <div id="map_region"><canvas id="map" width="256" height="256"></canvas></div><br />
+  <div id="temp_region"><canvas id="temp" width="256" height="256"></canvas></div>
+
   <div id="maps">
     Choose a map to load.
   </div>
-  <br /><br />
+
+  <!-- Item configuration -->
+  Orientation: <select id="orientation"></select>
+  Color: <select id="color"></select><br /><br />
 
   <!-- Load tile images. -->
   <?php
@@ -51,10 +55,5 @@
     }
     echo $tile_str;
   ?>
-  <br /><br />
-
-  <!-- Item configuration -->
-  Orientation: <select id="orientation"></select>
-  Color: <select id="color"></select>
 </body>
 </html>
