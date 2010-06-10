@@ -8,7 +8,7 @@ table {
 }
 
 td {
-  padding: 0px;
+  padding: 0;
 }
 
 #map_output {
@@ -24,14 +24,14 @@ td {
 
 #map_region {
     border-style: outset;
-    border-width: 10px;
+    border-width: 10;
     width: 256;
     height: 256;
 }
 
 #temp_region {
     border-style: outset;
-    border-width: 10px;
+    border-width: 10;
     width: 256;
     height: 256;
 }

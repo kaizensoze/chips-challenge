@@ -31,8 +31,12 @@ function set_event_handlers() {
 
     $('#map_region').droppable({
         drop: function(event, ui) {
-			var left = ui.position.left;
-			var top = ui.position.top;
+            var map_region_left = $('#map_region').position().left;
+            var map_region_top = $('#map_region').position().top;
+            var map_region_border_width = parseInt($('#map_region').css('borderLeftWidth'));
+
+			var left = ui.position.left - map_region_left + tile_width/2 - map_region_border_width;
+			var top = ui.position.top - map_region_top + tile_width/2 - map_region_border_width;
 
             var map_width = $('#map').width();
             var map_height = $('#map').height();
@@ -174,7 +178,7 @@ function expand_map(left, top) {
 
             // update map data structure as result of shift
             for (var i=(canvas.height/tile_width)-1; i >= 0; i--) {
-                for (var j=(canvas.width/tile_width)-1; j >= 0; j--) {
+                for (var j=(canvas.width/tile_width)-1; j > 0; j--) {
                     var tile_to_be_shifted = map.data[i][j-1];
                     map.data[i][j] = tile_to_be_shifted;
 
@@ -187,7 +191,7 @@ function expand_map(left, top) {
 
             // add new prefilled col
             for (var i=0; i < canvas.height/tile_width; i++) {
-                add_tile_part(0, i, tile_path + 'floor_normal.png', 'UP', '');
+                clear_tile(0, i);
             }
         }
     }
@@ -233,7 +237,7 @@ function expand_map(left, top) {
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
-            for (var i=(canvas.height/tile_width)-1; i >= 0; i--) {
+            for (var i=(canvas.height/tile_width)-1; i > 0; i--) {
                 for (var j=(canvas.width/tile_width)-1; j >= 0; j--) {
                     var tile_to_be_shifted = map.data[i-1][j];
                     map.data[i][j] = tile_to_be_shifted;
@@ -247,7 +251,7 @@ function expand_map(left, top) {
 
             // add new prefilled row
             for (var i=0; i < canvas.width/tile_width; i++) {
-                add_tile_part(i, 0, tile_path + 'floor_normal.png', 'UP', '');
+                clear_tile(i, 0);
             }
         }
     }
