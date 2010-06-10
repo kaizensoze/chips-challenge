@@ -15,11 +15,13 @@
   Chips: <input id="chips" size="5" type="text" />
   Time: <input id="time" size="5" type="text" />
   Password: <input id="password" size="5" type="text" />
-  <input type="button" onClick="save_map(0)" value="Save" />
+  <input type="button" onClick="save_map(0)" value="Save" /><br />
+  <input type="button" onClick="play_map();" value="Play" />
 
   <!-- Map. -->
-  <div id="map_region"><canvas id="map" width="288" height="288"></canvas></div><br />
+  <div id="map_region"><canvas id="map" width="288" height="288"></canvas></div>
   <div id="temp_region"><canvas id="temp" width="288" height="288"></canvas></div>
+  <div id="viewport_container"><canvas id="viewport" width="288" height="288"></canvas></div><br />
 
   <div id="maps">
     Choose a map to load.

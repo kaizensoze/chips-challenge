@@ -1,10 +1,11 @@
 
 var map;
+var game_data;
 
 $(document).ready(function() {
     sync_canvas_stuff();
     load_config_options();
-    set_event_handlers();
+    set_play_event_handlers();
     show_maps();
 });
 
@@ -24,14 +25,14 @@ function init_map() {
     }
 }
 
-function set_event_handlers() {
+function set_editor_event_handlers() {
     $(".tile").draggable({
         helper: 'clone',
         cursorAt: {left: tile_width/2, top: tile_width/2}
     });
 
     $('#map_region').droppable({
-        drop: function(event, ui) {
+        drop: function(evt, ui) {
             var map_region_left = $('#map_region').position().left;
             var map_region_top = $('#map_region').position().top;
             var map_region_border_width = parseInt($('#map_region').css('borderLeftWidth'));
@@ -72,6 +73,20 @@ function set_event_handlers() {
     });
 }
 
+function set_play_event_handlers() {
+    $(document).keydown(function(evt) {
+        key = evt.which;
+        switch (key) {
+            case 37: move(Direction.LEFT); break;  // Left
+            case 38: move(Direction.UP); break;  // Up
+            case 39: move(Direction.RIGHT); break;  // Right
+            case 40: move(Direction.DOWN); break;  // Down
+            default: return false;
+        }
+        evt.preventDefault();
+    });
+}
+
 function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
     var orientation_input, orientation;
     var color_input, color;
@@ -105,13 +120,13 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
             item.type = ItemType.CHIP;
         }
 
-        // if chip is placed on map, set the starting point
+        // if chip is placed on map, set the start point
         if ($.inArray(src_input, ChipPoses) != -1) {
-            if (map.starting_point) {
+            if (map.start_point) {
                 alert("There can be only one chip!");
                 return;
             }
-            map.starting_point = [map_tile_left, map_tile_top];
+            map.start_point = [map_tile_left, map_tile_top];
         }
 
         tile.items.push(item);
@@ -182,9 +197,9 @@ function expand_map(left, top) {
                     var tile_to_be_shifted = map.data[i][j-1];
                     map.data[i][j] = tile_to_be_shifted;
 
-                    // update map's starting point if it's one of tiles being shifted
-                    if (map.starting_point && map.starting_point[0] == j-1 && map.starting_point[1] == i) {
-                        map.starting_point = [j, i];
+                    // update map's start point if it's one of tiles being shifted
+                    if (map.start_point && map.start_point[0] == j-1 && map.start_point[1] == i) {
+                        map.start_point = [j, i];
                     }
                 }
             }
@@ -241,9 +256,9 @@ function expand_map(left, top) {
                     var tile_to_be_shifted = map.data[i-1][j];
                     map.data[i][j] = tile_to_be_shifted;
 
-                    // update map's starting point if it's one of tiles being shifted
-                    if (map.starting_point && map.starting_point[0] == j && map.starting_point[1] == i-1) {
-                        map.starting_point = [j, i];
+                    // update map's start point if it's one of tiles being shifted
+                    if (map.start_point && map.start_point[0] == j && map.start_point[1] == i-1) {
+                        map.start_point = [j, i];
                     }
                 }
             }
@@ -321,11 +336,11 @@ function clear_tile(left, top) {
 
     tile = map.data[top][left];
 
-    // clear map's starting point if tile being deleted contains chip (protagonist)
+    // clear map's start point if tile being deleted contains chip (protagonist)
     for (var i=0; i < tile.items.length; i++) {
         item = tile.items[i];
         if ($.inArray(FileToSource[item.source], ChipPoses) != -1) {
-            map.starting_point = null;
+            map.start_point = null;
         }
     }
     map.data[top][left] = null;
@@ -432,7 +447,7 @@ function save_map(overwrite) {
     var password = $('#password').val();
 
     map.level_number = level_number;
-    map.chips_left = chips;
+    map.chips = chips;
     map.time = time;
     map.password = password;
 
@@ -455,7 +470,7 @@ function load_map(map_to_load) {
         map = JSON.parse(loaded_map);
 
         $('#level_number').val(map.level_number);
-        $('#chips').val(map.chips_left);
+        $('#chips').val(map.chips);
         $('#time').val(map.time);
         $('#password').val(map.password);
 
@@ -484,5 +499,53 @@ function draw_map(loaded_map) {
             draw_tile(j, i, tile);
         }
     }
+}
+
+function play_map() {
+    set_play_event_handlers();
+
+    $('#map_region').hide();
+    $('#viewport').show();
+    $('#viewport').focus();
+
+    game_data = new GameData(map);
+    update_viewport();
+}
+
+function move(direction) {
+    var chip_x = game_data.chip.position_x;
+    var chip_y = game_data.chip.position_y;
+    var orientation;
+
+    clear_tile(chip_x, chip_y);
+
+    orientation = PoseToFile[KeyToPose[direction]];
+
+    if (can_move()) {
+        change position;
+    }
+
+    draw_move(orientation, new_position);
+    update_viewport();
+}
+
+function can_move(direction) {
+    return false;
+}
+
+function update_viewport() {
+    var viewport = document.getElementById('viewport');
+    var viewport_ctx = viewport.getContext('2d');
+    var map_canvas = document.getElementById('map');
+    var map_ctx = map_canvas.getContext('2d');
+
+    sx = game_data.viewport_x * tile_width;
+    sy = game_data.viewport_y * tile_width;
+    s_width = viewport.width;
+    s_height = viewport.height;
+    d_width = s_width;
+    d_height = s_height;
+
+    viewport_ctx.drawImage(map_canvas, sx, sy, s_width, s_height, 0, 0, d_width, d_height);
 }
 

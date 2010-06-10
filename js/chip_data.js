@@ -8,14 +8,28 @@ function Map() {
 
 	this.level_number;
 	this.time;
-	this.chips_left;
-    this.starting_point;  // x,y (left, top)
+	this.chips;
+    this.start_point;  // x,y (left, top)
     this.password;
 }
 
 /* Chip. */
 function Chip() {
 	this.inventory = new Array();
+    this.position_x;
+    this.position_y;
+}
+
+function GameData(map) {
+    this.chip = new Chip();
+    this.chip.position_x = map.start_point[0];
+    this.chip.position_y = map.start_point[1];
+
+    this.chips_left = map.chips;
+    this.time_remaining = map.time;
+
+    this.viewport_x = map.start_point[0] - 4;
+    this.viewport_y = map.start_point[1] - 4;
 }
 
 /* Enums. */
@@ -24,6 +38,13 @@ var Orientation = {
 	LEFT : 270,
 	DOWN : 180,
 	RIGHT : 90
+};
+
+var Direction = {
+    LEFT : 0,
+    UP : 1,
+    RIGHT : 2,
+    DOWN : 3
 };
 
 var Color = {
@@ -191,6 +212,20 @@ var ChipPoses = new Array(
     Source.CHIP_LEFT,
     Source.CHIP_RIGHT
 );
+
+var KeyToPose = {
+    Direction.LEFT : Source.CHIP_LEFT,
+    Direction.UP : Source.CHIP_UP,
+    Direction.RIGHT : Source.CHIP_RIGHT,
+    Dirction.DOWN : Source.CHIP_DOWN
+};
+
+var PoseToFile = {
+    Source.CHIP_LEFT : 'chip_left.png',
+    Source.CHIP_UP : 'chip_up.png',
+    Source.CHIP_RIGHT : 'chip_right.png',
+    Source.CHIP_DOWN : 'chip_down.png'
+};
 
 /* Objects. */
 function Item() {
