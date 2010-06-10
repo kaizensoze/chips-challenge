@@ -2,6 +2,7 @@
 var map;
 
 $(document).ready(function() {
+    sync_canvas_stuff();
     load_config_options();
     set_event_handlers();
     show_maps();
@@ -329,6 +330,14 @@ function clear_tile(left, top) {
     }
     map.data[top][left] = null;
     add_tile_part(left, top, tile_path + 'floor_normal.png', 'UP', '');
+}
+
+function sync_canvas_stuff() {
+    $('#map_region').width($('#map').width());
+    $('#map_region').height($('#map').height());
+
+    $('#temp_region').width($('#map').width());
+    $('#temp_region').height($('#map').height());
 }
 
 function load_config_options() {

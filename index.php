@@ -18,8 +18,8 @@
   <input type="button" onClick="save_map(0)" value="Save" />
 
   <!-- Map. -->
-  <div id="map_region"><canvas id="map" width="256" height="256"></canvas></div><br />
-  <div id="temp_region"><canvas id="temp" width="256" height="256"></canvas></div>
+  <div id="map_region"><canvas id="map" width="288" height="288"></canvas></div><br />
+  <div id="temp_region"><canvas id="temp" width="288" height="288"></canvas></div>
 
   <div id="maps">
     Choose a map to load.
