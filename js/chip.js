@@ -519,10 +519,17 @@ function move(direction) {
 
 function update_chip(direction) {
     var chip = game_data.chip;
-    // TODO: check for obstacles that would prevent chip from moving
-    // TODO: take into consideration objects such as teleporters
+
+    interact(direction);
+
     clear_tile(chip.position_x, chip.position_y);
     add_tile_part(chip.position_x, chip.position_y, tile_path + DirectionToFile[direction], 'UP', '');
+}
+
+function interact(direction) {
+    // !!! GAME LOGIC GOES HERE
+    // TODO: check for obstacles that would prevent chip from moving
+    // TODO: take into consideration objects such as teleporters
 }
 
 function update_viewport() {

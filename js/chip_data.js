@@ -102,7 +102,8 @@ var Source = {
 	SWITCH_ : 32,
 	TELEPORTER : 33,
 	TRAP : 34,
-    CLEAR_TILE: 40
+    CLEAR_TILE : 40,
+    WATER : 43
 };
 
 var FileToSource = {
@@ -143,10 +144,10 @@ var FileToSource = {
 	'switch.png' : Source.SWITCH_,
 	'teleporter.png' : Source.TELEPORTER,
 	'trap.png' : Source.TRAP,
+    'water.png' : Source.WATER
 };
 
 var Floors = new Array(
-	Source.FLOOR_MUD,
 	Source.FLOOR_NORMAL
 );
 
@@ -184,7 +185,9 @@ var Items = new Array(
 	Source.SPLASH,
 	Source.SWITCH_,
 	Source.TELEPORTER,
-	Source.TRAP
+	Source.TRAP,
+	Source.FLOOR_MUD,
+    Source.WATER
 );
 
 var InventoryItems = new Array(
