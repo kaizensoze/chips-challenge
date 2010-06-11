@@ -607,12 +607,12 @@ function interact(direction) {
             var has_key = false;
             var inventory = chip.inventory;
             var inventory_item;
-            for (var i=0; i < inventory.length; i++) {
-                inventory_item = inventory[i];
+            for (var j=0; j < inventory.length; j++) {
+                inventory_item = inventory[j];
                 if (FileToSource[inventory_item.source] == Source.KEY && inventory_item.color == gate_color) {
                     has_key = true;
                     items.splice(i,1);
-                    inventory.splice(i,1);
+                    inventory.splice(j,1);
                     break;
                 }
             }
@@ -633,8 +633,6 @@ function interact(direction) {
     // update chip's position
     chip.position_x = x;
     chip.position_y = y;
-
-    console.log(game_data);
 }
 
 function update_viewport() {
