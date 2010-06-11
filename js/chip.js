@@ -551,20 +551,20 @@ function interact(direction) {
 
     switch (direction) {
         case Direction.LEFT:
-            x = game_data.chip.position_x - 1;
-            y = game_data.chip.position_y;
+            x = chip.position_x - 1;
+            y = chip.position_y;
             break;
         case Direction.UP:
-            x = game_data.chip.position_x;
-            y = game_data.chip.position_y - 1;
+            x = chip.position_x;
+            y = chip.position_y - 1;
             break;
         case Direction.RIGHT: 
-            x = game_data.chip.position_x + 1;
-            y = game_data.chip.position_y;
+            x = chip.position_x + 1;
+            y = chip.position_y;
             break;
         case Direction.DOWN:
-            x = game_data.chip.position_x;
-            y = game_data.chip.position_y + 1;
+            x = chip.position_x;
+            y = chip.position_y + 1;
             break;
         default: return;
     }
@@ -602,12 +602,18 @@ function interact(direction) {
 
         // if gate, check for key
         if (item_source == Source.GATE) {
+            var gate_color = item.color;
+
             var has_key = false;
-            for (item in inventory) {
-                if (has key) {
+            var inventory = chip.inventory;
+            var inventory_item;
+            for (var i=0; i < inventory.length; i++) {
+                inventory_item = inventory[i];
+                if (FileToSource[inventory_item.source] == Source.KEY && inventory_item.color == gate_color) {
                     has_key = true;
-                    remove key from inventory
-                    remove gate
+                    items.splice(i,1);
+                    inventory.splice(i,1);
+                    break;
                 }
             }
             if (!has_key) {
@@ -616,6 +622,8 @@ function interact(direction) {
         }
 
         // TODO: help
+
+        // TODO: if block, return
     }
 
     // update the game tile
@@ -623,8 +631,8 @@ function interact(direction) {
     draw_tile(x, y, tile_to_check);
 
     // update chip's position
-    game_data.chip.position_x = x;
-    game_data.chip.position_y = y;
+    chip.position_x = x;
+    chip.position_y = y;
 
     console.log(game_data);
 }
