@@ -155,7 +155,8 @@ var FileToSource = {
 };
 
 var Floors = new Array(
-	Source.FLOOR_NORMAL
+	Source.FLOOR_NORMAL,
+    'WTF' // array needs to contain more than one literal in constructor for it to be recognized as containing anything
 );
 
 var Items = new Array(

@@ -112,7 +112,7 @@ function add_tile_part(position, tile_src, orientation_input, color_input) {
     var item;
     if ($.inArray(src_input, Floors) != -1) {
         tile.source = src_filename;  // floor
-    } else {
+    } else if ($.inArray(src_input, Items) != -1) {
         item = new Item();  // item
         item.orientation = orientation_input;
         item.color = color_input;
@@ -338,7 +338,7 @@ function draw_tile(position, tile) {
         return;
     }
 
-    draw_tile_part(position, tile_path + tile.source);
+    draw_tile_part(position, tile_path + tile.source, 'UP', '');
     for (var i=0; i < tile.items.length; i++) {
         item = tile.items[i];
         draw_tile_part(position, tile_path + item.source, item.orientation, item.color);
