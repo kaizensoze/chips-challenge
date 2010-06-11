@@ -478,6 +478,9 @@ function load_map(map_to_load) {
     });
 }
 
+function reset() {
+}
+
 function draw_map(loaded_map) {
     var canvas = document.getElementById('map');
     var ctx = canvas.getContext('2d');
@@ -533,7 +536,11 @@ function update_chip(direction) {
     // add updated chip to new position
     add_tile_part(chip.position_x, chip.position_y, tile_path + DirectionToFile[direction], 'UP', '');
 
-    // TODO: check game_data to see if chip is dead, etc.
+    // check game_data to check outcome (chip is dead, etc.)
+    if (game_data.outcome == "DEAD") {
+        alert(game_data.outcome_msg);
+        reset();
+    }
 }
 
 function interact(direction) {
@@ -587,9 +594,28 @@ function interact(direction) {
             game_data.chips_left--;
         }
 
-        // TODO: enemy
+        // if enemy, chip dies
+        if ($.inArray(item_source, Enemies) != -1){
+            game_data.outcome = "DEAD";
+            game_data.outcome_msg = "DEAD";
+        }
 
-        // TODO: gate
+        // if gate, check for key
+        if (item_source == Source.GATE) {
+            var has_key = false;
+            for (item in inventory) {
+                if (has key) {
+                    has_key = true;
+                    remove key from inventory
+                    remove gate
+                }
+            }
+            if (!has_key) {
+                return;
+            }
+        }
+
+        // TODO: help
     }
 
     // update the game tile
