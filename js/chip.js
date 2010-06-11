@@ -588,7 +588,7 @@ function interact(direction) {
             chip.inventory.push(item);
         }
 
-        // if chip, chips_remaining--
+        // if chip, chips_remaining--; if 0, remove goal gate
         if (item_source == Source.CHIP) {
             items.splice(i,1);
             game_data.chips_left--;
