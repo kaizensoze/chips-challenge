@@ -4,12 +4,12 @@ var tile_path = 'images/tiles/';
 
 /* Map. */
 function Map() {
-	this.data = [];  // y,x (top, left)
+	this.data = [];  // 2d array [top][left]
 
 	this.level_number;
 	this.time;
 	this.chips;
-    this.start_point;  // x,y (left, top)
+    this.start_point;
     this.password;
     this.help_msg;
 }
@@ -18,20 +18,23 @@ function Map() {
 function Chip() {
 	this.inventory = new Array();
     this.orientation = Direction.UP;
-    this.position_x;
-    this.position_y;
+    this.position;
 }
 
 function GameData(map) {
     this.chip = new Chip();
-    this.chip.position_x = map.start_point[0];
-    this.chip.position_y = map.start_point[1];
+    this.chip.position = map.start_point;
 
     this.chips_left = map.chips;
     this.time_remaining = map.time;
 
     this.outcome;
     this.outcome_msg;
+}
+
+function Position(top, left) {
+    this.top = top;
+    this.left = left;
 }
 
 /* Enums. */

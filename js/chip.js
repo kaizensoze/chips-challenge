@@ -17,10 +17,12 @@ function init_map() {
     var canvas = document.getElementById('map');
 
 	map = new Map();
-    for (var i=0; i < canvas.height/tile_width; i++) {
-        map.data[i] = [];
-        for (var j=0; j < canvas.width/tile_width; j++) {
-            add_tile_part(j, i, tile_path + 'floor_normal.png', 'UP', '');
+    var position;
+    for (var top=0; top < canvas.height/tile_width; top++) {
+        map.data[top] = [];
+        for (var left=0; left < canvas.width/tile_width; left++) {
+            position = new Position(top, left);
+            add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
         }
     }
 }
@@ -33,27 +35,28 @@ function set_editor_event_handlers() {
 
     $('#map_region').droppable({
         drop: function(evt, ui) {
-            var map_region_left = $('#map_region').position().left;
             var map_region_top = $('#map_region').position().top;
+            var map_region_left = $('#map_region').position().left;
             var map_region_border_width = parseInt($('#map_region').css('borderLeftWidth'));
-
-			var left = ui.position.left - map_region_left + tile_width/2 - map_region_border_width;
+ 
 			var top = ui.position.top - map_region_top + tile_width/2 - map_region_border_width;
+			var left = ui.position.left - map_region_left + tile_width/2 - map_region_border_width;
 
             var map_width = $('#map').width();
             var map_height = $('#map').height();
 
-			var map_tile_left = Math.floor(left / tile_width);
 			var map_tile_top = Math.floor(top / tile_width);
+			var map_tile_left = Math.floor(left / tile_width);
 
             var dragged_tile_src = $(ui.draggable).children(':first').attr('src');
 
             var orientation_input = orientation_input = $('#orientation').val().toUpperCase();
             var color_input = color_input = $('#color').val().toUpperCase();
 
-            src_filename = dragged_tile_src.split("/").pop();
-            src_input = FileToSource[src_filename];
+            var src_filename = dragged_tile_src.split("/").pop();
+            var src_input = FileToSource[src_filename];
 
+            var position;
             if (left > map_width || left < 0 || top > map_height || top < 0) {
                 if (left < 0) {
                     map_tile_left = 0;
@@ -61,13 +64,15 @@ function set_editor_event_handlers() {
                 if (top < 0) {
                     map_tile_top = 0;
                 }
-                expand_map(left, top);
+                position = new Position(top, left);
+                expand_map(position);
             }
 
+            position = new Position(map_tile_top, map_tile_left);
             if (src_input == Source.CLEAR_TILE) {
-                clear_tile(map_tile_left, map_tile_top);
+                clear_tile(position);
             } else {
-                add_tile_part(map_tile_left, map_tile_top, dragged_tile_src, orientation_input, color_input);
+                add_tile_part(position, dragged_tile_src, orientation_input, color_input);
             }
         }
     });
@@ -75,7 +80,7 @@ function set_editor_event_handlers() {
 
 function set_play_event_handlers() {
     $(document).keydown(function(evt) {
-        key = evt.which;
+        var key = evt.which;
         switch (key) {
             case 37: move(Direction.LEFT); break;  // Left
             case 38: move(Direction.UP); break;  // Up
@@ -87,24 +92,24 @@ function set_play_event_handlers() {
     });
 }
 
-function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
-    var orientation_input, orientation;
-    var color_input, color;
-    var src_filename, src_input;
-    var tile, item;
+function add_tile_part(position, tile_src, orientation_input, color_input) {
+    var map_tile_top = position.top;
+    var map_tile_left = position.left;
 
+    var orientation = Orientation[orientation_input];
+    var color = Color[color_input];
+
+    var src_filename = tile_src.split("/").pop();
+    var src_input = FileToSource[src_filename];
+
+    var tile;
     if (map.data[map_tile_top] && map.data[map_tile_top][map_tile_left]) {
         tile = map.data[map_tile_top][map_tile_left];
     } else {
         tile = new Tile();
     }
 
-    orientation = Orientation[orientation_input];
-    color = Color[color_input];
-
-    src_filename = tile_src.split("/").pop();
-    src_input = FileToSource[src_filename];
-
+    var item;
     if ($.inArray(src_input, Floors) != -1) {
         tile.source = src_filename;  // floor
     } else {
@@ -126,7 +131,7 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
                 alert("There can be only one chip!");
                 return;
             }
-            map.start_point = [map_tile_left, map_tile_top];
+            map.start_point = new Position(map_tile_top, map_tile_left);
         }
 
         tile.items.push(item);
@@ -137,10 +142,13 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
     }
     map.data[map_tile_top][map_tile_left] = tile;
 
-    draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input);
+    draw_tile_part(position, tile_src, orientation_input, color_input);
 }
 
-function expand_map(left, top) {
+function expand_map(position) {
+    var top = position.top;
+    var left = position.left;
+
     var map_width = $('#map').width();
     var map_height = $('#map').height();
 
@@ -171,8 +179,10 @@ function expand_map(left, top) {
         if (left > map_width) {
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             // add new prefilled col
+            var position;
             for (var i=0; i < canvas.height/tile_width; i++) {
-                add_tile_part((canvas.width/tile_width)-1, i, tile_path + 'floor_normal.png', 'UP', '');
+                position = new Position(i, (canvas.width/tile_width)-1);
+                add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
             }
         }
 
@@ -198,15 +208,19 @@ function expand_map(left, top) {
                     map.data[i][j] = tile_to_be_shifted;
 
                     // update map's start point if it's one of tiles being shifted
-                    if (map.start_point && map.start_point[0] == j-1 && map.start_point[1] == i) {
-                        map.start_point = [j, i];
+                    var position;
+                    if (map.start_point && map.start_point.top == i && map.start_point.left == j-1) {
+                        position = new Position(i, j);
+                        map.start_point = position;
                     }
                 }
             }
 
             // add new prefilled col
+            var position;
             for (var i=0; i < canvas.height/tile_width; i++) {
-                clear_tile(0, i);
+                position = new Position(i, 0);
+                clear_tile(position);
             }
         }
     }
@@ -230,8 +244,10 @@ function expand_map(left, top) {
         if (top > map_height) {
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             // add new prefilled row
+            var position;
             for (var i=0; i < canvas.width/tile_width; i++) {
-                add_tile_part(i, (canvas.height/tile_width)-1, tile_path + 'floor_normal.png', 'UP', '');
+                position = new Position((canvas.height/tile_width)-1, i);
+                add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
             }
         }
 
@@ -257,41 +273,42 @@ function expand_map(left, top) {
                     map.data[i][j] = tile_to_be_shifted;
 
                     // update map's start point if it's one of tiles being shifted
-                    if (map.start_point && map.start_point[0] == j && map.start_point[1] == i-1) {
-                        map.start_point = [j, i];
+                    var position;
+                    if (map.start_point && map.start_point.top == i-1 && map.start_point.left == j) {
+                        position = new Position(i, j);
+                        map.start_point = position;
                     }
                 }
             }
 
             // add new prefilled row
+            var position;
             for (var i=0; i < canvas.width/tile_width; i++) {
-                clear_tile(i, 0);
+                position = (0, i);
+                clear_tile(position);
             }
         }
     }
-    console.log('blah');
-    console.log(map);
 }
 
-function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input, color_input) {
+function draw_tile_part(position, tile_src, orientation_input, color_input) {
+    var map_tile_top = position.top;
+    var map_tile_left = position.left;
+
     var canvas = document.getElementById('map');
     var ctx = canvas.getContext('2d');
 
-    var src_filename, src_input;
-    var translate_x, translate_y;
-    var base_x, base_y;
+    var src_filename = tile_src.split("/").pop();
+    var src_input = FileToSource[src_filename];
 
-    src_filename = tile_src.split("/").pop();
-    src_input = FileToSource[src_filename];
-
-    orientation = Orientation[orientation_input];
-    color = Color[color_input];
+    var orientation = Orientation[orientation_input];
+    var color = Color[color_input];
     
     ctx.save();
 
     /* Rotate. */
-    translate_x = map_tile_left * tile_width + tile_width/2;
-    translate_y = map_tile_top * tile_width + tile_width/2;
+    var translate_x = map_tile_left * tile_width + tile_width/2;
+    var translate_y = map_tile_top * tile_width + tile_width/2;
 
     ctx.translate(translate_x, translate_y);
     ctx.rotate(orientation * Math.PI / 180);
@@ -300,8 +317,8 @@ function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input
     if (color) {
         ctx.fillStyle = color;
         if (src_input == Source.KEY) {
-            base_x = map_tile_left * tile_width;
-            base_y = map_tile_top * tile_width;
+            var base_x = map_tile_left * tile_width;
+            var base_y = map_tile_top * tile_width;
 
             color_key(ctx, base_x, base_y, translate_x, translate_y);
         } else {
@@ -316,23 +333,26 @@ function draw_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input
     ctx.restore();
 }
 
-function draw_tile(left, top, tile) {
+function draw_tile(position, tile) {
     if (!tile) {
         return;
     }
 
-    draw_tile_part(left, top, tile_path + tile.source);
+    draw_tile_part(position, tile_path + tile.source);
     for (var i=0; i < tile.items.length; i++) {
         item = tile.items[i];
-        draw_tile_part(left, top, tile_path + item.source, item.orientation, item.color);
+        draw_tile_part(position, tile_path + item.source, item.orientation, item.color);
     }
 }
 
-function clear_tile(left, top) {
+function clear_tile(position) {
 	var canvas = document.getElementById('map');
     var ctx = canvas.getContext('2d');
-	ctx.fillStyle = "rgb(255,255,255)";
-	ctx.fillRect(left * tile_width, top * tile_width, tile_width, tile_width);
+
+    var top = position.top;
+    var left = position.left;
+
+	ctx.clearRect(left * tile_width, top * tile_width, tile_width, tile_width);
 
     tile = map.data[top][left];
 
@@ -344,7 +364,7 @@ function clear_tile(left, top) {
         }
     }
     map.data[top][left] = null;
-    add_tile_part(left, top, tile_path + 'floor_normal.png', 'UP', '');
+    add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
 }
 
 function sync_canvas_stuff() {
@@ -440,7 +460,6 @@ function show_maps() {
 }
 
 function save_map(overwrite) {
-    var dataString;
     var level_number = $('#level_number').val();
     var chips = $('#chips').val();
     var time = $('#time').val();
@@ -451,7 +470,7 @@ function save_map(overwrite) {
     map.time = time;
     map.password = password;
 
-    dataString = JSON.stringify(map);
+    var dataString = JSON.stringify(map);
 
     $.post('http://localhost/chip/php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
             function(res) {
@@ -482,6 +501,7 @@ function reset() {
 }
 
 function draw_map(loaded_map) {
+    console.log(map);
     var canvas = document.getElementById('map');
     var ctx = canvas.getContext('2d');
 
@@ -496,10 +516,12 @@ function draw_map(loaded_map) {
     canvas.width = proper_width;
     canvas.height = proper_height;
 
-    for (var i=0; i < map.data.length; i++) {
-        for (var j=0; j < map.data[i].length; j++) {
-            tile = map.data[i][j];
-            draw_tile(j, i, tile);
+    var position;
+    for (var top=0; top < map.data.length; top++) {
+        for (var left=0; left < map.data[top].length; left++) {
+            tile = map.data[top][left];
+            position = new Position(top, left);
+            draw_tile(position, tile);
         }
     }
 }
@@ -522,19 +544,18 @@ function move(direction) {
 
 function update_chip(direction) {
     var chip = game_data.chip;
-    var position_x_old = chip.position_x;
-    var position_y_old = chip.position_y;
-    var old_tile;
+    var position_old = new Position(chip.position.top, chip.position.left);
 
     interact(direction);
 
     // remove chip from position he was at, redraw tile
-    old_tile = map.data[position_y_old][position_x_old];
+    var old_tile = map.data[position_old.top][position_old.left];
     old_tile.items.pop();
-    draw_tile(position_x_old, position_y_old, old_tile);
+    draw_tile(position_old, old_tile);
 
     // add updated chip to new position
-    add_tile_part(chip.position_x, chip.position_y, tile_path + DirectionToFile[direction], 'UP', '');
+    var position_new = new Position(chip.position.top, chip.position.left);
+    add_tile_part(position_new, tile_path + DirectionToFile[direction], 'UP', '');
 
     // check game_data to check outcome (chip is dead, etc.)
     if (game_data.outcome == "DEAD") {
@@ -545,32 +566,31 @@ function update_chip(direction) {
 
 function interact(direction) {
     var chip = game_data.chip;
-    var x, y;
-    var tile_to_check;
-    var items;
-
+    var top, left;
     switch (direction) {
         case Direction.LEFT:
-            x = chip.position_x - 1;
-            y = chip.position_y;
+            left = chip.position.left - 1;
+            top = chip.position.top;
             break;
         case Direction.UP:
-            x = chip.position_x;
-            y = chip.position_y - 1;
+            left = chip.position.left;
+            top = chip.position.top - 1;
             break;
         case Direction.RIGHT: 
-            x = chip.position_x + 1;
-            y = chip.position_y;
+            left = chip.position.left + 1;
+            top = chip.position.top;
             break;
         case Direction.DOWN:
-            x = chip.position_x;
-            y = chip.position_y + 1;
+            left = chip.position.left;
+            top = chip.position.top + 1;
             break;
         default: return;
     }
 
-    if (y > 0 && y < map.data.length && x > 0 && x < map.data[y].length) {  // check if in bounds
-        tile_to_check = map.data[y][x];
+    var tile_to_check;
+    var items;
+    if (top > 0 && top < map.data.length && left > 0 && left < map.data[top].length) {  // check if in bounds
+        tile_to_check = map.data[top][left];
         items = tile_to_check.items;
     } else {
         return;
@@ -627,12 +647,12 @@ function interact(direction) {
     }
 
     // update the game tile
-    map.data[y][x] = tile_to_check;
-    draw_tile(x, y, tile_to_check);
+    map.data[top][left] = tile_to_check;
+    var position = new Position(top, left);
+    draw_tile(position, tile_to_check);
 
     // update chip's position
-    chip.position_x = x;
-    chip.position_y = y;
+    chip.position = position;
 }
 
 function update_viewport() {
@@ -641,8 +661,8 @@ function update_viewport() {
     var map_canvas = document.getElementById('map');
     var map_ctx = map_canvas.getContext('2d');
 
-    sx = (game_data.chip.position_x - 4) * tile_width;
-    sy = (game_data.chip.position_y - 4) * tile_width;
+    sx = (game_data.chip.position.left - 4) * tile_width;
+    sy = (game_data.chip.position.top - 4) * tile_width;
     s_width = viewport.width;
     s_height = viewport.height;
     d_width = s_width;
