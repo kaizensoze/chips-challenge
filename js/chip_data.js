@@ -4,7 +4,7 @@ var tile_path = 'images/tiles/';
 
 /* Map. */
 function Map() {
-	this.data = [];
+	this.data = [];  // y,x (top, left)
 
 	this.level_number;
 	this.time;

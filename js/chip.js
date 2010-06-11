@@ -121,7 +121,7 @@ function add_tile_part(map_tile_left, map_tile_top, tile_src, orientation_input,
         }
 
         // if chip is placed on map, set the start point
-        if ($.inArray(src_input, ChipPoses) != -1) {
+        if ($.inArray(src_input, ChipPoses) != -1 && $('#map_region').is(':visible')) {
             if (map.start_point) {
                 alert("There can be only one chip!");
                 return;
@@ -519,17 +519,64 @@ function move(direction) {
 
 function update_chip(direction) {
     var chip = game_data.chip;
+    var position_x_old = chip.position_x;
+    var position_y_old = chip.position_y;
+    var old_tile;
 
     interact(direction);
 
-    clear_tile(chip.position_x, chip.position_y);
+    // remove chip from position he was at, redraw tile
+    old_tile = map.data[position_y_old][position_x_old];
+    old_tile.items.pop();
+    draw_tile(position_x_old, position_y_old, old_tile);
+
+    // add updated chip to new position
     add_tile_part(chip.position_x, chip.position_y, tile_path + DirectionToFile[direction], 'UP', '');
+
+    // TODO: check game_data to see if chip is dead, etc.
 }
 
 function interact(direction) {
-    // !!! GAME LOGIC GOES HERE
-    // TODO: check for obstacles that would prevent chip from moving
-    // TODO: take into consideration objects such as teleporters
+    var x, y;
+    var tile_to_check;
+    var items;
+
+    switch (direction) {
+        case Direction.LEFT:
+            x = game_data.chip.position_x - 1;
+            y = game_data.chip.position_y;
+            break;
+        case Direction.UP:
+            x = game_data.chip.position_x;
+            y = game_data.chip.position_y - 1;
+            break;
+        case Direction.RIGHT: 
+            x = game_data.chip.position_x + 1;
+            y = game_data.chip.position_y;
+            break;
+        case Direction.DOWN:
+            x = game_data.chip.position_x;
+            y = game_data.chip.position_y + 1;
+            break;
+        default: return;
+    }
+
+    if (y > 0 && y < map.data.length && x > 0 && x < map.data[y].length) {  // check if in bounds
+        tile_to_check = map.data[y][x];
+        items = tile_to_check.items;
+    } else {
+        return;
+    }
+
+    // TODO: iterate over items and see what [type] each one is
+    var item;
+    for (var i=0; i < tile.items.length; i++) {
+        item = tile.items[i];
+        console.log(item);
+    }
+
+    game_data.chip.position_x = x;
+    game_data.chip.position_y = y;
 }
 
 function update_viewport() {
