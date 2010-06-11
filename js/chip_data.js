@@ -11,6 +11,7 @@ function Map() {
 	this.chips;
     this.start_point;  // x,y (left, top)
     this.password;
+    this.help_msg;
 }
 
 /* Chip. */
@@ -28,6 +29,9 @@ function GameData(map) {
 
     this.chips_left = map.chips;
     this.time_remaining = map.time;
+
+    this.outcome;
+    this.outcome_msg;
 }
 
 /* Enums. */

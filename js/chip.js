@@ -537,6 +537,7 @@ function update_chip(direction) {
 }
 
 function interact(direction) {
+    var chip = game_data.chip;
     var x, y;
     var tile_to_check;
     var items;
@@ -570,11 +571,22 @@ function interact(direction) {
 
     // TODO: iterate over items and see what [type] each one is
     var item;
-    for (var i=0; i < tile.items.length; i++) {
-        item = tile.items[i];
-        console.log(item);
+    for (var i=0; i < items.length; i++) {
+        item = items[i];
+        item_source = FileToSource[items[i].source];
+
+        // if inventory, add to chip's inventory and remove from tile
+        if ($.inArray(item_source, InventoryItems) != -1) {
+            items.splice(i,1);
+            chip.inventory.push(item);
+        }
     }
 
+    // update the game tile
+    map.data[y][x] = tile_to_check;
+    draw_tile(x, y, tile_to_check);
+
+    // update chip's position
     game_data.chip.position_x = x;
     game_data.chip.position_y = y;
 }
