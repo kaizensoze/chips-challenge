@@ -127,11 +127,11 @@ function add_tile_part(position, tile_src, orientation_input, color_input) {
 
         // if chip is placed on map, set the start point
         if ($.inArray(src_input, ChipPoses) != -1 && $('#map_region').is(':visible')) {
-            if (map.start_point) {
+            if (map.start_position) {
                 alert("There can be only one chip!");
                 return;
             }
-            map.start_point = new Position(map_tile_top, map_tile_left);
+            map.start_position = new Position(map_tile_top, map_tile_left);
         }
 
         tile.items.push(item);
@@ -180,8 +180,8 @@ function expand_map(position) {
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             // add new prefilled col
             var position;
-            for (var i=0; i < canvas.height/tile_width; i++) {
-                position = new Position(i, (canvas.width/tile_width)-1);
+            for (var top=0; top < canvas.height/tile_width; top++) {
+                position = new Position(top, (canvas.width/tile_width)-1);
                 add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
             }
         }
@@ -202,24 +202,24 @@ function expand_map(position) {
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
-            for (var i=(canvas.height/tile_width)-1; i >= 0; i--) {
-                for (var j=(canvas.width/tile_width)-1; j > 0; j--) {
-                    var tile_to_be_shifted = map.data[i][j-1];
-                    map.data[i][j] = tile_to_be_shifted;
+            for (var top=(canvas.height/tile_width)-1; top >= 0; top--) {
+                for (var left=(canvas.width/tile_width)-1; left > 0; left--) {
+                    var tile_to_be_shifted = map.data[top][left-1];
+                    map.data[top][left] = tile_to_be_shifted;
 
                     // update map's start point if it's one of tiles being shifted
-                    var position;
-                    if (map.start_point && map.start_point.top == i && map.start_point.left == j-1) {
-                        position = new Position(i, j);
-                        map.start_point = position;
+                    var position_to_shift = new Position(top, left-1);
+                    var position = new Position(top, left);
+                    if (map.start_position == position_to_shift) {
+                        map.start_position = position;
                     }
                 }
             }
 
             // add new prefilled col
             var position;
-            for (var i=0; i < canvas.height/tile_width; i++) {
-                position = new Position(i, 0);
+            for (var top=0; top < canvas.height/tile_width; top++) {
+                position = new Position(top, 0);
                 clear_tile(position);
             }
         }
@@ -245,8 +245,8 @@ function expand_map(position) {
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             // add new prefilled row
             var position;
-            for (var i=0; i < canvas.width/tile_width; i++) {
-                position = new Position((canvas.height/tile_width)-1, i);
+            for (var left=0; left < canvas.width/tile_width; left++) {
+                position = new Position((canvas.height/tile_width)-1, left);
                 add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
             }
         }
@@ -267,24 +267,25 @@ function expand_map(position) {
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
-            for (var i=(canvas.height/tile_width)-1; i > 0; i--) {
-                for (var j=(canvas.width/tile_width)-1; j >= 0; j--) {
-                    var tile_to_be_shifted = map.data[i-1][j];
-                    map.data[i][j] = tile_to_be_shifted;
+            for (var top=(canvas.height/tile_width)-1; top > 0; top--) {
+                for (var left=(canvas.width/tile_width)-1; left >= 0; left--) {
+                    var tile_to_be_shifted = map.data[top-1][left];
+                    map.data[top][left] = tile_to_be_shifted;
 
                     // update map's start point if it's one of tiles being shifted
-                    var position;
-                    if (map.start_point && map.start_point.top == i-1 && map.start_point.left == j) {
-                        position = new Position(i, j);
-                        map.start_point = position;
+
+                    var position_to_shift = new Position(top-1, left);
+                    var position = new Position(top, left);
+                    if (map.start_position == position_to_shift) {
+                        map.start_position = position;
                     }
                 }
             }
 
             // add new prefilled row
             var position;
-            for (var i=0; i < canvas.width/tile_width; i++) {
-                position = (0, i);
+            for (var left=0; left < canvas.width/tile_width; left++) {
+                position = new Position(0, left);
                 clear_tile(position);
             }
         }
@@ -360,7 +361,7 @@ function clear_tile(position) {
     for (var i=0; i < tile.items.length; i++) {
         item = tile.items[i];
         if ($.inArray(FileToSource[item.source], ChipPoses) != -1) {
-            map.start_point = null;
+            map.start_position = null;
         }
     }
     map.data[top][left] = null;

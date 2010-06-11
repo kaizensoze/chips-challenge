@@ -9,8 +9,12 @@ function Map() {
 	this.level_number;
 	this.time;
 	this.chips;
-    this.start_point;
     this.password;
+    
+    this.start_position;
+    this.goal_position;
+    this.goal_gate_position;
+
     this.help_msg;
 }
 
@@ -23,7 +27,7 @@ function Chip() {
 
 function GameData(map) {
     this.chip = new Chip();
-    this.chip.position = map.start_point;
+    this.chip.position = map.start_position;
 
     this.chips_left = map.chips;
     this.time_remaining = map.time;
