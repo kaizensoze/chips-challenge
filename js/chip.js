@@ -210,7 +210,7 @@ function expand_map(position) {
                     // update map's start point if it's one of tiles being shifted
                     var position_to_shift = new Position(top, left-1);
                     var position = new Position(top, left);
-                    if (map.start_position == position_to_shift) {
+                    if (map.start_position.equals(position_to_shift)) {
                         map.start_position = position;
                     }
                 }
@@ -276,7 +276,7 @@ function expand_map(position) {
 
                     var position_to_shift = new Position(top-1, left);
                     var position = new Position(top, left);
-                    if (map.start_position == position_to_shift) {
+                    if (map.start_position.equals(position_to_shift)) {
                         map.start_position = position;
                     }
                 }

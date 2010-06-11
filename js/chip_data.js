@@ -39,6 +39,10 @@ function GameData(map) {
 function Position(top, left) {
     this.top = top;
     this.left = left;
+
+    this.equals = function(other) {
+        return this.top == other.top && this.left == other.left;
+    }
 }
 
 /* Enums. */
