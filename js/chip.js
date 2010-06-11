@@ -501,7 +501,6 @@ function reset() {
 }
 
 function draw_map(loaded_map) {
-    console.log(map);
     var canvas = document.getElementById('map');
     var ctx = canvas.getContext('2d');
 
