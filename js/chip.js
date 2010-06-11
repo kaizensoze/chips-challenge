@@ -580,6 +580,16 @@ function interact(direction) {
             items.splice(i,1);
             chip.inventory.push(item);
         }
+
+        // if chip, chips_remaining--
+        if (item_source == Source.CHIP) {
+            items.splice(i,1);
+            game_data.chips_left--;
+        }
+
+        // TODO: enemy
+
+        // TODO: gate
     }
 
     // update the game tile
@@ -589,6 +599,8 @@ function interact(direction) {
     // update chip's position
     game_data.chip.position_x = x;
     game_data.chip.position_y = y;
+
+    console.log(game_data);
 }
 
 function update_viewport() {
