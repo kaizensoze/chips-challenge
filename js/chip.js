@@ -445,16 +445,25 @@ function sync_canvas_stuff() {
 
     // update canvas size to reflect underlying data structure
     var canvas = document.getElementById('map');
+    var canvas_ctx = canvas.getContext('2d');
+    var temp = document.getElementById('temp');
+    var temp_ctx = temp.getContext('2d');
+
+    // resize temp canvas
+    temp.width = proper_width;
+    temp.height = proper_height;
+
+    console.log(canvas, temp, proper_width, proper_height);
+
+    // copy canvas to temp, resize canvas, copy temp back to canvas
+    temp_ctx.drawImage(canvas, 0, 0, proper_width, proper_height, 0, 0, proper_width, proper_height);
     canvas.width = proper_width;
     canvas.height = proper_height;
+    canvas_ctx.drawImage(temp, 0, 0, proper_width, proper_height, 0, 0, proper_width, proper_height);
 
+    // store the updated width, height into variables (shrug)
     var map_width = canvas.width;
     var map_height = canvas.height;
-
-    // fit temp canvas to map canvas
-    var temp = document.getElementById('temp');
-    temp.width = map_width;
-    temp.height = map_height;
 
     // fit map div to map canvas
     var map_region = $('#map_region');
@@ -605,7 +614,7 @@ function draw_map(loaded_map) {
 }
 
 function play_map() {
-    //sync_canvas_stuff();
+    sync_canvas_stuff_special();
     set_play_event_handlers();
 
     $('#map_region').hide();
