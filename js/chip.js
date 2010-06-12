@@ -453,10 +453,8 @@ function sync_canvas_stuff() {
     temp.width = proper_width;
     temp.height = proper_height;
 
-    console.log(canvas, temp, proper_width, proper_height);
-
     // copy canvas to temp, resize canvas, copy temp back to canvas
-    temp_ctx.drawImage(canvas, 0, 0, proper_width, proper_height, 0, 0, proper_width, proper_height);
+    temp_ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, proper_width, proper_height);
     canvas.width = proper_width;
     canvas.height = proper_height;
     canvas_ctx.drawImage(temp, 0, 0, proper_width, proper_height, 0, 0, proper_width, proper_height);
@@ -614,7 +612,7 @@ function draw_map(loaded_map) {
 }
 
 function play_map() {
-    sync_canvas_stuff_special();
+    sync_canvas_stuff();
     set_play_event_handlers();
 
     $('#map_region').hide();
@@ -623,15 +621,15 @@ function play_map() {
     $('#viewport').show();
     $('#viewport').focus();
 
+    var canvas = document.getElementById('map');
+
     // pad map by 4 on all sides (to prevent viewport from showing out-of-bounds map region
-    /*
     for (var i=0; i < 4; i++) {
         expand_map(new Position(0, -1)); // left
         expand_map(new Position(-1, 0));  // top
-        expand_map(new Position(0, $('#map').width() + 1));  // right
-        expand_map(new Position($('#map').height() + 1, 0));  // down
+        expand_map(new Position(0, canvas.width + 1));  // right
+        expand_map(new Position(canvas.height + 1, 0));  // down
     }
-    */
 
     game_data = new GameData(map);
     update_viewport();
