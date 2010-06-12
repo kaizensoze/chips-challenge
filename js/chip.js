@@ -593,6 +593,16 @@ function play_map() {
     $('#viewport').show();
     $('#viewport').focus();
 
+    // pad map by 4 on all sides (to prevent viewport from showing out-of-bounds map region
+    /*
+    for (var i=0; i < 4; i++) {
+        expand_map(new Position(0, -1)); // left
+        expand_map(new Position(-1, 0));  // top
+        expand_map(new Position(0, $('#map').width() + 1));  // right
+        expand_map(new Position($('#map').height() + 1, 0));  // down
+    }
+    */
+
     game_data = new GameData(map);
     update_viewport();
 }
