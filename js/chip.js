@@ -717,7 +717,13 @@ function interact(direction) {
             // TODO: show help msg
         }
 
-        // TODO: if block, return
+        // if obstacle that should prevent chip from moving
+        if (item_source == Source.BLOCK_NORMAL) {
+            return;
+        }
+        if (item_source == Source.GATE_GOAL && game_data.chips_left > 0) {
+            return;
+        }
 
         // TODO: if goal, advance to next level
     }
