@@ -125,13 +125,36 @@ function add_tile_part(position, tile_src, orientation_input, color_input) {
             item.type = ItemType.CHIP;
         }
 
-        // if chip is placed on map, set the start point
-        if ($.inArray(src_input, ChipPoses) != -1 && $('#map_region').is(':visible')) {
-            if (map.start_position) {
-                alert("There can be only one chip!");
-                return;
+        if ($('#map_region').is(':visible')) {
+            // if chip is placed on map, set the start position
+            if ($.inArray(src_input, ChipPoses) != -1) {
+                // maintain a max of only 1 chip for given map
+                if (map.start_position) {
+                    alert("There can be only one chip!");
+                    return;
+                }
+                map.start_position = new Position(map_tile_top, map_tile_left);
             }
-            map.start_position = new Position(map_tile_top, map_tile_left);
+
+            // if goal is placed on map, set the goal position
+            if (src_input == Source.GOAL) {
+                // maintain a max of only 1 goal for given map
+                if (map.goal_position) {
+                    alert("There can be only one goal!");
+                    return;
+                }
+                map.goal_position = new Position(map_tile_top, map_tile_left);
+            }
+
+            // if goal gate is placed on map, set the goal gate position
+            if (src_input == Source.GATE_GOAL) {
+                // maintain a max of only 1 goal gate for given map
+                if (map.goal_gate_position) {
+                    alert("There can be only one goal gate!");
+                    return;
+                }
+                map.goal_gate_position = new Position(map_tile_top, map_tile_left);
+            }
         }
 
         tile.items.push(item);
@@ -207,11 +230,23 @@ function expand_map(position) {
                     var tile_to_be_shifted = map.data[top][left-1];
                     map.data[top][left] = tile_to_be_shifted;
 
-                    // update map's start point if it's one of tiles being shifted
+                    // update map's unique tiles if they're being affected by shift
                     var position_to_shift = new Position(top, left-1);
                     var position = new Position(top, left);
+
+                    // start position
                     if (map.start_position.equals(position_to_shift)) {
                         map.start_position = position;
+                    }
+
+                    // goal position
+                    if (map.goal_position.equals(position_to_shift)) {
+                        map.goal_position = position;
+                    }
+
+                    // goal gate position
+                    if (map.goal_gate_position.equals(position_to_shift)) {
+                        map.goal_gate_position = position;
                     }
                 }
             }
@@ -272,12 +307,23 @@ function expand_map(position) {
                     var tile_to_be_shifted = map.data[top-1][left];
                     map.data[top][left] = tile_to_be_shifted;
 
-                    // update map's start point if it's one of tiles being shifted
-
+                    // update map's unique tiles if they're being affected by shift
                     var position_to_shift = new Position(top-1, left);
                     var position = new Position(top, left);
+
+                    // start position
                     if (map.start_position.equals(position_to_shift)) {
                         map.start_position = position;
+                    }
+
+                    // goal position
+                    if (map.goal_position.equals(position_to_shift)) {
+                        map.goal_position = position;
+                    }
+
+                    // goal gate position
+                    if (map.goal_gate_position.equals(position_to_shift)) {
+                        map.goal_gate_position = position;
                     }
                 }
             }
@@ -357,11 +403,25 @@ function clear_tile(position) {
 
     tile = map.data[top][left];
 
-    // clear map's start point if tile being deleted contains chip (protagonist)
+    // if tile being cleared contains one of map's unique tiles/attributes, set to null
+    var source;
     for (var i=0; i < tile.items.length; i++) {
         item = tile.items[i];
-        if ($.inArray(FileToSource[item.source], ChipPoses) != -1) {
+        source = FileToSource[item.source];
+
+        // start position
+        if ($.inArray(source, ChipPoses) != -1) {
             map.start_position = null;
+        }
+
+        // goal position
+        if (source == Source.GOAL) {
+            map.goal_position = null;
+        }
+
+        // goal gate position
+        if (source == Source.GATE_GOAL) {
+            map.goal_gate_position = null;
         }
     }
     map.data[top][left] = null;
