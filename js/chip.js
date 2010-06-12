@@ -742,7 +742,6 @@ function interact(direction) {
                     has_key = true;
                     items.splice(i,1);
                     inventory.splice(j,1);
-                    break;
                 }
             }
             if (!has_key) {
