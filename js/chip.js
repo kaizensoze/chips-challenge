@@ -672,6 +672,17 @@ function interact(direction) {
         if (item_source == Source.CHIP) {
             items.splice(i,1);
             game_data.chips_left--;
+            if (game_data.chips_left == 0) {
+                // remove goal gate
+                var goal_gate_position = map.goal_gate_position;
+                var goal_gate_tile = map.data[goal_gate_position.top][goal_gate_position.left];
+                for (var i=0; i < goal_gate_tile.items.length; i++) {
+                    if (FileToSource[goal_gate_tile.items[i].source] == Source.GATE_GOAL) {
+                        goal_gate_tile.items.splice(i,1);
+                    }
+                }
+                draw_tile(goal_gate_position, goal_gate_tile);
+            }
         }
 
         // if enemy, chip dies
