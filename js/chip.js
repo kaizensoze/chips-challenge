@@ -35,15 +35,18 @@ function set_editor_event_handlers() {
 
     $('#map_region').droppable({
         drop: function(evt, ui) {
-            var map_region_top = $('#map_region').position().top;
-            var map_region_left = $('#map_region').position().left;
-            var map_region_border_width = parseInt($('#map_region').css('borderLeftWidth'));
+            var map_region = $('#map_region');
+            var map_region_top = map_region.position().top;
+            var map_region_left = map_region.position().left;
+            var map_region_border_width = parseInt(map_region.css('borderLeftWidth'));
  
 			var top = ui.position.top - map_region_top + tile_width/2 - map_region_border_width;
 			var left = ui.position.left - map_region_left + tile_width/2 - map_region_border_width;
 
-            var map_width = $('#map').width();
-            var map_height = $('#map').height();
+            var canvas = document.getElementById('map');
+
+            var map_width = canvas.width;
+            var map_height = canvas.height;
 
 			var map_tile_top = Math.floor(top / tile_width);
 			var map_tile_left = Math.floor(left / tile_width);
@@ -172,14 +175,14 @@ function expand_map(position) {
     var top = position.top;
     var left = position.left;
 
-    var map_width = $('#map').width();
-    var map_height = $('#map').height();
-
     var canvas = document.getElementById('map');
     var ctx = canvas.getContext('2d');
 
     var temp = document.getElementById('temp');
     var temp_ctx = temp.getContext('2d');
+
+    var map_width = canvas.width;
+    var map_height = canvas.height;
 
     var div_width = $('#map_region').width();
     var div_height = $('#map_region').height();
@@ -235,17 +238,17 @@ function expand_map(position) {
                     var position = new Position(top, left);
 
                     // start position
-                    if (map.start_position && map.start_position.equals(position_to_shift)) {
+                    if (map.start_position && equals(map.start_position, position_to_shift)) {
                         map.start_position = position;
                     }
 
                     // goal position
-                    if (map.goal_position && map.goal_position.equals(position_to_shift)) {
+                    if (map.goal_position && equals(map.goal_position, position_to_shift)) {
                         map.goal_position = position;
                     }
 
                     // goal gate position
-                    if (map.goal_position && map.goal_gate_position.equals(position_to_shift)) {
+                    if (map.goal_position && equals(map.goal_gate_position, position_to_shift)) {
                         map.goal_gate_position = position;
                     }
                 }
@@ -312,17 +315,17 @@ function expand_map(position) {
                     var position = new Position(top, left);
 
                     // start position
-                    if (map.start_position && map.start_position.equals(position_to_shift)) {
+                    if (map.start_position && equals(map.start_position, position_to_shift)) {
                         map.start_position = position;
                     }
 
                     // goal position
-                    if (map.goal_position && map.goal_position.equals(position_to_shift)) {
+                    if (map.goal_position && equals(map.goal_position, position_to_shift)) {
                         map.goal_position = position;
                     }
 
                     // goal gate position
-                    if (map.goal_gate_position && map.goal_gate_position.equals(position_to_shift)) {
+                    if (map.goal_position && equals(map.goal_gate_position, position_to_shift)) {
                         map.goal_gate_position = position;
                     }
                 }
@@ -429,11 +432,39 @@ function clear_tile(position) {
 }
 
 function sync_canvas_stuff() {
-    $('#map_region').width($('#map').width());
-    $('#map_region').height($('#map').height());
+    var default_map_colsrows = 9;
 
-    $('#temp_region').width($('#map').width());
-    $('#temp_region').height($('#map').height());
+    var proper_width, proper_height;
+    if (map) {
+        proper_width = map.data[0].length * tile_width;
+        proper_height = map.data.length * tile_width;
+    } else {
+        proper_width = default_map_colsrows * tile_width;
+        proper_height = default_map_colsrows * tile_width;
+    }
+
+    // update canvas size to reflect underlying data structure
+    var canvas = document.getElementById('map');
+    canvas.width = proper_width;
+    canvas.height = proper_height;
+
+    var map_width = canvas.width;
+    var map_height = canvas.height;
+
+    // fit temp canvas to map canvas
+    var temp = document.getElementById('temp');
+    temp.width = map_width;
+    temp.height = map_height;
+
+    // fit map div to map canvas
+    var map_region = $('#map_region');
+    map_region.width(map_width);
+    map_region.height(map_height);
+
+    // fit temp div to temp canvas
+    var temp_region = $('#temp_region');
+    temp_region.width(map_width);
+    temp_region.height(map_height);
 }
 
 function load_config_options() {
@@ -554,6 +585,7 @@ function load_map(map_to_load) {
         $('#time').val(map.time);
         $('#password').val(map.password);
 
+        sync_canvas_stuff();
         draw_map(map);
     });
 }
@@ -562,20 +594,6 @@ function reset() {
 }
 
 function draw_map(loaded_map) {
-    var canvas = document.getElementById('map');
-    var ctx = canvas.getContext('2d');
-
-    var proper_width = map.data[0].length * tile_width;
-    var proper_height = map.data.length * tile_width;
-
-    // resize div
-    $('#map_region').width(proper_width);
-    $('#map_region').height(proper_height);
-
-    // resize canvas
-    canvas.width = proper_width;
-    canvas.height = proper_height;
-
     var position;
     for (var top=0; top < map.data.length; top++) {
         for (var left=0; left < map.data[top].length; left++) {
@@ -587,9 +605,12 @@ function draw_map(loaded_map) {
 }
 
 function play_map() {
+    //sync_canvas_stuff();
     set_play_event_handlers();
 
     $('#map_region').hide();
+    $('#temp_region').hide();
+
     $('#viewport').show();
     $('#viewport').focus();
 

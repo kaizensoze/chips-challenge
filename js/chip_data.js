@@ -39,10 +39,15 @@ function GameData(map) {
 function Position(top, left) {
     this.top = top;
     this.left = left;
+}
 
-    this.equals = function(other) {
-        return this.top == other.top && this.left == other.left;
-    }
+/*
+ * Originally, this was inside the Position object, but
+ * the object's "type" gets lost in the mix in the JSON
+ * serialization.
+ */
+function equals(a, b) {
+    return a.top == b.top && a.left == b.left;
 }
 
 /* Enums. */
