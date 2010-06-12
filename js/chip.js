@@ -235,17 +235,17 @@ function expand_map(position) {
                     var position = new Position(top, left);
 
                     // start position
-                    if (map.start_position.equals(position_to_shift)) {
+                    if (map.start_position && map.start_position.equals(position_to_shift)) {
                         map.start_position = position;
                     }
 
                     // goal position
-                    if (map.goal_position.equals(position_to_shift)) {
+                    if (map.goal_position && map.goal_position.equals(position_to_shift)) {
                         map.goal_position = position;
                     }
 
                     // goal gate position
-                    if (map.goal_gate_position.equals(position_to_shift)) {
+                    if (map.goal_position && map.goal_gate_position.equals(position_to_shift)) {
                         map.goal_gate_position = position;
                     }
                 }
@@ -312,17 +312,17 @@ function expand_map(position) {
                     var position = new Position(top, left);
 
                     // start position
-                    if (map.start_position.equals(position_to_shift)) {
+                    if (map.start_position && map.start_position.equals(position_to_shift)) {
                         map.start_position = position;
                     }
 
                     // goal position
-                    if (map.goal_position.equals(position_to_shift)) {
+                    if (map.goal_position && map.goal_position.equals(position_to_shift)) {
                         map.goal_position = position;
                     }
 
                     // goal gate position
-                    if (map.goal_gate_position.equals(position_to_shift)) {
+                    if (map.goal_gate_position && map.goal_gate_position.equals(position_to_shift)) {
                         map.goal_gate_position = position;
                     }
                 }
