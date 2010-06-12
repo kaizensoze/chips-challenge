@@ -148,16 +148,6 @@ function add_tile_part(position, tile_src, orientation_input, color_input) {
                 }
                 map.goal_position = new Position(map_tile_top, map_tile_left);
             }
-
-            // if goal gate is placed on map, set the goal gate position
-            if (src_input == Source.GATE_GOAL) {
-                // maintain a max of only 1 goal gate for given map
-                if (map.goal_gate_position) {
-                    alert("There can be only one goal gate!");
-                    return;
-                }
-                map.goal_gate_position = new Position(map_tile_top, map_tile_left);
-            }
         }
 
         tile.items.push(item);
@@ -246,11 +236,6 @@ function expand_map(position) {
                     if (map.goal_position && equals(map.goal_position, position_to_shift)) {
                         map.goal_position = position;
                     }
-
-                    // goal gate position
-                    if (map.goal_position && equals(map.goal_gate_position, position_to_shift)) {
-                        map.goal_gate_position = position;
-                    }
                 }
             }
 
@@ -322,11 +307,6 @@ function expand_map(position) {
                     // goal position
                     if (map.goal_position && equals(map.goal_position, position_to_shift)) {
                         map.goal_position = position;
-                    }
-
-                    // goal gate position
-                    if (map.goal_position && equals(map.goal_gate_position, position_to_shift)) {
-                        map.goal_gate_position = position;
                     }
                 }
             }
@@ -420,11 +400,6 @@ function clear_tile(position) {
         // goal position
         if (source == Source.GOAL) {
             map.goal_position = null;
-        }
-
-        // goal gate position
-        if (source == Source.GATE_GOAL) {
-            map.goal_gate_position = null;
         }
     }
     map.data[top][left] = null;
@@ -710,17 +685,6 @@ function interact(direction) {
         if (item_source == Source.CHIP) {
             items.splice(i,1);
             game_data.chips_left--;
-            if (game_data.chips_left == 0) {
-                // remove goal gate
-                var goal_gate_position = map.goal_gate_position;
-                var goal_gate_tile = map.data[goal_gate_position.top][goal_gate_position.left];
-                for (var i=0; i < goal_gate_tile.items.length; i++) {
-                    if (FileToSource[goal_gate_tile.items[i].source] == Source.GATE_GOAL) {
-                        goal_gate_tile.items.splice(i,1);
-                    }
-                }
-                draw_tile(goal_gate_position, goal_gate_tile);
-            }
         }
 
         // if enemy, chip dies
@@ -758,8 +722,19 @@ function interact(direction) {
         if (item_source == Source.BLOCK_NORMAL) {
             return;
         }
-        if (item_source == Source.GATE_GOAL && game_data.chips_left > 0) {
-            return;
+
+        // if goal gate
+        if (item_source == Source.GATE_GOAL) {
+            if (game_data.chips_left > 0) {
+                return;
+            } else {
+                // remove goal gate
+                for (var i=0; i < tile_to_check.items.length; i++) {
+                    if (FileToSource[tile_to_check.items[i].source] == Source.GATE_GOAL) {
+                        tile_to_check.items.splice(i,1);
+                    }
+                }
+            }
         }
 
         // TODO: if goal, advance to next level

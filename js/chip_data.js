@@ -13,7 +13,6 @@ function Map() {
     
     this.start_position;
     this.goal_position;
-    this.goal_gate_position;
 
     this.help_msg;
 }
