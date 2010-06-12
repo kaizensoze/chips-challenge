@@ -656,7 +656,7 @@ function interact(direction) {
         return;
     }
 
-    // TODO: iterate over items and see what [type] each one is
+    // iterate over items and see what [type] each one is
     var item;
     for (var i=0; i < items.length; i++) {
         item = items[i];
@@ -712,9 +712,14 @@ function interact(direction) {
             }
         }
 
-        // TODO: help
+        // if help, show help msg
+        if (item_source == Source.HELP) {
+            // TODO: show help msg
+        }
 
         // TODO: if block, return
+
+        // TODO: if goal, advance to next level
     }
 
     // update the game tile
