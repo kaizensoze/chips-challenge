@@ -434,7 +434,7 @@ function sync_canvas_stuff() {
     canvas.height = proper_height;
     canvas_ctx.drawImage(temp, 0, 0, proper_width, proper_height, 0, 0, proper_width, proper_height);
 
-    // store the updated width, height into variables (shrug)
+    // store the updated width, height into variables
     var map_width = canvas.width;
     var map_height = canvas.height;
 
@@ -561,6 +561,7 @@ function load_map(map_to_load) {
     $.getJSON('http://localhost/chip/php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
         var loaded_map = res;
         map = JSON.parse(loaded_map);
+        console.log(map);
 
         $('#level_number').val(map.level_number);
         $('#chips').val(map.chips);
@@ -573,6 +574,11 @@ function load_map(map_to_load) {
 }
 
 function reset() {
+    load_map('2');
+    play_map();
+}
+
+function advance_level() {
 }
 
 function draw_map(loaded_map) {
@@ -613,6 +619,22 @@ function play_map() {
 function move(direction) {
     update_chip(direction);
     update_viewport();
+
+    // check game outcome
+    if (game_data.outcome) {
+        alert(game_data.outcome_msg);
+
+        switch (game_data.outcome) {
+            case "DONE": // TODO: change back to DEAD
+                reset();
+                break;
+            case "DONER":
+                advance_level();
+                break;
+            default:
+                alert("BLAH");
+        }
+    }
 }
 
 function update_chip(direction) {
@@ -629,12 +651,6 @@ function update_chip(direction) {
     // add updated chip to new position
     var position_new = new Position(chip.position.top, chip.position.left);
     add_tile_part(position_new, tile_path + DirectionToFile[direction], 'UP', '');
-
-    // check game_data to check outcome (chip is dead, etc.)
-    if (game_data.outcome == "DEAD") {
-        alert(game_data.outcome_msg);
-        reset();
-    }
 }
 
 function interact(direction) {
@@ -738,6 +754,10 @@ function interact(direction) {
         }
 
         // TODO: if goal, advance to next level
+        if (item_source == Source.GOAL) {
+            game_data.outcome = "DONE";
+            game_data.outcome_msg = "LEVEL COMPLETE!";
+        }
     }
 
     // remove whatever items were to be removed in the loop
