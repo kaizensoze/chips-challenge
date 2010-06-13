@@ -677,18 +677,18 @@ function interact(direction) {
 
         // if inventory, add to chip's inventory and remove from tile
         if ($.inArray(item_source, InventoryItems) != -1) {
-            items.splice(i,1);
+            items.splice(items.indexOf(item), 1);
             chip.inventory.push(item);
         }
 
         // if chip, chips_remaining--; if 0, remove goal gate
         if (item_source == Source.CHIP) {
-            items.splice(i,1);
+            items.splice(items.indexOf(item), 1);
             game_data.chips_left--;
         }
 
         // if enemy, chip dies
-        if ($.inArray(item_source, Enemies) != -1){
+        if ($.inArray(item_source, Enemies) != -1) {
             game_data.outcome = "DEAD";
             game_data.outcome_msg = "DEAD";
         }
@@ -704,8 +704,9 @@ function interact(direction) {
                 inventory_item = inventory[j];
                 if (FileToSource[inventory_item.source] == Source.KEY && inventory_item.color == gate_color) {
                     has_key = true;
-                    items.splice(i,1);
+                    items.splice(items.indexOf(item), 1);
                     inventory.splice(j,1);
+                    break;
                 }
             }
             if (!has_key) {
@@ -731,7 +732,7 @@ function interact(direction) {
                 // remove goal gate
                 for (var i=0; i < tile_to_check.items.length; i++) {
                     if (FileToSource[tile_to_check.items[i].source] == Source.GATE_GOAL) {
-                        tile_to_check.items.splice(i,1);
+                        tile_to_check.items.splice(items.indexOf(item), 1);
                     }
                 }
             }
@@ -742,6 +743,7 @@ function interact(direction) {
 
     // update the game tile
     map.data[top][left] = tile_to_check;
+
     var position = new Position(top, left);
     draw_tile(position, tile_to_check);
 
