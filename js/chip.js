@@ -669,6 +669,7 @@ function interact(direction) {
 
     // iterate over items and see what [type] each one is
     items = tile_to_check.items;
+    var items_to_remove = new Array();
     for (var item_index in items) {
         item = tile_to_check.items[item_index];
         item_source = FileToSource[item.source];
@@ -676,12 +677,12 @@ function interact(direction) {
         // if inventory, add to chip's inventory and remove from tile
         if ($.inArray(item_source, InventoryItems) != -1) {
             chip.inventory.push(item);
-            items.splice(items.indexOf(item), 1);
+            items_to_remove.push(item);
         }
 
         // if chip, chips_remaining--; if 0, remove goal gate
         if (item_source == Source.CHIP) {
-            items.splice(items.indexOf(item), 1);
+            items_to_remove.push(item);
             game_data.chips_left--;
         }
 
@@ -701,7 +702,7 @@ function interact(direction) {
                 inventory_item = inventory[inventory_item_index];
                 if (FileToSource[inventory_item.source] == Source.KEY && inventory_item.color == gate_color) {
                     has_key = true;
-                    items.splice(items.indexOf(item), 1);
+                    items_to_remove.push(item);
                     inventory.splice(inventory.indexOf(inventory_item), 1);
                     break;
                 }
@@ -730,7 +731,7 @@ function interact(direction) {
                 for (var item_index in items) {
                     var item = items[item_index];
                     if (FileToSource[item.source] == Source.GATE_GOAL) {
-                        items.splice(items.indexOf(item), 1);
+                        items_to_remove.push(item);
                     }
                 }
             }
@@ -740,6 +741,9 @@ function interact(direction) {
     }
 
     // remove whatever items were to be removed in the loop
+    for (var i in items_to_remove) {
+        items.splice(items.indexOf(items_to_remove[i]), 1);
+    }
 
     // update the game tile
     map.data[top][left] = tile_to_check;
