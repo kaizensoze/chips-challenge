@@ -1,3 +1,4 @@
+just record indices of items to remove and remove them at end of loop
 picking up duplicate keys
     check the tile with 2 duplicate green keys in json file
     12+4=16, 8+4=12

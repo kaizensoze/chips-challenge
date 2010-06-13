@@ -675,8 +675,8 @@ function interact(direction) {
 
         // if inventory, add to chip's inventory and remove from tile
         if ($.inArray(item_source, InventoryItems) != -1) {
-            items.splice(items.indexOf(item), 1);
             chip.inventory.push(item);
+            items.splice(items.indexOf(item), 1);
         }
 
         // if chip, chips_remaining--; if 0, remove goal gate
@@ -738,6 +738,8 @@ function interact(direction) {
 
         // TODO: if goal, advance to next level
     }
+
+    // remove whatever items were to be removed in the loop
 
     // update the game tile
     map.data[top][left] = tile_to_check;
