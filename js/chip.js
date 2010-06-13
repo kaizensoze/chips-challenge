@@ -661,7 +661,6 @@ function interact(direction) {
     }
 
     var tile_to_check;
-    var items;
     if (top > 0 && top < map.data.length && left > 0 && left < map.data[top].length) {  // check if in bounds
         tile_to_check = map.data[top][left];
     } else {
@@ -669,7 +668,9 @@ function interact(direction) {
     }
 
     // iterate over items and see what [type] each one is
-    for (var item in tile_to_check.items) {
+    items = tile_to_check.items;
+    for (var item_index in items) {
+        item = tile_to_check.items[item_index];
         item_source = FileToSource[item.source];
 
         // if inventory, add to chip's inventory and remove from tile
@@ -695,11 +696,13 @@ function interact(direction) {
             var gate_color = item.color;
 
             var has_key = false;
-            for (var inventory_item in chip.inventory) {
+            var inventory = chip.inventory;
+            for (var inventory_item_index in inventory) {
+                inventory_item = inventory[inventory_item_index];
                 if (FileToSource[inventory_item.source] == Source.KEY && inventory_item.color == gate_color) {
                     has_key = true;
                     items.splice(items.indexOf(item), 1);
-                    inventory.splice(j,1);
+                    inventory.splice(inventory.indexOf(inventory_item), 1);
                     break;
                 }
             }
@@ -724,7 +727,8 @@ function interact(direction) {
                 return;
             } else {
                 // remove goal gate
-                for (var item in items) {
+                for (var item_index in items) {
+                    var item = items[item_index];
                     if (FileToSource[item.source] == Source.GATE_GOAL) {
                         items.splice(items.indexOf(item), 1);
                     }
