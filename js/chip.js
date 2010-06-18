@@ -383,7 +383,6 @@ function clear_tile(position) {
     var left = position.left;
 
 	ctx.clearRect(left * tile_width, top * tile_width, tile_width, tile_width);
-
     tile = map.data[top][left];
 
     // if tile being cleared contains one of map's unique tiles/attributes, set to null
@@ -561,7 +560,6 @@ function load_map(map_to_load) {
     $.getJSON('http://localhost/chip/php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
         var loaded_map = res;
         map = JSON.parse(loaded_map);
-        console.log(map);
 
         $('#level_number').val(map.level_number);
         $('#chips').val(map.chips);
@@ -573,15 +571,31 @@ function load_map(map_to_load) {
     });
 }
 
-function reset() {
-    load_map('2');
+// reset to given map
+function reset(level) {
+    $('#viewport').hide();
+    $('#viewport_container').hide();
+    $('#map').show();
+    $('#map_region').show();
+    $('#temp').show();
+    $('#temp_region').show();
+
+    load_map(level);
     play_map();
 }
 
 function advance_level() {
 }
 
+function clear_map() {
+    var canvas = document.getElementById('map');
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function draw_map(loaded_map) {
+    clear_map();
+
     var position;
     for (var top=0; top < map.data.length; top++) {
         for (var left=0; left < map.data[top].length; left++) {
@@ -626,7 +640,7 @@ function move(direction) {
 
         switch (game_data.outcome) {
             case "DONE": // TODO: change back to DEAD
-                reset();
+                reset('' + map.level_number);
                 break;
             case "DONER":
                 advance_level();
