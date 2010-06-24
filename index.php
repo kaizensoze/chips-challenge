@@ -31,6 +31,8 @@
   Orientation: <select id="orientation"></select>
   Color: <select id="color"></select><br /><br />
 
+  <input type="button" onClick="reset('2');" value="Advance" />
+
   <!-- Load tile images. -->
   <?php
     $tile_str = '';

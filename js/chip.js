@@ -573,13 +573,6 @@ function load_map(map_to_load) {
 
 // reset to given map
 function reset(level) {
-    $('#viewport').hide();
-    $('#viewport_container').hide();
-    $('#map').show();
-    $('#map_region').show();
-    $('#temp').show();
-    $('#temp_region').show();
-
     load_map(level);
     play_map();
 }
