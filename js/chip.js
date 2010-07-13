@@ -571,13 +571,10 @@ function load_map(map_to_load) {
     });
 }
 
-// reset to given map
-function reset(level) {
+// go to given level
+function goto_level(level) {
     load_map(level);
     play_map();
-}
-
-function advance_level() {
 }
 
 function clear_map() {
@@ -632,11 +629,11 @@ function move(direction) {
         alert(game_data.outcome_msg);
 
         switch (game_data.outcome) {
-            case "DONE": // TODO: change back to DEAD
-                reset('' + map.level_number);
+            case "DEAD":
+                goto_level(map.level_number);
                 break;
-            case "DONER":
-                advance_level();
+            case "LEVEL_COMPLETE":
+                goto_level(map.level_number + 1);
                 break;
             default:
                 alert("BLAH");
@@ -762,8 +759,8 @@ function interact(direction) {
 
         // TODO: if goal, advance to next level
         if (item_source == Source.GOAL) {
-            game_data.outcome = "DONE";
-            game_data.outcome_msg = "LEVEL COMPLETE!";
+            game_data.outcome = "LEVEL_COMPLETE";
+            game_data.outcome_msg = "LEVEL_COMPLETE";
         }
     }
 
@@ -787,6 +784,8 @@ function update_viewport() {
     var viewport_ctx = viewport.getContext('2d');
     var map_canvas = document.getElementById('map');
     var map_ctx = map_canvas.getContext('2d');
+
+    console.log(game_data);
 
     sx = (game_data.chip.position.left - 4) * tile_width;
     sy = (game_data.chip.position.top - 4) * tile_width;
