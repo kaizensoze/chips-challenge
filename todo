@@ -1,0 +1,11 @@
+
+[DONE] upgrade jquery
+no inline
+    live
+namespace
+move php out of html
+objectify
+no global variables
+convert php to ruby
+separate mapeditor from game
+enemy pathing

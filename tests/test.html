@@ -1,0 +1,38 @@
+ <html>
+  <head>
+   <script type="application/javascript">
+     function draw() {
+       var canvas = document.getElementById("canvas");
+       var ctx = canvas.getContext("2d");
+
+       var translate_x = 12.5;
+       var translate_y = 12.5;
+
+       ctx.translate(12.5, 12.5);
+       ctx.rotate(90 * Math.PI / 180);
+
+       ctx.fillStyle = "red";
+       ctx.beginPath();
+       ctx.moveTo(0-translate_x, 25-translate_y);
+       ctx.lineTo(25-translate_x, 25-translate_y);
+       ctx.lineTo(25-translate_x, 0-translate_y);
+       ctx.closePath();
+       ctx.fill();
+     }
+    
+     function Position(top, left) {
+        this.top = top;
+        this.left = left;
+     }
+
+     /*
+     var a = new Position(1,2);
+     var b = new Position(1,2);
+     alert(a === b);
+     */
+    </script>
+  </head>
+  <body onload="draw()">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+ </html>
