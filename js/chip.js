@@ -3,11 +3,11 @@ var map;
 var game_data;
 
 $(document).ready(function() {
-    init_event_handlers();
     sync_canvas_stuff();
     load_config_options();
-    set_editor_event_handlers();
     show_maps();
+    init_event_handlers();
+    load_tiles();
 });
 
 $(window).load(function() {
@@ -15,16 +15,36 @@ $(window).load(function() {
 });
 
 function init_event_handlers() {
-    $("#save_map_button").click(function() {
+    $('#save_map_button').click(function() {
         save_map(0);
     });
 
-    $("#play_map_button").click(function() {
+    $('#play_map_button').click(function() {
         play_map();
     });
 
-    $("#goto_level_button").click(function() {
+    $('#goto_level_button').click(function() {
         goto_level(1);
+    });
+}
+
+function load_tiles() {
+    $.getJSON('php/chip.php?action=load_tiles', function(res) {
+        var col_limit = 10;
+        for (var i=0; i < res.length; i++) {
+            if (i % col_limit == 0 && i > 0) {
+                $('#tile_section').append('<br />');
+            }
+            var tile = $('<div></div>');
+            tile.attr('class', 'tile');
+
+            var tile_img = $('<img />');
+            tile_img.attr('src', res[i]);
+            tile.append(tile_img);
+
+            $('#tile_section').append(tile);
+        }
+        set_editor_event_handlers();
     });
 }
 
@@ -537,6 +557,8 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y) {
 function show_maps() {
     $.getJSON('php/chip.php?action=show_maps', function(res) {
         var list = $('<ul></ul>');
+        list.attr('id', 'map_list');
+
         for (var i in res) {
             var searchResult = res[i];
             var name = searchResult.split(".")[0];
@@ -544,16 +566,18 @@ function show_maps() {
             var list_entry = $('<li></li>');
             list.append(list_entry);
 
-            var link = $('<a href="">' + name + '</a>');
-            list_entry.append(link);
+            var link = $('<a href=""></a>');
+            link.html(name);
 
-            link.bind("click", function() {
-                console.log(name);
-                load_map(name);
-                return false;
-            });
+            list_entry.append(link);
         }
         $('#maps').append(list);
+
+        $('#map_list a').bind("click", function(a) {
+            var name = $(this).html();
+            load_map(name);
+            return false;
+        });
     });
 }
 

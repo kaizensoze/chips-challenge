@@ -1,11 +1,14 @@
 
 [DONE] upgrade jquery
-no inline
-    live
-namespace
-move php out of html
+[DONE] no inline
+[DONE] move php out of html
 objectify
+    Map
+    MapEditor
+    Level
+    Chip
+    Inventory
+    Game
 no global variables
 convert php to ruby
-separate mapeditor from game
 enemy pathing

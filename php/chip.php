@@ -13,12 +13,30 @@ function main() {
             case "load_map":
                 load_map($_REQUEST['map']);
                 break;
+            case "load_tiles":
+                load_tiles();
+                break;
             default:
                 echo 'invalid action';
         }
     }
 }
 main();
+
+function load_tiles() {
+    $tiles = array();
+    $tile_dir = '../images/tiles/';
+    $it = new RecursiveDirectoryIterator($tile_dir);
+    foreach (new RecursiveIteratorIterator($it) as $file) {
+        if ($it->isDot()) {
+            continue;
+        }
+        array_push($tiles, preg_replace('/\.\.\//', '', $tile_dir) . $file->getFilename());
+    }
+    sort($tiles);
+
+    echo json_encode($tiles);
+}
 
 function save_map($r) {
     $map = $r['map'];

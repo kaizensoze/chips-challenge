@@ -17,7 +17,7 @@ td {
 
 #maps {
     float: right;
-    width: 500;
+    width: 600;
     height: 250;
     overflow: auto;
 }
@@ -42,4 +42,8 @@ td {
 
 #viewport {
     display: none;
+}
+
+#tile_config_section {
+    margin-bottom: 10px;
 }
