@@ -3,6 +3,7 @@ var map;
 var game_data;
 
 $(document).ready(function() {
+    init_event_handlers();
     sync_canvas_stuff();
     load_config_options();
     set_editor_event_handlers();
@@ -12,6 +13,20 @@ $(document).ready(function() {
 $(window).load(function() {
     init_map();  // IMPORTANT: the draw part of init only works using window.load()
 });
+
+function init_event_handlers() {
+    $("#save_map_button").click(function() {
+        save_map(0);
+    });
+
+    $("#play_map_button").click(function() {
+        play_map();
+    });
+
+    $("#goto_level_button").click(function() {
+        goto_level(1);
+    });
+}
 
 function init_map() {
     var canvas = document.getElementById('map');
@@ -520,14 +535,24 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y) {
 }
 
 function show_maps() {
-    $.getJSON('http://localhost/chip/php/chip.php?action=show_maps', function(res) {
-        var list = '<ul>';
+    $.getJSON('php/chip.php?action=show_maps', function(res) {
+        var list = $('<ul></ul>');
         for (var i in res) {
             var searchResult = res[i];
             var name = searchResult.split(".")[0];
-            list += '<li><a href="" onclick="load_map('+name+'); return false;">' + name + '</a></li>';
+
+            var list_entry = $('<li></li>');
+            list.append(list_entry);
+
+            var link = $('<a href="">' + name + '</a>');
+            list_entry.append(link);
+
+            link.bind("click", function() {
+                console.log(name);
+                load_map(name);
+                return false;
+            });
         }
-        list += '</ul>';
         $('#maps').append(list);
     });
 }
@@ -545,7 +570,7 @@ function save_map(overwrite) {
 
     var dataString = JSON.stringify(map);
 
-    $.post('http://localhost/chip/php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
+    $.post('php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
             function(res) {
                 if (res.indexOf('exists') != -1) {
                     if (confirm("Map already exists. Overwrite?")) {
@@ -557,7 +582,7 @@ function save_map(overwrite) {
 }
 
 function load_map(map_to_load) {
-    $.getJSON('http://localhost/chip/php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
+    $.getJSON('php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
         var loaded_map = res;
         map = JSON.parse(loaded_map);
 
