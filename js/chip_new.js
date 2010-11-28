@@ -1,34 +1,12 @@
 
-var Map = function() {
-    var a = 1;
-
-    var privateFunction = function() {
-        alert(a);
-    }
-
+var MapEditor = function() {
+    var maps = {};
     return {
-        getA : function() {
-            return a;
-        },
-        setA : function(val) {
-            a = val;
+        getMaps : function() {
+            $.getJSON('php/mapeditor.php?action=load_maps', function(data) {
+                maps = JSON.parse(JSON.stringify(data)); // stringify is required ::shrug::
+            });
         }
     }
 };
 
-var Level = function(map) {
-    var a = 1;
-
-    var privateFunction = function() {
-        alert(a);
-    }
-
-    return {
-        getA : function() {
-            return a;
-        },
-        setA : function(val) {
-            a = val;
-        }
-    }
-};

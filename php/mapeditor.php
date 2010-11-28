@@ -7,12 +7,8 @@ function main() {
     }
 
     switch ($action) {
-        case "load_map_list":
-            load_map_list();
-            break;
-        case "load_map":
-            $map = $_REQUEST['map'];
-            load_map($map);
+        case "load_maps":
+            loadMaps();
             break;
         default:
             echo 'invalid action';
@@ -20,26 +16,23 @@ function main() {
 }
 main();
 
-function load_map_list() {
+function loadMaps() {
      $maps = array();
      $it = new RecursiveDirectoryIterator('../maps');
      foreach (new RecursiveIteratorIterator($it) as $file) {
         if ($it->isDot()) {
             continue;
         }
-        array_push($maps, basename($file));
+
+        $fh = fopen($file, 'r');
+        $data = fread($fh, filesize($file));
+        fclose($fh);
+
+        $info = pathinfo($file);
+        $map_name = basename($file, '.' . $info['extension']);
+        $maps[$map_name] =  $data;
      }
      echo json_encode($maps);
-}
-
-function load_map($map) {
-    $f = '../maps/' . $map . '.json';
-    if (file_exists($f)) {
-        $fh = fopen($f, 'r');
-        $data = fread($fh, filesize($f));
-        fclose($fh);
-    }
-    echo json_encode($data);
 }
 
 /*

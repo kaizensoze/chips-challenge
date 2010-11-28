@@ -1,14 +1,16 @@
 
 $(document).ready(function() {
+    var m = new MapEditor();
+    var maps = m.getMaps();
+    //loadMaps(maps);
+
+    /*
     $('#load_map').bind('click', function() {
         var map_to_load = $('#map_list option:selected').val();
         load_map(map_to_load);
     });
     generate_map();
-    load_map_list();
-    var m = new Map();
-    m.setA(5);
-    console.log(m.getA());
+    */
 });
 
 function generate_map() {
