@@ -3,12 +3,12 @@
 [DONE] no inline
 [DONE] move php out of html
 objectify
-    Map
     MapEditor
-    Level
+    Map
+    Level (Canvas)
     Chip
     Inventory
     Game
 no global variables
-convert php to ruby
 enemy pathing
+
