@@ -28,9 +28,7 @@ function loadMaps() {
         $data = fread($fh, filesize($file));
         fclose($fh);
 
-        $info = pathinfo($file);
-        $map_name = basename($file, '.' . $info['extension']);
-        $maps[$map_name] =  $data;
+        array_push($maps, $data);
      }
      echo json_encode($maps);
 }
