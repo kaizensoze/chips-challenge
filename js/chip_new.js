@@ -6,16 +6,26 @@ var MapEditor = function() {
         return new Map( JSON.parse(mapJSON) );
     }
 
-    var exportMap = 
+    this.loadMaps = function() {
+        $.ajax({
+            type: 'GET',
+            url: 'php/mapeditor.php?action=load_maps',
+            dataType: 'json',
+            success: function(data) {
+                for (var i=0; i < data.length; i++) {
+                    var map = importMap(data[i]);
+                    maps.push(map);
+                }
+                console.log('done loading maps');
+            },
+            data: {},
+            async: false
+        });
+    }
 
     this.getMaps = function() {
-        $.getJSON('php/mapeditor.php?action=load_maps', function(data) {
-            for (var i=0; i < data.length; i++) {
-                var map = importMap(data[i]);
-                maps.push(map);
-            }
-            console.log(maps[0].exportMap());
-        });
+        console.log('getting maps');
+        return maps;
     }
 };
 
@@ -54,7 +64,7 @@ var Map = function(model_param) {
         return model['time'];
     }
 
-    this.exportMap = function() {
+    this.getExport = function() {
         return JSON.stringify(model);
     }
 };

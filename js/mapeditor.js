@@ -1,7 +1,9 @@
 
 $(document).ready(function() {
     var m = new MapEditor();
+    m.loadMaps();
     var maps = m.getMaps();
+    console.log(maps.length);
     //loadMaps(maps);
 
     /*
@@ -13,32 +15,23 @@ $(document).ready(function() {
     */
 });
 
-function generate_map() {
-}
+function loadMaps(maps) {
+    console.log(maps.length);
+    /*
+    var map_list = $('#map_list');
+    for (var i=0; i < maps.length; i++) {
+        console.log(i);
+        /*
+        var map = maps[i];
+        console.log(map);
+        var map_name = map_file.split(".")[0];
 
-function load_map_list() {
-    $.getJSON('php/mapeditor.php?action=load_map_list', function(data) {
-        var map_list = $('#map_list');
-        for (var i=0; i < data.length; i++) {
-            var map_file = data[i];
-            var map_name = map_file.split(".")[0];
+        var option = $('<option></option>');
+        option.text(map_name);
+        option.val(map_name);
 
-            var option = $('<option></option>');
-            option.text(map_name);
-            option.val(map_name);
-
-            map_list.append(option);
-        }
-    });
-}
-
-function load_map(map_to_load) {
-    if (map_to_load == undefined) {
-        return;
+        map_list.append(option);
     }
-    $.getJSON('php/chip.php?action=load_map&map='+encodeURIComponent(map_to_load), function(data) {
-        var map_to_import = JSON.parse(data);
-        console.log(map_to_import);
-    });
+    */
 }
 
