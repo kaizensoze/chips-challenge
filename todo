@@ -2,13 +2,16 @@
 [DONE] upgrade jquery
 [DONE] no inline
 [DONE] move php out of html
+store maps in associative array
+new/load map
+save
+MapCanvas
 objectify
     MapEditor
     Map
-    Level (Canvas)
+    MapCanvas
     Chip
     Inventory
     Game
-no global variables
 enemy pathing
 

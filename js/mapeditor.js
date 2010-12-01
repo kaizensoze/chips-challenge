@@ -1,10 +1,8 @@
 
 $(document).ready(function() {
     var m = new MapEditor();
-    m.loadMaps();
     var maps = m.getMaps();
-    console.log(maps.length);
-    //loadMaps(maps);
+    loadMaps(maps);
 
     /*
     $('#load_map').bind('click', function() {
@@ -16,15 +14,10 @@ $(document).ready(function() {
 });
 
 function loadMaps(maps) {
-    console.log(maps.length);
-    /*
     var map_list = $('#map_list');
     for (var i=0; i < maps.length; i++) {
-        console.log(i);
-        /*
         var map = maps[i];
-        console.log(map);
-        var map_name = map_file.split(".")[0];
+        var map_name = map.getName();
 
         var option = $('<option></option>');
         option.text(map_name);
@@ -32,6 +25,5 @@ function loadMaps(maps) {
 
         map_list.append(option);
     }
-    */
 }
 

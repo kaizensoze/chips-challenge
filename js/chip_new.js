@@ -6,7 +6,7 @@ var MapEditor = function() {
         return new Map( JSON.parse(mapJSON) );
     }
 
-    this.loadMaps = function() {
+    var loadMaps = function() {
         $.ajax({
             type: 'GET',
             url: 'php/mapeditor.php?action=load_maps',
@@ -16,7 +16,6 @@ var MapEditor = function() {
                     var map = importMap(data[i]);
                     maps.push(map);
                 }
-                console.log('done loading maps');
             },
             data: {},
             async: false
@@ -24,9 +23,10 @@ var MapEditor = function() {
     }
 
     this.getMaps = function() {
-        console.log('getting maps');
         return maps;
     }
+
+    loadMaps();
 };
 
 var Map = function(model_param) {
