@@ -10,6 +10,12 @@ function main() {
         case "load_maps":
             loadMaps();
             break;
+        case "load_tiles":
+            loadTiles();
+            break;
+        case "get_tile_dimensions":
+            getTileDimensions();
+            break;
         default:
             echo 'invalid action';
     }
@@ -33,8 +39,7 @@ function loadMaps() {
      echo json_encode($maps);
 }
 
-/*
-function load_tiles() {
+function loadTiles() {
     $tiles = array();
     $tile_dir = '../images/tiles/';
     $it = new RecursiveDirectoryIterator($tile_dir);
@@ -49,6 +54,20 @@ function load_tiles() {
     echo json_encode($tiles);
 }
 
+function getTileDimensions() {
+    $tile_dir = '../images/tiles/';
+    $it = new RecursiveDirectoryIterator($tile_dir);
+    foreach (new RecursiveIteratorIterator($it) as $file) {
+        if ($it->isDot()) {
+            continue;
+        }
+
+        echo json_encode( getimagesize($file) );
+        break;
+    }
+}
+
+/*
 function save_map($r) {
     $map = $r['map'];
     $level = $r['level'];

@@ -1,8 +1,12 @@
 
-#load_map_section {
-    margin-bottom: 5px;
+#load_save_map_section {
+    margin-bottom: 15px;
 }
 
 #new_map {
     margin-right: 15px;
+}
+
+.tile {
+  display: inline;
 }

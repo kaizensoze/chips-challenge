@@ -2,11 +2,17 @@
 [DONE] upgrade jquery
 [DONE] no inline
 [DONE] move php out of html
-store maps in associative array
-new/load map
-save
+[DONE] store maps in associative array
+
+[DONE] finish tile stuff
 MapCanvas
-objectify
+    have mapeditor generate default map model to be passed to MapCanvas
+    add params to map model:
+        width
+        length
+save map
+tile config
+objects
     MapEditor
     Map
     MapCanvas
