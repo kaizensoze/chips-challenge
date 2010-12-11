@@ -7,6 +7,18 @@
   margin-left: 5px;
 }
 
+#map_list {
+  display: none;
+}
+
+#tile_section {
+  display: none;
+}
+
+#map_section {
+  display: none;
+}
+
 /*
 #load_save_map_section {
     margin-bottom: 15px;

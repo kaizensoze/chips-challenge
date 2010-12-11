@@ -1,74 +1,177 @@
 
 var chip = (function($, chip) {
+    // Utility functions.
+    (function() {
+        String.prototype.capitalize = function() {
+            return this.charAt(0).toUpperCase() + this.substring(1);
+        }
+
+        String.prototype.unixHackerToCamelCase = function() {
+            // ex: one_two_three -> oneTwoThree
+            var result = '';
+            var words = this.split('_');
+            if (words.length == 1) {
+                return this.toString();
+            }
+
+            result = result + words[0].toLowerCase();
+            for (var i=1; i < words.length; i++) {
+                result = result + words[i].capitalize();
+            }
+            return result;
+        }
+
+        String.prototype.isPseudoPrivate = function() {
+            // ex: _blah
+            return this.charAt(0) == '_';
+        }
+
+        String.prototype.isConstant = function() {
+            // ex: CONSTANT_VARIABLE
+            return this.replace(/_/g, '') == this.toUpperCase();
+        }
+    })();
+    //console.log('_One_two_three'.unixHackerToCamelCase());
+
+    // Generate getters/setters for all objects.
+    var generateGetterSetterMethods = function(obj) {
+        var props = {};
+        var _this = new obj();
+        for (var property in _this) {
+            if (typeof _this[property] == 'function') {
+                continue;
+            }
+            if (property.isPseudoPrivate() || property.isConstant()) {
+                continue;
+            }
+
+            var cleanProperty = property.unixHackerToCamelCase().capitalize();
+            (function(prop) {
+                var property = prop;
+                props['get' + cleanProperty] = function() {
+                    return this[property];
+                };
+                props['set' + cleanProperty] = function(val) {
+                    this[property] = val;
+                };
+            })(property);
+        }
+        $.extend(obj.prototype, props);
+        delete _this;
+
+        console.log(obj.prototype);
+    }
+
+    // Position
+    chip.Position = Position = function(_top, _left) {
+        this.top = _top || 0;
+        this.left = _left || 0;
+    }
+    generateGetterSetterMethods(Position);
+    
+    // TODO: Tile
+
+    // TODO: TileStack
+
+    // Map
+    chip.Map = Map = function(_model) {
+        var _this = this;
+
+        Map.WIDTH_IN_TILES = 20;
+        Map.HEIGHT_IN_TILES = 20;
+
+        var generateData = function() {
+            var defaultData = {};
+
+            /*
+            for (var y=0; y < Map.HEIGHT_IN_TILES; y++) {
+                defaultData[y] = [];
+                for (var x=0; x < Map.WIDTH_IN_TILES; x++) {
+                    defaultData[y][x] = new TileStack();
+                }
+            }
+            */
+
+            return defaultData;
+        }
+
+        var defaults = {
+            'name': 'default',
+            'levelNumber': -1,
+            'totalChips': 0,
+            'time': 0,
+            'startPosition': new Position(0, 0),
+            'goalPosition': new Position(0, 0),
+            'password': 'BLAH',
+            'data': generateData()
+        };
+
+        var _import = function(_model) {
+            for (var property in (_model || defaults)) {
+                var val;
+                if (_model) {
+                    val = _model[property];
+                } else {
+                    val = defaults[property];
+                }
+                _this[property.unixHackerToCamelCase()] = val;
+            }
+            //console.log('\n');
+        }
+        _import(_model);
+    }
+    $.extend(Map.prototype, {
+    });
+    generateGetterSetterMethods(Map);
+
     // Map Editor
     chip.MapEditor = MapEditor = function() {
+        MapEditor.TILE_COL_LIMIT = 10;
+
         this.maps = {};
         this.tiles = {};
         this.tilesFolder = '';
         this.tileDimensions = {};
     }
     $.extend(MapEditor.prototype, {
-        loadTileData: function() {
-            _this = this;
+        importMaps: function(_maps) {
+            var m;
+            var mapName;
+
+            for (var i=0; i < _maps.length; i++) {
+                m = new Map(JSON.parse(_maps[i]));
+                mapName = m.getName();
+                this.maps[mapName] = m;
+            }
+        },
+        importTiles: function(_tiles) {
+        },
+        loadData: function() {
+            var _this = this;
             $.ajax({
                 type: 'GET',
                 url: '../app/chip.php?action=load_tile_data',
                 dataType: 'json',
                 success: function(data) {
-                    _this.maps = data['maps'];
-                    _this.tiles = data['tiles'];
                     _this.tilesFolder = data['tiles_folder'];
                     _this.tileDimensions = data['tile_dimensions'];
+
+                    _this.importMaps(data['maps']);
+                    _this.importTiles(data['tiles']);
                 },
                 data: {},
                 async: false
             });
         },
     });
-
-    (function() {
-        String.prototype.capitalize = function() {
-            return this.charAt(0).toUpperCase() + this.substring(1);
-        }
-
-        for (var obj in chip) {
-            var props = {};
-            _this = new chip[obj]();
-            for (var property in _this) {
-                if (property.charAt(0) == '_') {
-                    continue;
-                }
-                if (typeof _this[property] == 'function') {
-                    continue;
-                }
-
-                var capitalizedProperty = property.capitalize();
-
-                (function(prop) {
-                    var property = prop;
-                    props['get' + capitalizedProperty] = function() {
-                        return this[property];
-                    };
-                    props['set' + capitalizedProperty] = function(val) {
-                        console.log('set ' + property + ' to ' + val);
-                        //this[property] = val;
-                    };
-                })(property);
-            }
-            $.extend(chip[obj].prototype, props);
-            delete _this;
-        }
-     })();
+    generateGetterSetterMethods(MapEditor);
 
     return chip;
 })(jQuery, chip || {});
 
 
-
-
-
-
 /*
+
 // CHIP_DATA.JS
 var tile_width = 32;
 var tile_path = 'images/tiles/';
@@ -104,10 +207,6 @@ function GameData(map) {
     this.outcome_msg;
 }
 
-function Position(top, left) {
-    this.top = top;
-    this.left = left;
-}
 
 
 //Originally, this was inside the Position object, but
@@ -414,22 +513,6 @@ var Tile = function(src_param) {
     var orientation;
     var color;
 
-    this.getSrc = function() {
-        return src;
-    }
-
-    this.getOrientation = function() {
-        return orientation;
-    }
-
-    this.getColor = function() {
-        return color;
-    }
-
-    this.toString = function() {
-        return '[src: ' + src + ', orientation: ' + orientation + ', color: ' + color + ']';
-    }
-
     var init = function() {
         if (src_param == null) {
             src = TileSource.FLOOR_NORMAL;
@@ -459,23 +542,6 @@ var MapEditorGUI = function(map_editor_param) {
             var m = map_editor.getMap(map_name);
             loadCanvas(m);
         });
-    }
-
-    this.loadMaps = function() {
-        var map_list = $('#map_list');
-        var maps = map_editor.getMaps();
-        for (var key in maps) {
-            if (maps.hasOwnProperty(key)) {
-                var map = maps[key];
-                var map_name = map.getName();
-
-                var option = $('<option></option>');
-                option.text(map_name);
-                option.val(map_name);
-
-                map_list.append(option);
-            }
-        }
     }
 
     this.loadTiles = function() {
@@ -580,41 +646,6 @@ var MapEditor = function() {
         return new Map( JSON.parse(mapJSON) );
     }
 
-    var loadMaps = function() {
-        $.ajax({
-            type: 'GET',
-            url: 'php/mapeditor.php?action=load_maps',
-            dataType: 'json',
-            success: function(data) {
-                for (var i=0; i < data.length; i++) {
-                    var map_data = data[i];
-                    if (map_data == null) {
-                        continue;
-                    }
-                    var map = importMap(map_data);
-                    var map_name = map.getName();
-                    maps[map_name] = map;
-                }
-            },
-            data: {},
-            async: false
-        });
-    }
-
-    var getTileDimensions = function() {
-        $.ajax({
-            type: 'GET',
-            url: 'php/mapeditor.php?action=get_tile_dimensions',
-            dataType: 'json',
-            success: function(data) {
-                MapEditor.TILE_WIDTH = data[0];
-                MapEditor.TILE_HEIGHT = data[1];
-            },
-            data: {},
-            async: false
-        });
-    }
-
     var loadTiles = function() {
         $.ajax({
             type: 'GET',
@@ -655,119 +686,6 @@ var MapEditor = function() {
     init();
 };
 
-var Map = function(model_param) {
-    Map.WIDTH_IN_TILES = 20;
-    Map.HEIGHT_IN_TILES = 20;
-
-    var model;
-
-    this.getTotalChips = function() {
-        return model['chips'];
-    }
-
-    this.getData = function() {
-        return model['data'];
-    }
-
-    this.getGoal = function() {
-        return model['goal_position'];
-    }
-
-    this.getLevelNumber = function() {
-        return model['level_number'];
-    }
-
-    this.getName = function() {
-        return model['name'];
-    }
-
-    this.getPassword = function() {
-        return model['password'];
-    }
-
-    this.getStart = function() {
-        return model['start_position'];
-    }
-
-    this.getMaxTime = function() {
-        return model['time'];
-    }
-
-    this.getTile = function(y, x) {
-        return model['data'][y][x];
-    }
-
-    this.getExport = function() {
-        return JSON.stringify(model);
-    }
-
-    var getDataStr = function() {
-        var str = '';
-
-        var data = model['data'];
-        for (var y_idx in data) {
-            for (var x_idx in data[y_idx]) {
-                var tile_stack = data[y_idx][x_idx];
-                for (var i=0; i < tile_stack.length; i++) {
-                    var tile = tile_stack[i];
-                    str += tile;
-                }
-                str += ' ';
-            }
-            str += '\n';
-        }
-
-        return str;
-    }
-
-    this.log = function() {
-        for (var prop in model) {
-            if (model.hasOwnProperty(prop)) {
-                var prop_val = model[prop];
-                if (prop == 'data') {
-                    console.log(prop, ':', getDataStr());
-                } else if (prop_val instanceof Object) {
-                    console.log(prop + ': ' + prop_val);
-                } else {
-                    console.log(prop, ':', prop_val);
-                }
-            }
-        }
-    }
-
-    var generate = function() {
-        var default_model = {};
-        default_model['chips'] = 0;
-        default_model['time'] = 0;
-        default_model['start_position'] = new Position(0, 0);
-        default_model['goal_position'] = new Position(0, 0);
-        default_model['name'] = 0;
-        default_model['level_number'] = 0;
-        default_model['password'] = 'BLAH';
-        default_model['data'] = {};
-        var default_model_data = default_model['data'];
-        for (var y=0; y < Map.HEIGHT_IN_TILES; y++) {
-            default_model_data[y] = new Array();
-            for (var x=0; x < Map.WIDTH_IN_TILES; x++) {
-                var tile = new Tile();
-                default_model_data[y][x] = new Array();
-                default_model_data[y][x].push(tile);
-            }
-        }
-        //console.log(default_model_data);
-
-        return default_model;
-    }
-
-    var init = function() {
-        if (model_param == null) {
-            model = generate();
-        } else {
-            model = model_param;
-        }
-    }
-    init();
-};
 
 // CHIP_OLD.JS
 var map;
