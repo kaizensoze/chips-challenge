@@ -1,0 +1,7 @@
+
+ p/mapedit.html  p/c/chip.css  p/j/mapedit.js  p/j/chip.js  a/chip.php  /j/u/jquery.ui.datepicker.js
+
+mapedit:
+    at time of load I should have:
+        the tiles
+        dimensions of tile

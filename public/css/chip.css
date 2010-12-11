@@ -1,0 +1,71 @@
+
+#create_new_map {
+  margin-right: 5px;
+}
+
+#load_existing_map {
+  margin-left: 5px;
+}
+
+/*
+#load_save_map_section {
+    margin-bottom: 15px;
+}
+
+#new_map {
+    margin-right: 15px;
+}
+
+.tile {
+  display: inline;
+}
+
+.tile {
+  display: inline;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0;
+}
+
+#map_output {
+	display: block;
+}
+
+#maps {
+    float: right;
+    width: 600;
+    height: 250;
+    overflow: auto;
+}
+
+#map_region {
+    border-style: outset;
+    border-width: 10;
+    width: 256;
+    height: 256;
+}
+
+#temp_region {
+    border-style: outset;
+    border-width: 10;
+    width: 256;
+    height: 256;
+}
+
+#temp_region {
+    display: none;
+}
+
+#viewport {
+    display: none;
+}
+
+#tile_config_section {
+    margin-bottom: 10px;
+}
+*/
