@@ -298,14 +298,12 @@ var chip = (function($, chip) {
         var generateData = function() {
             var defaultData = {};
 
-            /*
             for (var y=0; y < Map.HEIGHT_IN_TILES; y++) {
                 defaultData[y] = [];
                 for (var x=0; x < Map.WIDTH_IN_TILES; x++) {
                     defaultData[y][x] = new TileStack();
                 }
             }
-            */
 
             return defaultData;
         }
@@ -340,10 +338,10 @@ var chip = (function($, chip) {
     chip.MapEditor = MapEditor = function() {
         MapEditor.TILE_COL_LIMIT = 10;
 
-        this.maps = {};
-        this.tiles = {};
+        this.maps = [];
+        this.tiles = [];
         this.tilesFolder = '';
-        this.tileDimensions = {};
+        this.tile_dimensions = {};
     }
     generateGetterSetterMethods(MapEditor);
     $.extend(MapEditor.prototype, {
@@ -354,11 +352,8 @@ var chip = (function($, chip) {
             for (var i=0; i < _maps.length; i++) {
                 m = new Map(JSON.parse(_maps[i]));
                 mapName = m.getName();
-                this.maps[mapName] = m;
+                this.maps.push(m);
             }
-        },
-
-        importTiles: function(_tiles) {
         },
 
         loadData: function() {
@@ -370,9 +365,8 @@ var chip = (function($, chip) {
                 success: function(data) {
                     _this.tilesFolder = data['tiles_folder'];
                     _this.tileDimensions = data['tile_dimensions'];
-
+                    _this.tiles = data['tiles'];
                     _this.importMaps(data['maps']);
-                    _this.importTiles(data['tiles']);
                 },
                 data: {},
                 async: false

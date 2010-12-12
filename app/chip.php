@@ -7,8 +7,8 @@ function main() {
     }
 
     switch ($action) {
-        case "load_tile_data":
-            loadTileData();
+        case "load_data":
+            loadData();
             break;
         default:
             echo 'invalid action';
@@ -16,7 +16,7 @@ function main() {
 }
 main();
 
-function loadTileData() {
+function loadData() {
     $data = array(
         'maps' => getMaps(),
         'tiles' => getTiles(),

@@ -4,16 +4,43 @@ $(document).ready(function() {
     mapEditor.loadData();
 
     fillWidgetData(mapEditor);
-    bindWidgetEvents(mapEditor);
 });
 
 function fillWidgetData(mapEditor) {
-    //var maps = mapEditor.getMaps();
+    // fill in load map select
+    var maps = mapEditor.getMaps();
     //console.log(maps);
-    //console.log(MapEditor.TILE_COL_LIMIT);
+
+    var loadMapSelectHTML = '';
+    for (var i=0; i < maps.length; i++) {
+        var mapName = maps[i].getName();
+        loadMapSelectHTML += '<option id="' + mapName + '" class="load_map_select_option">' + mapName + '</option>';
+    }
+    $('#load_map_select').html(loadMapSelectHTML);
+
+    // fill in tile section
+    var tiles = mapEditor.getTiles();
+    var tilesFolder = mapEditor.getTilesFolder();
+
+    var tileSectionHTML = '';
+    for (var i=0; i < tiles.length; i++) {
+        tileSectionHTML += '<img class="tile" src="' + tilesFolder + '" />';
+        if (i % MapEditor.TILE_COL_LIMIT == 0) {
+            tileSectionHTML 
+    }
+
+    bindWidgetEvents(maps, tiles);
 }
 
-function bindWidgetEvents(mapEditor) {
+function bindWidgetEvents(maps, tiles) {
+    $('#show_existing_maps').click(function() {
+        if (maps.length == 0) {
+            alert('No maps to load.');
+        } else {
+            $("#load_map_section").show();
+        }
+        return false;
+    });
 }
 
 /*

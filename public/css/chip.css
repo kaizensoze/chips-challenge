@@ -3,15 +3,15 @@
   margin-right: 5px;
 }
 
-#load_existing_map {
+#show_existing_maps {
   margin-left: 5px;
 }
 
-#map_list {
+#load_map_section {
   display: none;
 }
 
-#tile_section {
+#tileSection {
   display: none;
 }
 
