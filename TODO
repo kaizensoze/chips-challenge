@@ -1,7 +1,38 @@
 
- p/mapedit.html  p/c/chip.css  p/j/mapedit.js  p/j/chip.js  a/chip.php  /j/u/jquery.ui.datepicker.js
+generate default map model
 
-mapedit:
-    at time of load I should have:
-        the tiles
-        dimensions of tile
+
+a MapManager should do the load/save stuff, not MapEditor
+
+how to handle movement for non-Chip entities (should the logic be in the Tile itself?)
+    store references to things that need to move (Chip, Enemies)
+
+    there will be a Chip object and multiple Enemy objects for given map
+
+    Chip {
+        TileSource
+        CurrentLocation
+        Inventory
+    }
+
+    Enemy {
+        TileSource
+        CurrentLocation
+        PathingRoute
+    }
+
+    use MVC; M = Map, V = MapCanvas, C = MapManager
+    when needing to move one of them:
+        pass (Chip|Enemy, desiredDirection) to MapManager
+
+        MapManager.move:
+            get TileStack at given location in map
+            find tile containing TileSource(s)
+            pop that tile from stack
+            look at desiredDirection to determine where to move tile, how to orient, etc.
+
+    have a MapManager to alter tiles:
+        move:
+            * if is direction based (multiple images for same entity with different versions according to direction)
+            * or if just rotate the tile
+

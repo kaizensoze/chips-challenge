@@ -59,8 +59,174 @@ var chip = (function($, chip) {
         $.extend(obj.prototype, props);
         delete _this;
 
-        console.log(obj.prototype);
+        //console.log(obj.prototype);
     }
+
+    // Orientation (Rotation)
+    var Orientation = {
+        UP: 0,
+        RIGHT: 90,
+        DOWN: 180,
+        LEFT: -90
+    };
+
+    // Direction
+    var Direction = {
+        UP: 'up',
+        RIGHT: 'right',
+        DOWN: 'down',
+        LEFT: 'left' 
+    };
+
+    // Color
+    var Color = {
+        RED:    '#FF0000',
+        BLUE:   '#00FFFF',
+        GREEN:  '#00FF00',
+        YELLOW: '#FFFF00',
+        DBLUE:  '#0000FF',
+        BROWN:  '#808000'
+    };
+
+    // TileSource
+    var TileSource = {
+        BLOCK_MUD : 'block mud',
+        BLOCK_NORMAL : 'block normal',
+        BLOCK_QUESTIONABLE : 'block questionable',
+        BLOCK_SWITCHABLE : 'block switchable',
+        CHIP_DOWN : 'chip down',
+        CHIP_LEFT : 'chip left',
+        CHIP_RIGHT : 'chip right',
+        CHIP_UP : 'chip up',
+        CHIP_ITEM: 'chip item',
+        CLEAR : 'clear',
+        DASH : 'dash tile',
+        DASH_BOOTS : 'dash boots',
+        BALL : 'ball enemy',
+        BOMB : 'bomb enemy',
+        BUG : 'bug enemy',
+        FIREBALL : 'fireball enemy',
+        GHOST : 'ghost enemy',
+        TANK : 'tank enemy',
+        FIRE_BOOTS : 'fire boots',
+        FIRE : 'fire',
+        FIREBALL_GENERATOR : 'fireball generator',
+        FLIPPERS : 'flippers',
+        FLOOR_MUD : 'mud floor',
+        FLOOR_NORMAL : 'normal floor',
+        GATE_GOAL : 'goal gate',
+        GATE : 'gate',
+        GOAL : 'goal',
+        HELP : 'help tile',
+        ICE_CENTER : 'ice center',
+        ICE_CORNER : 'ice corner',
+        ICE_SKATES : 'ice skates',
+        KEY : 'key',
+        SPLASH : 'splash',
+        SWITCH_ : 'switch',
+        TELEPORTER : 'teleporter',
+        TRAP : 'trap',
+        CLEAR_TILE : 'clear tile',
+        WATER : 'water'
+    };
+
+    var FileToSource = {
+        'block_mud.png': TileSource.BLOCK_MUD,
+        'block_normal.png': TileSource.BLOCK_NORMAL,
+        'block_questionable.png': TileSource.BLOCK_QUESTIONABLE, 
+        'block_switchable.png' : TileSource.BLOCK_SWITCHABLE,
+        'chip_down.png' : TileSource.CHIP_DOWN,
+        'chip_left.png' : TileSource.CHIP_LEFT,
+        'chip_right.png' : TileSource.CHIP_RIGHT,
+        'chip_up.png' : TileSource.CHIP_UP,
+        'chip_item.png' : TileSource.CHIP_ITEM,
+        'clear.png' : TileSource.CLEAR,
+        'clear_tile.png' : TileSource.CLEAR_TILE,
+        'dash.png' : TileSource.DASH,
+        'dash_boots.png' : TileSource.DASH_BOOTS,
+        'ball.png' : TileSource.BALL,
+        'bomb.png' : TileSource.BOMB,
+        'bug.png' : TileSource.BUG,
+        'fireball.png' : TileSource.FIREBALL,
+        'ghost.png' : TileSource.GHOST,
+        'tank.png' : TileSource.TANK,
+        'fire_boots.png' : TileSource.FIRE_BOOTS,
+        'fire.png' : TileSource.FIRE,
+        'fireball_generator.png' : TileSource.FIREBALL_GENERATOR,
+        'flippers.png' : TileSource.FLIPPERS,
+        'floor_mud.png' : TileSource.FLOOR_MUD,
+        'floor_normal.png' : TileSource.FLOOR_NORMAL,
+        'gate_goal.png' : TileSource.GATE_GOAL,
+        'gate.png' : TileSource.GATE,
+        'goal.png' : TileSource.GOAL,
+        'help.png' : TileSource.HELP,
+        'ice_center.png' : TileSource.ICE_CENTER,
+        'ice_corner.png' : TileSource.ICE_CORNER,
+        'ice_skates.png' : TileSource.ICE_SKATES,
+        'key.png' : TileSource.KEY,
+        'splash.png' : TileSource.SPLASH,
+        'switch.png' : TileSource.SWITCH_,
+        'teleporter.png' : TileSource.TELEPORTER,
+        'trap.png' : TileSource.TRAP,
+        'water.png' : TileSource.WATER
+    };
+
+    var TileSourceType = {
+        CHIP: 'chip person',
+        CHIP_ITEM: 'chip item',
+        CLEAR_INVENTORY: 'clear inventory',
+        CLEAR_TILE_STACK: 'clear tile stack',
+        ENEMY: 'enemy',
+        ENVIRONMENT: 'environment',
+        GATE: 'gate',
+        GOAL: 'goal',
+        GOAL_GATE: 'goal gate',
+        HELP: 'help tile',
+        INVENTORY_ITEM: 'inventory item',
+        SWITCH_: 'switch',
+        TELEPORTER: 'teleporter',
+        TRAP: 'trap'
+    };
+
+    var SourceToType = {};
+    SourceToType[TileSource.BLOCK_MUD] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.BLOCK_NORMAL] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.BLOCK_QUESTIONABLE] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.BLOCK_SWITCHABLE] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.CHIP_DOWN] = TileSourceType.CHIP;
+    SourceToType[TileSource.CHIP_LEFT] = TileSourceType.CHIP;
+    SourceToType[TileSource.CHIP_RIGHT] = TileSourceType.CHIP;
+    SourceToType[TileSource.CHIP_UP] = TileSourceType.CHIP;
+    SourceToType[TileSource.CHIP_ITEM] = TileSourceType.CHIP_ITEM;
+    SourceToType[TileSource.CLEAR] = TileSourceType.CLEAR_INVENTORY;
+    SourceToType[TileSource.DASH] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.DASH_BOOTS] = TileSourceType.INVENTORY_ITEM;
+    SourceToType[TileSource.BALL] = TileSourceType.ENEMY;
+    SourceToType[TileSource.BOMB] = TileSourceType.ENEMY;
+    SourceToType[TileSource.BUG] = TileSourceType.ENEMY;
+    SourceToType[TileSource.FIREBALL] = TileSourceType.ENEMY;
+    SourceToType[TileSource.GHOST] = TileSourceType.ENEMY;
+    SourceToType[TileSource.TANK] = TileSourceType.ENEMY;
+    SourceToType[TileSource.FIRE_BOOTS] = TileSourceType.INVENTORY_ITEM;
+    SourceToType[TileSource.FIRE] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.FIREBALL_GENERATOR] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.FLIPPERS] = TileSourceType.INVENTORY_ITEM;
+    SourceToType[TileSource.FLOOR_MUD] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.FLOOR_NORMAL] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.GATE_GOAL] = TileSourceType.GOAL_GATE;
+    SourceToType[TileSource.GATE] = TileSourceType.GATE;
+    SourceToType[TileSource.GOAL] = TileSourceType.GOAL;
+    SourceToType[TileSource.HELP] = TileSourceType.HELP;
+    SourceToType[TileSource.ICE_CENTER] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.ICE_CORNER] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.ICE_SKATES] = TileSourceType.INVENTORY_ITEM;
+    SourceToType[TileSource.KEY] = TileSourceType.INVENTORY_ITEM;
+    SourceToType[TileSource.SPLASH] = TileSourceType.ENVIRONMENT;
+    SourceToType[TileSource.SWITCH_] = TileSourceType.SWITCH_;
+    SourceToType[TileSource.TELEPORTER] = TileSourceType.TELEPORTER;
+    SourceToType[TileSource.TRAP] = TileSourceType.TRAP;
+    SourceToType[TileSource.CLEAR_TILE] = TileSourceType.CLEAR_TILE_STACK;
+    SourceToType[TileSource.WATER] = TileSourceType.ENVIRONMENT;
 
     // Position
     chip.Position = Position = function(_top, _left) {
@@ -68,10 +234,59 @@ var chip = (function($, chip) {
         this.left = _left || 0;
     }
     generateGetterSetterMethods(Position);
-    
-    // TODO: Tile
 
-    // TODO: TileStack
+    // Tile
+    chip.Tile = Tile = function(_source, _orientation, _color) {
+        this.source = _source || TileSource.FLOOR_NORMAL;
+        this.type = SourceToType[this.source];
+        this.orientation = _orientation || Orientation.UP;
+        this.color = _color || Color.WHITE;
+    }
+    generateGetterSetterMethods(Tile);
+    $.extend(Tile.prototype, {
+        equals: function(_tile) {
+            return _tile.getSource() == this.getSource();
+        }
+    });
+
+    // TileStack
+    chip.TileStack = TileStack = function() {
+        var default_ = [ new Tile() ];
+        this.tiles = default_;
+    }
+    generateGetterSetterMethods(TileStack);
+    $.extend(TileStack.prototype, {
+        push: function(_tile) {
+            this.tiles.push(_tile);
+        },
+
+        pop: function() {
+            return this.tiles.pop();
+        },
+
+        peek: function() {
+            return (this.tiles.length == 0) ? null : this.tiles[this.tiles.length - 1];
+        },
+
+        remove: function(_tile) {
+            for (var i=0; i < this.tiles.length; i++) {
+                var thisTile = this.tiles[i];
+                if (thisTile.equals(_tile)) {
+                    return this.tiles.splice(i, 1);
+                }
+            }
+        },
+
+        contains: function(_type) {
+            for (var i=0; i < this.tiles.length; i++) {
+                var thisTile = this.tiles[i];
+                if (_type.getType() == thisTile.getType()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    });
 
     // Map
     chip.Map = Map = function(_model) {
@@ -116,12 +331,9 @@ var chip = (function($, chip) {
                 }
                 _this[property.unixHackerToCamelCase()] = val;
             }
-            //console.log('\n');
         }
         _import(_model);
     }
-    $.extend(Map.prototype, {
-    });
     generateGetterSetterMethods(Map);
 
     // Map Editor
@@ -133,6 +345,7 @@ var chip = (function($, chip) {
         this.tilesFolder = '';
         this.tileDimensions = {};
     }
+    generateGetterSetterMethods(MapEditor);
     $.extend(MapEditor.prototype, {
         importMaps: function(_maps) {
             var m;
@@ -144,8 +357,10 @@ var chip = (function($, chip) {
                 this.maps[mapName] = m;
             }
         },
+
         importTiles: function(_tiles) {
         },
+
         loadData: function() {
             var _this = this;
             $.ajax({
@@ -164,31 +379,13 @@ var chip = (function($, chip) {
             });
         },
     });
-    generateGetterSetterMethods(MapEditor);
 
     return chip;
 })(jQuery, chip || {});
 
 
 /*
-
 // CHIP_DATA.JS
-var tile_width = 32;
-var tile_path = 'images/tiles/';
-
-function Map() {
-	this.data = [];  // 2d array [top][left]
-
-	this.level_number;
-	this.time;
-	this.chips;
-    this.password;
-    
-    this.start_position;
-    this.goal_position;
-
-    this.help_msg;
-}
 
 function Chip() {
 	this.inventory = new Array();
@@ -207,8 +404,6 @@ function GameData(map) {
     this.outcome_msg;
 }
 
-
-
 //Originally, this was inside the Position object, but
 //the object's "type" gets lost in the mix in the JSON
 //serialization.
@@ -217,314 +412,8 @@ function equals(a, b) {
     return a.top == b.top && a.left == b.left;
 }
 
-var Orientation = {
-	UP : 0,
-	LEFT : 270,
-	DOWN : 180,
-	RIGHT : 90
-};
-
-var Direction = {
-    LEFT : 0,
-    UP : 1,
-    RIGHT : 2,
-    DOWN : 3
-};
-
-var Color = {
-	RED :    '#FF0000',
-	BLUE :   '#00FFFF',
-	GREEN :  '#00FF00',
-	YELLOW : '#FFFF00',
-	DBLUE :  '#0000FF',
-	BROWN :  '#808000'
-};
-
-var ItemType = {
-	ENEMY: 0,
-	INVENTORY: 1,
-	CHIP: 2 // The item, not the protagonist.
-};
-
-var SourceType = {
-	FLOOR : 0,
-	ITEM : 1
-};
-
-var Source = {
-	BLOCK_MUD : 0,
-	BLOCK_NORMAL : 1,
-	BLOCK_QUESTIONABLE : 2,
-	BLOCK_SWITCHABLE : 3,
-	CHIP_DOWN : 4,
-	CHIP_LEFT : 5,
-	CHIP_RIGHT : 6,
-	CHIP_UP : 7,
-	CHIP : 8,
-	CLEAR : 9,
-	DASH : 10,
-	DASH_BOOTS : 35,
-	BALL : 11,
-	BOMB : 12,
-	BUG : 13,
-	FIREBALL : 14,
-	GHOST : 15,
-	TANK : 16,
-	FIRE_BOOTS : 17,
-	FIRE : 18,
-	FIREBALL_GENERATOR : 19,
-	FLIPPERS : 20,
-	FLOOR_MUD : 21,
-	FLOOR_NORMAL : 22,
-	GATE_GOAL : 23,
-	GATE : 24,
-	GOAL : 25,
-	HELP : 26,
-	ICE_CENTER : 27,
-	ICE_CORNER : 28,
-	ICE_SKATES : 29,
-	KEY : 30,
-	SPLASH : 31,
-	SWITCH_ : 32,
-	TELEPORTER : 33,
-	TRAP : 34,
-    CLEAR_TILE : 40,
-    WATER : 43
-};
-
-var FileToSource = {
-	'block_mud.png' : Source.BLOCK_MUD,
-	'block_normal.png' : Source.BLOCK_NORMAL,
-	'block_questionable.png' : Source.BLOCK_QUESTIONABLE, 
-	'block_switchable.png' : Source.BLOCK_SWITCHABLE,
-	'chip_down.png' : Source.CHIP_DOWN,
-	'chip_left.png' : Source.CHIP_LEFT,
-	'chip_right.png' : Source.CHIP_RIGHT,
-	'chip_up.png' : Source.CHIP_UP,
-	'chip.png' : Source.CHIP,
-	'clear.png' : Source.CLEAR,
-    'clear_tile.png' : Source.CLEAR_TILE,
-	'dash.png' : Source.DASH,
-	'dash_boots.png' : Source.DASH_BOOTS,
-	'ball.png' : Source.BALL,
-	'bomb.png' : Source.BOMB,
-	'bug.png' : Source.BUG,
-	'fireball.png' : Source.FIREBALL,
-	'ghost.png' : Source.GHOST,
-	'tank.png' : Source.TANK,
-	'fire_boots.png' : Source.FIRE_BOOTS,
-	'fire.png' : Source.FIRE,
-	'fireball_generator.png' : Source.FIREBALL_GENERATOR,
-	'flippers.png' : Source.FLIPPERS,
-	'floor_mud.png' : Source.FLOOR_MUD,
-	'floor_normal.png' : Source.FLOOR_NORMAL,
-	'gate_goal.png' : Source.GATE_GOAL,
-	'gate.png' : Source.GATE,
-	'goal.png' : Source.GOAL,
-	'help.png' : Source.HELP,
-	'ice_center.png' : Source.ICE_CENTER,
-	'ice_corner.png' : Source.ICE_CORNER,
-	'ice_skates.png' : Source.ICE_SKATES,
-	'key.png' : Source.KEY,
-	'splash.png' : Source.SPLASH,
-	'switch.png' : Source.SWITCH_,
-	'teleporter.png' : Source.TELEPORTER,
-	'trap.png' : Source.TRAP,
-    'water.png' : Source.WATER
-};
-
-var Floors = new Array(
-	Source.FLOOR_NORMAL,
-    'WTF' // array needs to contain more than one literal in constructor for it to be recognized as containing anything
-);
-
-var Items = new Array(
-	Source.CHIP_DOWN,
-	Source.CHIP_LEFT,
-	Source.CHIP_RIGHT,
-	Source.CHIP_UP,
-	Source.CHIP,
-	Source.DASH_BOOTS,
-	Source.BALL,
-	Source.BOMB,
-	Source.BUG,
-	Source.FIREBALL,
-	Source.GHOST,
-	Source.TANK,
-	Source.FIRE_BOOTS,
-	Source.FLIPPERS,
-	Source.GATE_GOAL,
-	Source.GATE,
-	Source.ICE_SKATES,
-	Source.KEY,
-	Source.BLOCK_MUD,
-	Source.BLOCK_NORMAL,
-	Source.BLOCK_QUESTIONABLE,
-	Source.BLOCK_SWITCHABLE,
-	Source.CLEAR,
-	Source.DASH,
-	Source.FIRE,
-	Source.FIREBALL_GENERATOR,
-	Source.GOAL,
-	Source.HELP,
-	Source.ICE_CENTER,
-	Source.ICE_CORNER,
-	Source.SPLASH,
-	Source.SWITCH_,
-	Source.TELEPORTER,
-	Source.TRAP,
-	Source.FLOOR_MUD,
-    Source.WATER
-);
-
-var InventoryItems = new Array(
-	Source.DASH_BOOTS,
-	Source.FIRE_BOOTS,
-	Source.FLIPPERS,
-	Source.ICE_SKATES,
-	Source.KEY
-)
-
-var Enemies = new Array(
-	Source.BALL,
-	Source.BOMB,
-	Source.BUG,
-	Source.FIREBALL,
-	Source.GHOST,
-	Source.TANK
-);
-
-var ChipPoses = new Array(
-    Source.CHIP_DOWN,
-    Source.CHIP_UP,
-    Source.CHIP_LEFT,
-    Source.CHIP_RIGHT
-);
-
-var DirectionToFile = {
-    0 : 'chip_left.png',
-    1 : 'chip_up.png',
-    2 : 'chip_right.png',
-    3 : 'chip_down.png'
-};
-
-function Item() {
-	this.orientation;
-	this.color;
-	this.source;
-	this.type;
-}
-
-function Tile() {
-	this.source;
-	this.items = new Array();
-}
 
 // CHIP_NEW.JS
-var Orientation = {
-	UP : 0,
-	LEFT : 270,
-	DOWN : 180,
-	RIGHT : 90
-};
-
-var Direction = {
-    LEFT : 0,
-    UP : 1,
-    RIGHT : 2,
-    DOWN : 3
-};
-
-var Color = {
-	WHITE :  '#FFFFFF',
-	RED :    '#FF0000',
-	BLUE :   '#00FFFF',
-	GREEN :  '#00FF00',
-	YELLOW : '#FFFF00',
-	DBLUE :  '#0000FF',
-	BROWN :  '#808000'
-};
-
-var Position = function(y_param, x_param) {
-    var y, x;
-
-    this.getY = function() {
-        return y;
-    }
-
-    this.getX = function() {
-        return x;
-    }
-
-    this.toString = function() {
-        return '(' + y + ', ' + x + ')';
-    }
-
-    var init = function() {
-        y = y_param;
-        x = x_param;
-    }
-    init();
-}
-
-var TileSource = {
-	BLOCK_MUD : 'block mud',
-	BLOCK_NORMAL : 'block normal',
-	BLOCK_QUESTIONABLE : 'block questionable',
-	BLOCK_SWITCHABLE : 'block switchable',
-	CHIP_DOWN : 'chip down',
-	CHIP_LEFT : 'chip left',
-	CHIP_RIGHT : 'chip right',
-	CHIP_UP : 'chip up',
-	CHIP : 'chip item',
-	CLEAR : 'clear',
-	DASH : 'dash tile',
-	DASH_BOOTS : 'dash boots',
-	BALL : 'ball enemy',
-	BOMB : 'bomb enemy',
-	BUG : 'bug enemy',
-	FIREBALL : 'fireball enemy',
-	GHOST : 'ghost enemy',
-	TANK : 'tank enemy',
-	FIRE_BOOTS : 'fire boots',
-	FIRE : 'fire',
-	FIREBALL_GENERATOR : 'fireball generator',
-	FLIPPERS : 'flippers',
-	FLOOR_MUD : 'mud floor',
-	FLOOR_NORMAL : 'normal floor',
-	GATE_GOAL : 'goal gate',
-	GATE : 'gate',
-	GOAL : 'goal',
-	HELP : 'help tile',
-	ICE_CENTER : 'ice center',
-	ICE_CORNER : 'ice corner',
-	ICE_SKATES : 'ice skates',
-	KEY : 'key',
-	SPLASH : 'splash',
-	SWITCH_ : 'switch',
-	TELEPORTER : 'teleporter',
-	TRAP : 'trap',
-    CLEAR_TILE : 'clear tile',
-    WATER : 'water'
-};
-
-var Tile = function(src_param) {
-    var src;
-    var orientation;
-    var color;
-
-    var init = function() {
-        if (src_param == null) {
-            src = TileSource.FLOOR_NORMAL;
-        } else {
-            src = src_param;
-        }
-        orientation = Orientation.UP;
-        color = Color.WHITE;
-    }
-    init();
-}
-
 var MapEditorGUI = function(map_editor_param) {
     TILE_COL_LIMIT = 10;
 
@@ -613,7 +502,7 @@ var MapEditorGUI = function(map_editor_param) {
                 //}
 
                 //position = new Position(map_tile_top, map_tile_left);
-                //if (src_input == Source.CLEAR_TILE) {
+                //if (src_input == TileSource.CLEAR_TILE) {
                 //    clear_tile(position);
                 //} else {
                 //    add_tile_part(position, dragged_tile_src, orientation_input, color_input);
@@ -796,7 +685,7 @@ function set_editor_event_handlers() {
             }
 
             position = new Position(map_tile_top, map_tile_left);
-            if (src_input == Source.CLEAR_TILE) {
+            if (src_input == TileSource.CLEAR_TILE) {
                 clear_tile(position);
             } else {
                 add_tile_part(position, dragged_tile_src, orientation_input, color_input);
@@ -848,7 +737,7 @@ function add_tile_part(position, tile_src, orientation_input, color_input) {
             item.type = ItemType.ENEMY;
         } else if ($.inArray(src_input, InventoryItems) != -1) {
             item.type = ItemType.INVENTORY;
-        } else if (src_input == Source.CHIP) {
+        } else if (src_input == TileSource.CHIP) {
             item.type = ItemType.CHIP;
         }
 
@@ -864,7 +753,7 @@ function add_tile_part(position, tile_src, orientation_input, color_input) {
             }
 
             // if goal is placed on map, set the goal position
-            if (src_input == Source.GOAL) {
+            if (src_input == TileSource.GOAL) {
                 // maintain a max of only 1 goal for given map
                 if (map.goal_position) {
                     alert("There can be only one goal!");
@@ -1070,7 +959,7 @@ function draw_tile_part(position, tile_src, orientation_input, color_input) {
     // color
     if (color) {
         ctx.fillStyle = color;
-        if (src_input == Source.KEY) {
+        if (src_input == TileSource.KEY) {
             var base_x = map_tile_left * tile_width;
             var base_y = map_tile_top * tile_width;
 
@@ -1121,7 +1010,7 @@ function clear_tile(position) {
         }
 
         // goal position
-        if (source == Source.GOAL) {
+        if (source == TileSource.GOAL) {
             map.goal_position = null;
         }
     }
@@ -1294,21 +1183,6 @@ function save_map(overwrite) {
     );
 }
 
-function load_map(map_to_load) {
-    $.getJSON('php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
-        var loaded_map = res;
-        map = JSON.parse(loaded_map);
-
-        $('#level_number').val(map.level_number);
-        $('#chips').val(map.chips);
-        $('#time').val(map.time);
-        $('#password').val(map.password);
-
-        sync_canvas_stuff();
-        draw_map(map);
-    });
-}
-
 // go to given level
 function goto_level(level) {
     load_map(level);
@@ -1439,7 +1313,7 @@ function interact(direction) {
         }
 
         // if chip, chips_remaining--; if 0, remove goal gate
-        if (item_source == Source.CHIP) {
+        if (item_source == TileSource.CHIP) {
             items_to_remove.push(item);
             game_data.chips_left--;
         }
@@ -1451,14 +1325,14 @@ function interact(direction) {
         }
 
         // if gate, check for key
-        if (item_source == Source.GATE) {
+        if (item_source == TileSource.GATE) {
             var gate_color = item.color;
 
             var has_key = false;
             var inventory = chip.inventory;
             for (var inventory_item_index in inventory) {
                 inventory_item = inventory[inventory_item_index];
-                if (FileToSource[inventory_item.source] == Source.KEY && inventory_item.color == gate_color) {
+                if (FileToSource[inventory_item.source] == TileSource.KEY && inventory_item.color == gate_color) {
                     has_key = true;
                     items_to_remove.push(item);
                     inventory.splice(inventory.indexOf(inventory_item), 1);
@@ -1471,24 +1345,24 @@ function interact(direction) {
         }
 
         // if help, show help msg
-        if (item_source == Source.HELP) {
+        if (item_source == TileSource.HELP) {
             // TODO: show help msg
         }
 
         // if obstacle that should prevent chip from moving
-        if (item_source == Source.BLOCK_NORMAL) {
+        if (item_source == TileSource.BLOCK_NORMAL) {
             return;
         }
 
         // if goal gate
-        if (item_source == Source.GATE_GOAL) {
+        if (item_source == TileSource.GATE_GOAL) {
             if (game_data.chips_left > 0) {
                 return;
             } else {
                 // remove goal gate
                 for (var item_index in items) {
                     var item = items[item_index];
-                    if (FileToSource[item.source] == Source.GATE_GOAL) {
+                    if (FileToSource[item.source] == TileSource.GATE_GOAL) {
                         items_to_remove.push(item);
                     }
                 }
@@ -1496,7 +1370,7 @@ function interact(direction) {
         }
 
         // TODO: if goal, advance to next level
-        if (item_source == Source.GOAL) {
+        if (item_source == TileSource.GOAL) {
             game_data.outcome = "LEVEL_COMPLETE";
             game_data.outcome_msg = "LEVEL_COMPLETE";
         }
