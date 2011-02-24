@@ -520,7 +520,7 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y) {
 }
 
 function show_maps() {
-    $.getJSON('http://localhost/chip/php/chip.php?action=show_maps', function(res) {
+    $.getJSON('php/chip.php?action=show_maps', function(res) {
         var list = '<ul>';
         for (var i in res) {
             var searchResult = res[i];
@@ -545,7 +545,7 @@ function save_map(overwrite) {
 
     var dataString = JSON.stringify(map);
 
-    $.post('http://localhost/chip/php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
+    $.post('php/chip.php', {action: 'save_map', map: dataString, level: map.level_number, overwrite: overwrite},
             function(res) {
                 if (res.indexOf('exists') != -1) {
                     if (confirm("Map already exists. Overwrite?")) {
@@ -557,7 +557,7 @@ function save_map(overwrite) {
 }
 
 function load_map(map_to_load) {
-    $.getJSON('http://localhost/chip/php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
+    $.getJSON('php/chip.php?action=load_map&map='+escape(map_to_load), function(res) {
         var loaded_map = res;
         map = JSON.parse(loaded_map);
 
