@@ -18,10 +18,10 @@ function init_map() {
 
 	map = new Map();
     var position;
-    for (var top=0; top < canvas.height/tile_width; top++) {
-        map.data[top] = [];
-        for (var left=0; left < canvas.width/tile_width; left++) {
-            position = new Position(top, left);
+    for (var top_i=0; top_i < canvas.height/tile_width; top_i++) {
+        map.data[top_i] = [];
+        for (var left_i=0; left_i < canvas.width/tile_width; left_i++) {
+            position = new Position(top_i, left_i);
             add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
         }
     }
@@ -196,8 +196,8 @@ function expand_map(position) {
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             // add new prefilled col
             var position;
-            for (var top=0; top < canvas.height/tile_width; top++) {
-                position = new Position(top, (canvas.width/tile_width)-1);
+            for (var top_i=0; top_i < canvas.height/tile_width; top_i++) {
+                position = new Position(top_i, (canvas.width/tile_width)-1);
                 add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
             }
         }
@@ -218,14 +218,14 @@ function expand_map(position) {
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
-            for (var top=(canvas.height/tile_width)-1; top >= 0; top--) {
-                for (var left=(canvas.width/tile_width)-1; left > 0; left--) {
-                    var tile_to_be_shifted = map.data[top][left-1];
-                    map.data[top][left] = tile_to_be_shifted;
+            for (var top_i=(canvas.height/tile_width)-1; top_i >= 0; top_i--) {
+                for (var left_i=(canvas.width/tile_width)-1; left_i > 0; left_i--) {
+                    var tile_to_be_shifted = map.data[top_i][left_i-1];
+                    map.data[top_i][left_i] = tile_to_be_shifted;
 
                     // update map's unique tiles if they're being affected by shift
-                    var position_to_shift = new Position(top, left-1);
-                    var position = new Position(top, left);
+                    var position_to_shift = new Position(top_i, left_i-1);
+                    var position = new Position(top_i, left_i);
 
                     // start position
                     if (map.start_position && equals(map.start_position, position_to_shift)) {
@@ -241,8 +241,8 @@ function expand_map(position) {
 
             // add new prefilled col
             var position;
-            for (var top=0; top < canvas.height/tile_width; top++) {
-                position = new Position(top, 0);
+            for (var top_i=0; top_i < canvas.height/tile_width; top_i++) {
+                position = new Position(top_i, 0);
                 clear_tile(position);
             }
         }
@@ -268,8 +268,8 @@ function expand_map(position) {
             ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
             // add new prefilled row
             var position;
-            for (var left=0; left < canvas.width/tile_width; left++) {
-                position = new Position((canvas.height/tile_width)-1, left);
+            for (var left_i=0; left_i < canvas.width/tile_width; left_i++) {
+                position = new Position((canvas.height/tile_width)-1, left_i);
                 add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
             }
         }
@@ -290,14 +290,14 @@ function expand_map(position) {
             ctx.drawImage(temp, sx, sy, s_width, s_height, dx, dy, d_width, d_height);
 
             // update map data structure as result of shift
-            for (var top=(canvas.height/tile_width)-1; top > 0; top--) {
-                for (var left=(canvas.width/tile_width)-1; left >= 0; left--) {
-                    var tile_to_be_shifted = map.data[top-1][left];
-                    map.data[top][left] = tile_to_be_shifted;
+            for (var top_i=(canvas.height/tile_width)-1; top_i > 0; top_i--) {
+                for (var left_i=(canvas.width/tile_width)-1; left_i >= 0; left_i--) {
+                    var tile_to_be_shifted = map.data[top_i-1][left_i];
+                    map.data[top_i][left_i] = tile_to_be_shifted;
 
                     // update map's unique tiles if they're being affected by shift
-                    var position_to_shift = new Position(top-1, left);
-                    var position = new Position(top, left);
+                    var position_to_shift = new Position(top_i-1, left_i);
+                    var position = new Position(top_i, left_i);
 
                     // start position
                     if (map.start_position && equals(map.start_position, position_to_shift)) {
@@ -313,10 +313,28 @@ function expand_map(position) {
 
             // add new prefilled row
             var position;
-            for (var left=0; left < canvas.width/tile_width; left++) {
-                position = new Position(0, left);
+            for (var left_i=0; left_i < canvas.width/tile_width; left_i++) {
+                position = new Position(0, left_i);
                 clear_tile(position);
             }
+        }
+    }
+
+    if (left > map_width && top > map_height) {
+        ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+        // add new prefilled col
+        var position;
+        for (var top_i=0; top_i < canvas.height/tile_width; top_i++) {
+            position = new Position(top_i, (canvas.width/tile_width)-1);
+            add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
+        }
+
+        ctx.drawImage(temp, 0, 0, map_width, map_height, 0, 0, map_width, map_height);
+        // add new prefilled row
+        var position;
+        for (var left_i=0; left_i < canvas.width/tile_width; left_i++) {
+            position = new Position((canvas.height/tile_width)-1, left_i);
+            add_tile_part(position, tile_path + 'floor_normal.png', 'UP', '');
         }
     }
 }
@@ -784,8 +802,6 @@ function update_viewport() {
     var viewport_ctx = viewport.getContext('2d');
     var map_canvas = document.getElementById('map');
     var map_ctx = map_canvas.getContext('2d');
-
-    console.log(game_data);
 
     sx = (game_data.chip.position.left - 4) * tile_width;
     sy = (game_data.chip.position.top - 4) * tile_width;
