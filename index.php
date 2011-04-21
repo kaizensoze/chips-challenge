@@ -10,12 +10,17 @@
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
+  <div id="explanation" style="display: inline-block; border: 2px solid; padding: 5px; margin-bottom: 20px;">
+  This is a prototype of an html5 canvas port of Chip's Challenge.<br />
+  The layout is fairly cluttered since the mapeditor and playtesting share the same page.<br />
+  To test the prototype, <span style="color: blue;">select map 1 and click the Play button</span>.
+  </div><br />
   <!-- Save map. -->
   Level #: <input id="level_number" size="5" type="text" />
   Chips: <input id="chips" size="5" type="text" />
   Time: <input id="time" size="5" type="text" />
   Password: <input id="password" size="5" type="text" />
-  <input type="button" onClick="save_map(0)" value="Save" /><br />
+  <input type="button" onClick="save_map(0)" value="Save" disabled /><br />
   <input type="button" onClick="play_map();" value="Play" />
 
   <!-- Map. -->
