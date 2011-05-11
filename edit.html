@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edit</title>
+  <link rel="stylesheet" href="css/jquery-ui/base/jquery.ui.all.css">
+</head>
+<body>
+  <table border="0" cellpadding="0" cellspacing="0" width="400">
+    <tbody>
+      <tr>
+        <td align="center" valign="center">
+          Choose an existing tile set.<br />
+          <select id="existing_tile_sets">
+            <option value=""></option>
+          </select>
+          <input type="button" id="choose_existing_tile_set" value="Go">
+        </td>
+        <td align="center" valign="center" style="border-left: 1px solid black; padding: 10px;">
+          Upload new tile set.<br />
+          <form id="upload_tile_set" action="upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="tiles_to_upload[]" style="display: inline;" multiple>
+            <button type="submit">Upload</button>
+          </form>
+        </td>
+      </tr>
+  </table>
+  <script src="js/jquery-1.6.min.js">
+  <script src="js/jquery-ui-1.9.min.js">
+</body>
+</html>

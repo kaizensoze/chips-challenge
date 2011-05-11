@@ -1,45 +1,24 @@
 
-require.js
-node.js
-underscore.js
-javascript templating (replace php)
+freaks and geeks
+project euler
+learn more about apache
+tweak demo on duckspeaker.net (use git tagging)
+configure nginx on duckspeaker.net
+setup nginx with nodejs
 
+upload new tile set
+  read uploaded files on node.js end
+  do validation
+    dimensions of images are the same
+  store in mongodb
 
+select existing tile set
+  show tiles in set when selecting set
+  minimize init tileset section
 
-generate default map model
+add some game rules
+start creating maps
 
-
-a MapManager should do the load/save stuff, not MapEditor
-
-how to handle movement for non-Chip entities (should the logic be in the Tile itself?)
-    store references to things that need to move (Chip, Enemies)
-
-    there will be a Chip object and multiple Enemy objects for given map
-
-    Chip {
-        TileSource
-        CurrentLocation
-        Inventory
-    }
-
-    Enemy {
-        TileSource
-        CurrentLocation
-        PathingRoute
-    }
-
-    use MVC; M = Map, V = MapCanvas, C = MapManager
-    when needing to move one of them:
-        pass (Chip|Enemy, desiredDirection) to MapManager
-
-        MapManager.move:
-            get TileStack at given location in map
-            find tile containing TileSource(s)
-            pop that tile from stack
-            look at desiredDirection to determine where to move tile, how to orient, etc.
-
-    have a MapManager to alter tiles:
-        move:
-            * if is direction based (multiple images for same entity with different versions according to direction)
-            * or if just rotate the tile
-
+file upload interface
+iterate over files in dir using nodejs fs api
+read in each file using GridStore
