@@ -3,10 +3,7 @@ var map;
 var game_data;
 
 $(window).load(function() {
-    init_map();  // IMPORTANT: the draw part of init only works using window.load()
-});
-
-$(document).ready(function() {
+    init_map();
     sync_canvas_stuff();
     load_config_options();
     show_tiles();
@@ -80,6 +77,14 @@ function set_editor_event_handlers() {
             }
         }
     });
+
+    $('#button_save_map').click(function() {
+        save_map(0);
+    });
+    $('#button_play_map').click(function() {
+        play_map();
+    });
+
 }
 
 function set_play_event_handlers() {
