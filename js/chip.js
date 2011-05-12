@@ -2,13 +2,18 @@
 var map;
 var game_data;
 
-$(window).load(function() {
+$(document).ready(function() {
     init_map();
     sync_canvas_stuff();
     load_config_options();
     show_tiles();
     set_editor_event_handlers();
     show_maps();
+});
+
+$(window).load(function() {
+    // need to call this again in window.load to wait for all images to load to draw default tiles on canvas
+    init_map(); 
 });
 
 function init_map() {
