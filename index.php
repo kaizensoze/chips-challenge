@@ -39,30 +39,6 @@
   <!--<input type="button" onClick="goto_level(1);" value="Advance" /><br />-->
 
   <!-- Load tile images. -->
-  <?php
-    $tile_str = '';
-    $tiles = array();
-    $tile_dir = 'images/tiles/';
-    $it = new RecursiveDirectoryIterator($tile_dir);
-    foreach (new RecursiveIteratorIterator($it) as $file) {
-        if (!$it->isDot()) {
-            array_push($tiles, $tile_dir . $file->getFilename());
-        }
-    }
-    sort($tiles);
-
-    $col_limit = 10;
-    $i = 0;
-    foreach ($tiles as $tile) {
-        if ($i % $col_limit == 0 && $i > 0) {
-            $tile_str .= '<br />';
-        }
-        $tile_str .= '<div class="tile">'
-                  .  '  <img src="' . $tile . '"/>'
-                  .  '</div>';
-        $i++;
-    }
-    echo $tile_str;
-  ?>
+  <div id="tile_section"></div>
 </body>
 </html>

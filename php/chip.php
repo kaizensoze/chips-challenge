@@ -7,6 +7,9 @@ function main() {
             case "save_map":
                 save_map($_REQUEST);
                 break;
+            case "show_tiles":
+                show_tiles();
+                break;
             case "show_maps":
                 show_maps();
                 break;
@@ -32,6 +35,33 @@ function save_map($r) {
         fwrite($fh, $map);
         fclose($fh);
     }
+}
+
+function show_tiles() {
+    $tiles = array();
+    $tile_dir = '../images/tiles/';
+    $local_tile_dir = 'images/tiles/';
+    $it = new RecursiveDirectoryIterator($tile_dir);
+    foreach (new RecursiveIteratorIterator($it) as $file) {
+        if ($it->isDot()) {
+            continue;
+        }
+        array_push($tiles, $file->getFilename());
+    }
+    sort($tiles);
+
+    $col_limit = 10;
+    $i = 0;
+    foreach ($tiles as $tile) {
+        if ($i % $col_limit == 0 && $i > 0) {
+            $tile_str .= '<br />';
+        }
+        $tile_str .= '<div class="tile">'
+                  .  '  <img src="' . $local_tile_dir . $tile . '"/>'
+                  .  '</div>';
+        $i++;
+    }
+    echo $tile_str;
 }
 
 function show_maps() {

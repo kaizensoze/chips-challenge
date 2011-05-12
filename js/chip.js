@@ -2,15 +2,16 @@
 var map;
 var game_data;
 
+$(window).load(function() {
+    init_map();  // IMPORTANT: the draw part of init only works using window.load()
+});
+
 $(document).ready(function() {
     sync_canvas_stuff();
     load_config_options();
+    show_tiles();
     set_editor_event_handlers();
     show_maps();
-});
-
-$(window).load(function() {
-    init_map();  // IMPORTANT: the draw part of init only works using window.load()
 });
 
 function init_map() {
@@ -537,6 +538,18 @@ function color_key(ctx, base_x, base_y, translate_x, translate_y) {
     ctx.fill();
 }
 
+function show_tiles() {
+    $.ajax({
+        url: 'php/chip.php?action=show_tiles',
+        async: false,
+        success: function(res) {
+            var col_limit = 10;
+            var i = 0;
+            $('#tile_section').html(res);
+        }
+    });
+}
+
 function show_maps() {
     $.getJSON('php/chip.php?action=show_maps', function(res) {
         var list = '<ul>';
@@ -651,7 +664,7 @@ function move(direction) {
                 goto_level(map.level_number);
                 break;
             case "LEVEL_COMPLETE":
-                goto_level(map.level_number + 1);
+                //goto_level(map.level_number + 1);
                 break;
             default:
                 alert("BLAH");
