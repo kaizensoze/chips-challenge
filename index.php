@@ -23,14 +23,14 @@
   <input type="button" id="button_save_map" value="Save" disabled /><br />
   <input type="button" id="button_play_map" value="Play" />
 
+  <div id="maps">
+    Choose a map to load.
+  </div>
+
   <!-- Map. -->
   <div id="map_region"><canvas id="map" width="288" height="288"></canvas></div>
   <div id="temp_region"><canvas id="temp" width="288" height="288"></canvas></div>
   <div id="viewport_container"><canvas id="viewport" width="288" height="288"></canvas></div><br />
-
-  <div id="maps">
-    Choose a map to load.
-  </div>
 
   <!-- Item configuration -->
   Orientation: <select id="orientation"></select>
