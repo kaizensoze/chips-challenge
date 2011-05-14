@@ -9,6 +9,7 @@
   <script type="text/javascript" src="js/chip.js"></script>
 </head>
 <body>
+  <a href="..">Home</a><br /><br />
   <div id="explanation" style="display: inline-block; border: 2px solid; padding: 5px; margin-bottom: 20px;">
   This is a prototype of an html5 canvas port of Chip's Challenge.<br />
   The layout is fairly cluttered since the mapeditor and playtesting share the same page.<br />
