@@ -1,4 +1,0 @@
-have draw_map() clear canvas area before drawing to it
-problem: it's taking NON-reset map and padding it and then viewport isn't working
-reset() aka advance()
-enemy pathing
