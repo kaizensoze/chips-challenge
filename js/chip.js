@@ -19,7 +19,7 @@ $(window).load(function() {
 function init_map() {
     var canvas = document.getElementById('map');
 
-	map = new Map();
+    map = new Map();
     var position;
     for (var top_i=0; top_i < canvas.height/tile_width; top_i++) {
         map.data[top_i] = [];
