@@ -4,7 +4,7 @@
 Vagrant::Config.run do |config|
   config.vm.host_name = "chip.local.brassafrax.com"
   config.vm.box = "evbasebox-ubuntu-12.10-server-i386"
-  config.vm.network :hostonly, "192.168.33.10"
+  config.vm.network :hostonly, "192.168.33.11"
   config.vm.share_folder "project", "/home/vagrant/workspace/chip", ".."
 
   config.vm.provision :puppet do |puppet|

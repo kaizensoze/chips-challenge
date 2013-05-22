@@ -1,98 +1,36 @@
 ###########################################
 # base for nodejs server and flask backends
 
-# class add-and-update-repos {
-#   $add_repo_prereq = ['build-essential', 'g++', 'software-properties-common', 'python-software-properties']
-#   package { $add_repo_prereq: 
-#     ensure => present,
-#   }
+class add-and-update-repos {
+  $add_repo_prereq = ['build-essential', 'g++', 'software-properties-common', 'python-software-properties']
+  package { $add_repo_prereq: 
+    ensure => present,
+  }
 
-#   exec { "add-nodejs-repo":
-#     command => "/usr/bin/add-apt-repository ppa:chris-lea/node.js",
-#     require => Package[$add_repo_prereq],
-#     logoutput => true,
-#   }
+  exec { "add-go-repo":
+    command => "/usr/bin/add-apt-repository ppa:gophers/go",
+    require => Package[$add_repo_prereq],
+    logoutput => true,
+  }
 
-#   exec { "add-nginx-dev-repo":
-#     command => "/usr/bin/add-apt-repository ppa:nginx/development",
-#     require => Package[$add_repo_prereq],
-#     logoutput => true,
-#   }
+  exec { "add-nginx-repo":
+    command => "/usr/bin/add-apt-repository ppa:nginx/development",
+    require => Package[$add_repo_prereq],
+    logoutput => true,
+  }
 
-#   exec { "apt-update":
-#     command => "/usr/bin/apt-get update",
-#     require => [ Exec["add-nodejs-repo"], Exec["add-nginx-dev-repo"] ],
-#     logoutput => true,
-#   }
+  exec { "apt-update":
+    command => "/usr/bin/apt-get update",
+    require => [ Exec["add-go-repo"], Exec["add-nginx-repo"] ],
+    logoutput => true,
+  }
 
-#   notify { "after-update":
-#     message => "Updated packages.",
-#   }
-#   Exec["apt-update"] -> Notify["after-update"]
-# }
-# class {'add-and-update-repos': }
-
-
-# nodejs
-# class nodejs {
-#   package { "nodejs":
-#     ensure => present,
-#   }
-
-#   exec { "npm-async":
-#     command => "/usr/bin/npm install async -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-#   exec { "npm-db-migrate":
-#     command => "/usr/bin/npm install db-migrate -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-#   exec { "npm-deferred":
-#     command => "/usr/bin/npm install deferred -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-#   exec { "npm-forever":
-#     command => "/usr/bin/npm install forever -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-#   exec { "npm-mysql":
-#     command => "/usr/bin/npm install mysql@~2.0.0-alpha7 -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-#   exec { "npm-prompt":
-#     command => "/usr/bin/npm install prompt -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-#   exec { "npm-q":
-#     command => "/usr/bin/npm install q -g",
-#     require => Package["nodejs"],
-#     logoutput => true,
-#   }
-
-#   # FIXME: This should be templatized in a module. 
-#   file { "node.conf":
-#     name => "/etc/init/node.conf",
-#     owner => root,
-#     group => root,
-#     source => "${share_folder}/vagrant/manifests/node.conf",
-#     ensure => present,
-#   }
-
-#   service { "node":
-#     ensure => running,
-#     require => [Exec["npm-forever"],Exec["npm-async"],Exec["npm-db-migrate"],Exec["npm-deferred"],Exec["npm-mysql"],Exec["npm-prompt"],Exec["npm-q"]],
-#   }
-# }
-
-# class {'nodejs':
-#   require => Class["add-and-update-repos"],
-# }
+  notify { "after-update":
+    message => "Updated packages.",
+  }
+  Exec["apt-update"] -> Notify["after-update"]
+}
+class {'add-and-update-repos': }
 
 
 # nginx
@@ -156,6 +94,18 @@ class nginx {
 class {'nginx':
   require => Class["add-and-update-repos"],
 }
+
+
+# go
+class go {
+  package { "golang-stable":
+    ensure => present,
+  }
+}
+class {'go':
+  require => Class["add-and-update-repos"],
+}
+
 
 # mongo
 class mongo {
