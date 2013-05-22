@@ -1,0 +1,20 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+  config.vm.host_name = "chip.local.brassafrax.com"
+  config.vm.box = "evbasebox-ubuntu-12.10-server-i386"
+  config.vm.network :hostonly, "192.168.33.10"
+  config.vm.share_folder "project", "/home/vagrant/workspace/chip", ".."
+
+  config.vm.provision :puppet do |puppet|
+    puppet.module_path = "modules"
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "base.pp"
+    puppet.facter = {
+      "host_name" => config.vm.host_name,
+      "share_folder" => "/home/vagrant/workspace/chip",
+      "project_name" => "chip"
+    }
+  end
+end
