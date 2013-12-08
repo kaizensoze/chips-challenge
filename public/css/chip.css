@@ -1,5 +1,21 @@
 
-.tile {
+body {
+}
+
+.container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  width: 514px;
+  height: 372px;
+  
+  margin: auto;
+}
+
+/*.tile {
   display: inline;
 }
 
@@ -12,7 +28,7 @@ td {
 }
 
 #map_output {
-	display: block;
+    display: block;
 }
 
 #maps {
@@ -42,4 +58,4 @@ td {
 
 #viewport {
     display: none;
-}
+}*/
