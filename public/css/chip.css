@@ -2,6 +2,7 @@
 body {
 }
 
+/* container */
 .container {
   position: absolute;
   top: 0;
@@ -11,8 +12,139 @@ body {
 
   width: 514px;
   height: 372px;
-  
+
   margin: auto;
+}
+
+/* game content */
+.game-content {
+  background: url(/images/background.png) no-repeat left top;
+  width: 514px;
+  height: 353px;
+}
+
+/* displays */
+.display {
+  position: absolute;
+  right: 76px;
+  width: 51px;
+  height: 23px;
+  font-size: 0; /* fix to remove inline-block padding */
+}
+
+.display-level {
+  top: 63px;
+}
+
+.display-time {
+  top: 125px;
+}
+
+.display-chips-left {
+  top: 215px;
+}
+
+/* digits */
+.digit {
+  display: inline-block;
+  width: 13px;
+  height: 21px;
+  margin: 1px 2px 0px 2px;
+}
+
+.digit-none {
+  background: url(/images/sprite.png) no-repeat -1px -1px;
+}
+
+.digit-0 {
+  background: url(/images/sprite.png) no-repeat -15px -1px;
+}
+
+.digit-1 {
+  background: url(/images/sprite.png) no-repeat -29px -1px;
+}
+
+.digit-2 {
+  background: url(/images/sprite.png) no-repeat -43px -1px;
+}
+
+.digit-3 {
+  background: url(/images/sprite.png) no-repeat -57px -1px;
+}
+
+.digit-4 {
+  background: url(/images/sprite.png) no-repeat -71px -1px;
+}
+
+.digit-5 {
+  background: url(/images/sprite.png) no-repeat -85px -1px;
+}
+
+.digit-6 {
+  background: url(/images/sprite.png) no-repeat -99px -1px;
+}
+
+.digit-7 {
+  background: url(/images/sprite.png) no-repeat -113px -1px;
+}
+
+.digit-8 {
+  background: url(/images/sprite.png) no-repeat -127px -1px;
+}
+
+.digit-9 {
+  background: url(/images/sprite.png) no-repeat -141px -1px;
+}
+
+/* warning digits */
+.digit-none.warning {
+  background: url(/images/sprite.png) no-repeat -1px -23px;
+}
+
+.digit-0.warning {
+  background: url(/images/sprite.png) no-repeat -15px -23px;
+}
+
+.digit-1.warning {
+  background: url(/images/sprite.png) no-repeat -29px -23px;
+}
+
+.digit-2.warning {
+  background: url(/images/sprite.png) no-repeat -43px -23px;
+}
+
+.digit-3.warning {
+  background: url(/images/sprite.png) no-repeat -57px -23px;
+}
+
+.digit-4.warning {
+  background: url(/images/sprite.png) no-repeat -71px -23px;
+}
+
+.digit-5 .warning{
+  background: url(/images/sprite.png) no-repeat -85px -23px;
+}
+
+.digit-6.warning {
+  background: url(/images/sprite.png) no-repeat -99px -23px;
+}
+
+.digit-7.warning {
+  background: url(/images/sprite.png) no-repeat -113px -23px;
+}
+
+.digit-8.warning {
+  background: url(/images/sprite.png) no-repeat -127px -23px;
+}
+
+.digit-9.warning {
+  background: url(/images/sprite.png) no-repeat -141px -23px;
+}
+
+/* debug */
+.debug {
+  background-color: red;
+  opacity: 0.4;
 }
 
 /*.tile {

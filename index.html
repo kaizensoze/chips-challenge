@@ -10,9 +10,15 @@
 <template name="game">
   <div class="container">
     <div class="menu"></div>
-    <div class="game">
-      <img src="/images/background.png" />
+    <div class="game-content">
       <div class="level-map"></div>
+      {{#each displays}}
+      <div class="display {{this}}">
+        <div class="digit digit-none"></div>
+        <div class="digit digit-none"></div>
+        <div class="digit digit-none"></div>
+      </div>
+      {{/each}}
     </div>
   </div>
 </template>
