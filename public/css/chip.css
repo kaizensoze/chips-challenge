@@ -97,47 +97,47 @@ body {
 }
 
 /* warning digits */
-.digit-none.warning {
+.digit-none.low {
   background: url(/images/sprite.png) no-repeat -1px -23px;
 }
 
-.digit-0.warning {
+.digit-0.low {
   background: url(/images/sprite.png) no-repeat -15px -23px;
 }
 
-.digit-1.warning {
+.digit-1.low {
   background: url(/images/sprite.png) no-repeat -29px -23px;
 }
 
-.digit-2.warning {
+.digit-2.low {
   background: url(/images/sprite.png) no-repeat -43px -23px;
 }
 
-.digit-3.warning {
+.digit-3.low {
   background: url(/images/sprite.png) no-repeat -57px -23px;
 }
 
-.digit-4.warning {
+.digit-4.low {
   background: url(/images/sprite.png) no-repeat -71px -23px;
 }
 
-.digit-5 .warning{
+.digit-5.low{
   background: url(/images/sprite.png) no-repeat -85px -23px;
 }
 
-.digit-6.warning {
+.digit-6.low {
   background: url(/images/sprite.png) no-repeat -99px -23px;
 }
 
-.digit-7.warning {
+.digit-7.low {
   background: url(/images/sprite.png) no-repeat -113px -23px;
 }
 
-.digit-8.warning {
+.digit-8.low {
   background: url(/images/sprite.png) no-repeat -127px -23px;
 }
 
-.digit-9.warning {
+.digit-9.low {
   background: url(/images/sprite.png) no-repeat -141px -23px;
 }
 
