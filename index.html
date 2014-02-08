@@ -12,7 +12,8 @@
     <div class="menu"></div>
     <div class="game-content">
       <div class="level-map"></div>
-      {{> displays}}
+      <div class="displays">{{> displays}}</div>
+      <div class="inventory">{{> inventory}}</div>
     </div>
   </div>
 </template>
@@ -29,4 +30,7 @@
   {{#each digits}}
     <div class="digit digit-{{this}}{{../low}}"></div>
   {{/each}}
+</template>
+
+<template name="inventory">
 </template>

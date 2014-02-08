@@ -1,22 +1,35 @@
 
-// display types
+/** Display types (Level, Time, Chips Left) */
 var display_types = ["level", "time", "chips-left"];
 
-// low digit thresholds for each display type
+/** Low digit thresholds for each display type. */
 var LOW_DIGIT_THRESHOLDS = {
   "time": 15,
   "chips-left": 0
 };
 
+/** Level timer. */
 var level_timer;
 
+/** Inventory. */
+var inventory;
+
+/**
+ * Client startup.
+ * @return {[type]} [description]
+ */
 Meteor.startup(function () {
   // default to level 1
   if (!Session.get("level")) {
     setLevel(1);
   }
+  startLevel();
 });
 
+/**
+ * Set the level.
+ * @param {[type]} level_number [description]
+ */
 function setLevel(level_number) {
   Meteor.call('getLevel', level_number, function(error, level) {
     if (!error) {
@@ -25,7 +38,58 @@ function setLevel(level_number) {
   });
 }
 
-// display template
+/**
+ * Start the current level.
+ * @return {[type]} [description]
+ */
+function startLevel() {
+  inventory = [];
+  startLevelTimer();
+}
+
+/**
+ * Start the level timer.
+ * @return {[type]} [description]
+ */
+function startLevelTimer() {
+  // update time remaining
+  level_timer = Meteor.setInterval(updateTimeRemaining, 1000);
+}
+
+/**
+ * Update time remaining for current level.
+ * @return {[type]} [description]
+ */
+function updateTimeRemaining() {
+  if (!Session.get("level")) {
+    return;
+  }
+
+  var level = Session.get("level");
+  level.time_remaining--;
+  Session.set("level", level);
+
+  if (level.time_remaining <= 0) {
+    Meteor.clearInterval(level_timer);
+  }
+}
+
+/**
+ * Pad number.
+ * @param  {[type]} n     [description]
+ * @param  {[type]} width [description]
+ * @param  {[type]} z     [description]
+ * @return {[type]}       [description]
+ */
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+/**
+ * Display template.
+ */
 Template.displays.displayTypes = display_types;
 Template.displays.digits = function() {
   if (!Session.get("level")) {
@@ -66,28 +130,8 @@ Template.displays.digits = function() {
   return Template.digits({digits: digits, low: low});
 };
 
-function startLevelTimer() {
-  // update time remaining
-  level_timer = Meteor.setInterval(updateTimeRemaining, 1000);
-}
-startLevelTimer();
+/**
+ * Inventory template.
+ */
+// TODO
 
-function updateTimeRemaining() {
-  if (!Session.get("level")) {
-    return;
-  }
-
-  var level = Session.get("level");
-  level.time_remaining--;
-  Session.set("level", level);
-
-  if (level.time_remaining === 0) {
-    Meteor.clearInterval(level_timer);
-  }
-}
-
-function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
