@@ -17,10 +17,14 @@ var levels = {
  * @return {[type]} [description]
  */
 Meteor.startup(function () {
-  console.log('server');
   Meteor.methods({
     getLevel: function(level_number) {
       return levels[level_number];
+    },
+    clearCollections: function() {
+      Keys.remove({});
+      Boots.remove({});
+      Items.remove({});
     }
   });
 });
