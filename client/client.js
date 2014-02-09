@@ -11,9 +11,6 @@ var LOW_DIGIT_THRESHOLDS = {
 /** Level timer. */
 var level_timer;
 
-/** Inventory. */
-var inventory;
-
 /**
  * Client startup.
  * @return {[type]} [description]
@@ -43,8 +40,21 @@ function setLevel(level_number) {
  * @return {[type]} [description]
  */
 function startLevel() {
-  inventory = [];
+  // clear inventory
+  Session.set('inventory', {});
+
+  // start level timer
   startLevelTimer();
+
+  // test picking up items
+  pickUpItem({name: "red-key"});
+  pickUpItem({name: "blue-key"});
+  pickUpItem({name: "yellow-key"});
+  pickUpItem({name: "green-key"});
+  pickUpItem({name: "ice-skates"});
+  pickUpItem({name: "suction-boots"});
+  pickUpItem({name: "fire-boots"});
+  pickUpItem({name: "flippers"});
 }
 
 /**
@@ -72,6 +82,28 @@ function updateTimeRemaining() {
   if (level.time_remaining <= 0) {
     Meteor.clearInterval(level_timer);
   }
+}
+
+/**
+ * Pick up an item.
+ * @param  {[type]} item [description]
+ * @return {[type]}      [description]
+ */
+function pickUpItem(item) {
+  var inv = Session.get('inventory');
+  inv[item.name] = true;
+  Session.set('inventory', inv);
+}
+
+/**
+ * Remove an item.
+ * @param  {[type]} item [description]
+ * @return {[type]}      [description]
+ */
+function removeItem(item) {
+  var inv = Session.get('inventory');
+  delete inv[item.name];
+  Session.set('inventory', inv);
 }
 
 /**
@@ -133,5 +165,11 @@ Template.displays.digits = function() {
 /**
  * Inventory template.
  */
-// TODO
-
+Template.inventory.inventoryItems = function() {
+  var inv = Session.get('inventory');
+  if (typeof inv === 'undefined') {
+    return []
+  } else {
+    return Object.keys(inv);
+  }
+};

@@ -2,7 +2,13 @@
 body {
 }
 
-/* container */
+/* Debug */
+.debug {
+  background-color: red;
+  opacity: 0.4;
+}
+
+/* Container */
 .container {
   position: absolute;
   top: 0;
@@ -16,14 +22,14 @@ body {
   margin: auto;
 }
 
-/* game content */
+/* Game content */
 .game-content {
   background: url(/images/background.png) no-repeat left top;
   width: 514px;
   height: 353px;
 }
 
-/* displays */
+/* Displays */
 .display {
   position: absolute;
   right: 76px;
@@ -44,7 +50,7 @@ body {
   top: 215px;
 }
 
-/* digits */
+/* Digits */
 .digit {
   display: inline-block;
   width: 13px;
@@ -53,141 +59,188 @@ body {
 }
 
 .digit-none {
-  background: url(/images/sprite.png) no-repeat -1px -1px;
+  background: url(/images/digits.png) no-repeat -1px -1px;
 }
 
 .digit-0 {
-  background: url(/images/sprite.png) no-repeat -15px -1px;
+  background: url(/images/digits.png) no-repeat -15px -1px;
 }
 
 .digit-1 {
-  background: url(/images/sprite.png) no-repeat -29px -1px;
+  background: url(/images/digits.png) no-repeat -29px -1px;
 }
 
 .digit-2 {
-  background: url(/images/sprite.png) no-repeat -43px -1px;
+  background: url(/images/digits.png) no-repeat -43px -1px;
 }
 
 .digit-3 {
-  background: url(/images/sprite.png) no-repeat -57px -1px;
+  background: url(/images/digits.png) no-repeat -57px -1px;
 }
 
 .digit-4 {
-  background: url(/images/sprite.png) no-repeat -71px -1px;
+  background: url(/images/digits.png) no-repeat -71px -1px;
 }
 
 .digit-5 {
-  background: url(/images/sprite.png) no-repeat -85px -1px;
+  background: url(/images/digits.png) no-repeat -85px -1px;
 }
 
 .digit-6 {
-  background: url(/images/sprite.png) no-repeat -99px -1px;
+  background: url(/images/digits.png) no-repeat -99px -1px;
 }
 
 .digit-7 {
-  background: url(/images/sprite.png) no-repeat -113px -1px;
+  background: url(/images/digits.png) no-repeat -113px -1px;
 }
 
 .digit-8 {
-  background: url(/images/sprite.png) no-repeat -127px -1px;
+  background: url(/images/digits.png) no-repeat -127px -1px;
 }
 
 .digit-9 {
-  background: url(/images/sprite.png) no-repeat -141px -1px;
+  background: url(/images/digits.png) no-repeat -141px -1px;
 }
 
-/* warning digits */
+/* Warning digits */
 .digit-none.low {
-  background: url(/images/sprite.png) no-repeat -1px -23px;
+  background: url(/images/digits.png) no-repeat -1px -23px;
 }
 
 .digit-0.low {
-  background: url(/images/sprite.png) no-repeat -15px -23px;
+  background: url(/images/digits.png) no-repeat -15px -23px;
 }
 
 .digit-1.low {
-  background: url(/images/sprite.png) no-repeat -29px -23px;
+  background: url(/images/digits.png) no-repeat -29px -23px;
 }
 
 .digit-2.low {
-  background: url(/images/sprite.png) no-repeat -43px -23px;
+  background: url(/images/digits.png) no-repeat -43px -23px;
 }
 
 .digit-3.low {
-  background: url(/images/sprite.png) no-repeat -57px -23px;
+  background: url(/images/digits.png) no-repeat -57px -23px;
 }
 
 .digit-4.low {
-  background: url(/images/sprite.png) no-repeat -71px -23px;
+  background: url(/images/digits.png) no-repeat -71px -23px;
 }
 
 .digit-5.low{
-  background: url(/images/sprite.png) no-repeat -85px -23px;
+  background: url(/images/digits.png) no-repeat -85px -23px;
 }
 
 .digit-6.low {
-  background: url(/images/sprite.png) no-repeat -99px -23px;
+  background: url(/images/digits.png) no-repeat -99px -23px;
 }
 
 .digit-7.low {
-  background: url(/images/sprite.png) no-repeat -113px -23px;
+  background: url(/images/digits.png) no-repeat -113px -23px;
 }
 
 .digit-8.low {
-  background: url(/images/sprite.png) no-repeat -127px -23px;
+  background: url(/images/digits.png) no-repeat -127px -23px;
 }
 
 .digit-9.low {
-  background: url(/images/sprite.png) no-repeat -141px -23px;
+  background: url(/images/digits.png) no-repeat -141px -23px;
 }
 
-/* debug */
-.debug {
-  background-color: red;
-  opacity: 0.4;
+/* Inventory */
+.inventory {
+  position: absolute;
+  top: 247px;
+  right: 33px;
+  width: 128px;
+  height: 64px;
+  font-size: 0; /* fix to remove inline-block padding */
 }
 
-/*.tile {
-  display: inline;
+/* Inventory items */
+.inventory-red-key {
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
-table {
-  border-collapse: collapse;
+.inventory-blue-key {
+  position: absolute;
+  top: 0px;
+  left: 32px;
 }
 
-td {
-  padding: 0;
+.inventory-yellow-key {
+  position: absolute;
+  top: 0px;
+  left: 64px;
 }
 
-#map_output {
-    display: block;
+.inventory-green-key {
+  position: absolute;
+  top: 0px;
+  left: 96px;
 }
 
-#maps {
-    float: right;
-    width: 500;
-    height: 250;
-    overflow: auto;
+.inventory-ice-skates {
+  position: absolute;
+  top: 32px;
+  left: 0px;
 }
 
-#map_region {
-    border-style: outset;
-    border-width: 10;
-    width: 256;
-    height: 256;
+.inventory-suction-boots {
+  position: absolute;
+  top: 32px;
+  left: 32px;
 }
 
-#temp_region {
-    border-style: outset;
-    border-width: 10;
-    width: 256;
-    height: 256;
+.inventory-fire-boots {
+  position: absolute;
+  top: 32px;
+  left: 64px;
 }
 
-#temp_region {
-    display: none;
+.inventory-flippers {
+  position: absolute;
+  top: 32px;
+  left: 96px;
 }
 
-#viewport {
-    display: none;
-}*/
+/** Tiles. */
+.tile {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+}
+
+.tile-red-key {
+  background: url(/images/tiles.png) no-repeat -288px -160px;
+}
+
+.tile-blue-key {
+  background: url(/images/tiles.png) no-repeat -288px -128px;
+}
+
+.tile-yellow-key {
+  background: url(/images/tiles.png) no-repeat -288px -224px;
+}
+
+.tile-green-key {
+  background: url(/images/tiles.png) no-repeat -288px -192px;
+}
+
+.tile-ice-skates {
+  background: url(/images/tiles.png) no-repeat -288px -320px;
+}
+
+.tile-suction-boots {
+  background: url(/images/tiles.png) no-repeat -288px -352px;
+}
+
+.tile-fire-boots {
+  background: url(/images/tiles.png) no-repeat -288px -288px;
+}
+
+.tile-flippers {
+  background: url(/images/tiles.png) no-repeat -288px -256px;
+}

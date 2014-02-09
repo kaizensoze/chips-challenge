@@ -20,9 +20,9 @@
 
 <template name="displays">
   {{#each displayTypes}}
-  <div class="display display-{{this}}">
-    {{{digits}}}
-  </div>
+    <div class="display display-{{this}}">
+      {{{digits}}}
+    </div>
   {{/each}}
 </template>
 
@@ -33,4 +33,7 @@
 </template>
 
 <template name="inventory">
+  {{#each inventoryItems}}
+    <div class="tile tile-{{this}} inventory-{{this}}"></div>
+  {{/each}}
 </template>
