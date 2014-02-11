@@ -8,9 +8,10 @@
 </body>
 
 <template name="game">
+  <div class="tilecheck">{{> tilecheck}}</div>
   <div class="container">
     <div class="menu"></div>
-    <div class="game-content">
+    <div class="game-container">
       <div class="level-map"></div>
       <div class="displays">{{> displays}}</div>
       <div class="inventory">{{> inventory}}</div>
@@ -35,5 +36,11 @@
 <template name="inventory">
   {{#each inventoryItems}}
     <div class="tile tile-{{this}} inventory-{{this}}"></div>
+  {{/each}}
+</template>
+
+<template name="tilecheck">
+  {{#each tiles}}
+    <div class="tile tile-{{this.name}}"></div>
   {{/each}}
 </template>

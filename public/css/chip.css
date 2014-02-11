@@ -1,5 +1,6 @@
 
 body {
+  background-color: #CBCBCB;
 }
 
 /* Debug */
@@ -23,7 +24,7 @@ body {
 }
 
 /* Game content */
-.game-content {
+.game-container {
   background: url(/images/background.png) no-repeat left top;
   width: 514px;
   height: 353px;
@@ -213,20 +214,417 @@ body {
   height: 32px;
 }
 
-.tile-red-key {
-  background: url(/images/tiles.png) no-repeat -288px -160px;
+.tilecheck {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 320px;
+  height: 512px;
+  font-size: 0; /* fix to remove inline-block padding */
+}
+
+.tile-floor {
+  background: url(/images/tiles.png) no-repeat 0px 0px;
+}
+
+.tile-wall {
+  background: url(/images/tiles.png) no-repeat 0px -32px;
+}
+
+.tile-chip-item {
+  background: url(/images/tiles.png) no-repeat 0px -64px;
+}
+
+.tile-water {
+  background: url(/images/tiles.png) no-repeat 0px -96px;
+}
+
+.tile-fire {
+  background: url(/images/tiles.png) no-repeat 0px -128px;
+}
+
+.tile-thin-wall-top {
+  background: url(/images/tiles.png) no-repeat 0px -192px;
+}
+
+.tile-thin-wall-left {
+  background: url(/images/tiles.png) no-repeat 0px -224px;
+}
+
+.tile-thin-wall-bottom {
+  background: url(/images/tiles.png) no-repeat 0px -256px;
+}
+
+.tile-thin-wall-right {
+  background: url(/images/tiles.png) no-repeat 0px -288px;
+}
+
+.tile-block {
+  background: url(/images/tiles.png) no-repeat 0px -320px;
+}
+
+.tile-dirt {
+  background: url(/images/tiles.png) no-repeat 0px -352px;
+}
+
+.tile-ice {
+  background: url(/images/tiles.png) no-repeat 0px -384px;
+}
+
+.tile-force-floor-down {
+  background: url(/images/tiles.png) no-repeat 0px -416px;
+}
+
+.tile-clone-block-up {
+  background: url(/images/tiles.png) no-repeat 0px -448px;
+}
+
+.tile-clone-block-left {
+  background: url(/images/tiles.png) no-repeat 0px -480px;
+}
+
+.tile-clone-block-down {
+  background: url(/images/tiles.png) no-repeat -32px 0px;
+}
+
+.tile-clone-block-right {
+  background: url(/images/tiles.png) no-repeat -32px -32px;
+}
+
+.tile-force-floor-up {
+  background: url(/images/tiles.png) no-repeat -32px -64px;
+}
+
+.tile-force-floor-right {
+  background: url(/images/tiles.png) no-repeat -32px -96px;
+}
+
+.tile-force-floor-left {
+  background: url(/images/tiles.png) no-repeat -32px -128px;
+}
+
+.tile-exit {
+  background: url(/images/tiles.png) no-repeat -32px -160px;
+}
+
+.tile-blue-lock {
+  background: url(/images/tiles.png) no-repeat -32px -192px;
+}
+
+.tile-red-lock {
+  background: url(/images/tiles.png) no-repeat -32px -224px;
+}
+
+.tile-green-lock {
+  background: url(/images/tiles.png) no-repeat -32px -256px;
+}
+
+.tile-yellow-lock {
+  background: url(/images/tiles.png) no-repeat -32px -288px;
+}
+
+.tile-ice-top-left {
+  background: url(/images/tiles.png) no-repeat -32px -320px;
+}
+
+.tile-ice-top-right {
+  background: url(/images/tiles.png) no-repeat -32px -352px;
+}
+
+.tile-ice-bottom-right {
+  background: url(/images/tiles.png) no-repeat -32px -384px;
+}
+
+.tile-ice-bottom-left {
+  background: url(/images/tiles.png) no-repeat -32px -416px;
+}
+
+.tile-fake-blue-wall {
+  background: url(/images/tiles.png) no-repeat -32px -448px;
+}
+
+.tile-real-blue-wall {
+  background: url(/images/tiles.png) no-repeat -32px -480px;
+}
+
+.tile-spy {
+  background: url(/images/tiles.png) no-repeat -64px -32px;
+}
+
+.tile-socket {
+  background: url(/images/tiles.png) no-repeat -64px -64px;
+}
+
+.tile-green-button {
+  background: url(/images/tiles.png) no-repeat -64px -96px;
+}
+
+.tile-red-button {
+  background: url(/images/tiles.png) no-repeat -64px -128px;
+}
+
+.tile-closed-toggle-wall {
+  background: url(/images/tiles.png) no-repeat -64px -160px;
+}
+
+.tile-open-toggle-wall {
+  background: url(/images/tiles.png) no-repeat -64px -192px;
+}
+
+.tile-brown-switch {
+  background: url(/images/tiles.png) no-repeat -64px -224px;
+}
+
+.tile-blue-switch {
+  background: url(/images/tiles.png) no-repeat -64px -256px;
+}
+
+.tile-teleport {
+  background: url(/images/tiles.png) no-repeat -64px -288px;
+}
+
+.tile-bomb {
+  background: url(/images/tiles.png) no-repeat -64px -320px;
+}
+
+.tile-trap {
+  background: url(/images/tiles.png) no-repeat -64px -352px;
+}
+
+.tile-hidden-wall {
+  background: url(/images/tiles.png) no-repeat -64px -384px;
+}
+
+.tile-gravel {
+  background: url(/images/tiles.png) no-repeat -64px -416px;
+}
+
+.tile-recessed-wall {
+  background: url(/images/tiles.png) no-repeat -64px -448px;
+}
+
+.tile-hint {
+  background: url(/images/tiles.png) no-repeat -64px -480px;
+}
+
+.tile-thin-wall-bottom-right {
+  background: url(/images/tiles.png) no-repeat -96px 0px;
+}
+
+.tile-clone-machine {
+  background: url(/images/tiles.png) no-repeat -96px -32px;
+}
+
+.tile-force-floor-random {
+  background: url(/images/tiles.png) no-repeat -96px -64px;
+}
+
+.tile-drowned-chip {
+  background: url(/images/tiles.png) no-repeat -96px -96px;
+}
+
+.tile-burned-chip-with-fire {
+  background: url(/images/tiles.png) no-repeat -96px -128px;
+}
+
+.tile-burned-chip-smoke-only {
+  background: url(/images/tiles.png) no-repeat -96px -160px;
+}
+
+.tile-fake-exit-chip-in-exit {
+  background: url(/images/tiles.png) no-repeat -96px -288px;
+}
+
+.tile-fake-exit-dark-blue-border {
+  background: url(/images/tiles.png) no-repeat -96px -320px;
+}
+
+.tile-fake-exit-light-blue-border {
+  background: url(/images/tiles.png) no-repeat -96px -352px;
+}
+
+.tile-swimming-chip-up {
+  background: url(/images/tiles.png) no-repeat -96px -384px;
+}
+
+.tile-swimming-chip-left {
+  background: url(/images/tiles.png) no-repeat -96px -416px;
+}
+
+.tile-swimming-chip-down {
+  background: url(/images/tiles.png) no-repeat -96px -448px;
+}
+
+.tile-swimming-chip-right {
+  background: url(/images/tiles.png) no-repeat -96px -480px;
+}
+
+.tile-bug-up {
+  background: url(/images/tiles.png) no-repeat -224px 0px;
+}
+
+.tile-bug-left {
+  background: url(/images/tiles.png) no-repeat -224px -32px;
+}
+
+.tile-bug-down {
+  background: url(/images/tiles.png) no-repeat -224px -64px;
+}
+
+.tile-bug-right {
+  background: url(/images/tiles.png) no-repeat -224px -96px;
+}
+
+.tile-fireball-up {
+  background: url(/images/tiles.png) no-repeat -224px -128px;
+}
+
+.tile-fireball-left {
+  background: url(/images/tiles.png) no-repeat -224px -160px;
+}
+
+.tile-fireball-down {
+  background: url(/images/tiles.png) no-repeat -224px -192px;
+}
+
+.tile-fireball-right {
+  background: url(/images/tiles.png) no-repeat -224px -224px;
+}
+
+.tile-pink-ball-up {
+  background: url(/images/tiles.png) no-repeat -224px -256px;
+}
+
+.tile-pink-ball-left {
+  background: url(/images/tiles.png) no-repeat -224px -288px;
+}
+
+.tile-pink-ball-down {
+  background: url(/images/tiles.png) no-repeat -224px -320px;
+}
+
+.tile-pink-ball-right {
+  background: url(/images/tiles.png) no-repeat -224px -352px;
+}
+
+.tile-tank-up {
+  background: url(/images/tiles.png) no-repeat -224px -384px;
+}
+
+.tile-tank-left {
+  background: url(/images/tiles.png) no-repeat -224px -416px;
+}
+
+.tile-tank-down {
+  background: url(/images/tiles.png) no-repeat -224px -448px;
+}
+
+.tile-tank-right {
+  background: url(/images/tiles.png) no-repeat -224px -480px;
+}
+
+.tile-glider-up {
+  background: url(/images/tiles.png) no-repeat -256px 0px;
+}
+
+.tile-glider-left {
+  background: url(/images/tiles.png) no-repeat -256px -32px;
+}
+
+.tile-glider-down {
+  background: url(/images/tiles.png) no-repeat -256px -64px;
+}
+
+.tile-glider-right {
+  background: url(/images/tiles.png) no-repeat -256px -96px;
+}
+
+.tile-teeth-up {
+  background: url(/images/tiles.png) no-repeat -256px -128px;
+}
+
+.tile-teeth-left {
+  background: url(/images/tiles.png) no-repeat -256px -160px;
+}
+
+.tile-teeth-down {
+  background: url(/images/tiles.png) no-repeat -256px -192px;
+}
+
+.tile-teeth-right {
+  background: url(/images/tiles.png) no-repeat -256px -224px;
+}
+
+.tile-walker-up {
+  background: url(/images/tiles.png) no-repeat -256px -256px;
+}
+
+.tile-walker-left {
+  background: url(/images/tiles.png) no-repeat -256px -288px;
+}
+
+.tile-walker-down {
+  background: url(/images/tiles.png) no-repeat -256px -320px;
+}
+
+.tile-walker-right {
+  background: url(/images/tiles.png) no-repeat -256px -352px;
+}
+
+.tile-blob-up {
+  background: url(/images/tiles.png) no-repeat -256px -384px;
+}
+
+.tile-blob-left {
+  background: url(/images/tiles.png) no-repeat -256px -416px;
+}
+
+.tile-blob-down {
+  background: url(/images/tiles.png) no-repeat -256px -448px;
+}
+
+.tile-blob-right {
+  background: url(/images/tiles.png) no-repeat -256px -480px;
+}
+
+.tile-paramecium-up {
+  background: url(/images/tiles.png) no-repeat -288px 0px;
+}
+
+.tile-paramecium-left {
+  background: url(/images/tiles.png) no-repeat -288px -32px;
+}
+
+.tile-paramecium-down {
+  background: url(/images/tiles.png) no-repeat -288px -64px;
+}
+
+.tile-paramecium-right {
+  background: url(/images/tiles.png) no-repeat -288px -96px;
 }
 
 .tile-blue-key {
   background: url(/images/tiles.png) no-repeat -288px -128px;
 }
 
-.tile-yellow-key {
-  background: url(/images/tiles.png) no-repeat -288px -224px;
+.tile-red-key {
+  background: url(/images/tiles.png) no-repeat -288px -160px;
 }
 
 .tile-green-key {
   background: url(/images/tiles.png) no-repeat -288px -192px;
+}
+
+.tile-yellow-key {
+  background: url(/images/tiles.png) no-repeat -288px -224px;
+}
+
+.tile-flippers {
+  background: url(/images/tiles.png) no-repeat -288px -256px;
+}
+
+.tile-fire-boots {
+  background: url(/images/tiles.png) no-repeat -288px -288px;
 }
 
 .tile-ice-skates {
@@ -235,12 +633,4 @@ body {
 
 .tile-suction-boots {
   background: url(/images/tiles.png) no-repeat -288px -352px;
-}
-
-.tile-fire-boots {
-  background: url(/images/tiles.png) no-repeat -288px -288px;
-}
-
-.tile-flippers {
-  background: url(/images/tiles.png) no-repeat -288px -256px;
 }

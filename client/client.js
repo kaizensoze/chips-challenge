@@ -173,3 +173,10 @@ Template.inventory.inventoryItems = function() {
     return Object.keys(inv);
   }
 };
+
+/**
+ * Tile check template.
+ */
+Template.tilecheck.tiles = function() {
+  return Tiles.find().fetch();
+};
