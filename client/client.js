@@ -178,5 +178,5 @@ Template.inventory.inventoryItems = function() {
  * Tile check template.
  */
 Template.tilecheck.tiles = function() {
-  return Tiles.find().fetch();
+  return Object.keys(tiles);
 };

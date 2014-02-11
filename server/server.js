@@ -22,10 +22,7 @@ Meteor.startup(function () {
       return levels[level_number];
     },
     clearCollections: function() {
-      Tiles.remove({});
-      Keys.remove({});
-      Boots.remove({});
-      Items.remove({});
+      
     }
   });
 });
