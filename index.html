@@ -35,12 +35,12 @@
 
 <template name="inventory">
   {{#each inventoryItems}}
-    <div class="tile tile-{{this}} inventory-{{this}}"></div>
+    <div class="tile tile-{{this.cssClass}} inventory-{{this.cssClass}}"></div>
   {{/each}}
 </template>
 
 <template name="tilecheck">
   {{#each tiles}}
-    <div class="tile tile-{{this.name}}"></div>
+    <div class="tile tile-{{this.cssClass}}"></div>
   {{/each}}
 </template>

@@ -1,36 +1,35 @@
 
 /** Display types (Level, Time, Chips Left) */
-var display_types = ["level", "time", "chips-left"];
+var displayTypes = ['level', 'time', 'chipsLeft'];
 
 /** Low digit thresholds for each display type. */
 var LOW_DIGIT_THRESHOLDS = {
-  "time": 15,
-  "chips-left": 0
+  'time': 15,
+  'chipsLeft': 0
 };
 
 /** Level timer. */
-var level_timer;
+var levelTimer;
 
 /**
  * Client startup.
  * @return {[type]} [description]
  */
 Meteor.startup(function () {
-  // default to level 1
-  if (!Session.get("level")) {
-    setLevel(1);
-  }
-  startLevel();
+  setLevel();
 });
 
 /**
  * Set the level.
- * @param {[type]} level_number [description]
+ * @param {[type]} levelPassword [description]
  */
-function setLevel(level_number) {
-  Meteor.call('getLevel', level_number, function(error, level) {
+function setLevel(levelPassword) {
+  Meteor.call('getLevel', function(error, level) {
     if (!error) {
-      Session.set("level", level);
+      // store in session
+      Session.set('currentLevel', level);
+
+      startLevel();
     }
   });
 }
@@ -43,18 +42,25 @@ function startLevel() {
   // clear inventory
   Session.set('inventory', {});
 
+  // initialize session data for time remaining, chipsLeft
+  Session.set('timeRemaining', Session.get('currentLevel').timeLimit);
+  Session.set('chipsLeft', Session.get('currentLevel').chipsRequired);
+
   // start level timer
   startLevelTimer();
 
   // test picking up items
-  pickUpItem({name: "red-key"});
-  pickUpItem({name: "blue-key"});
-  pickUpItem({name: "yellow-key"});
-  pickUpItem({name: "green-key"});
-  pickUpItem({name: "ice-skates"});
-  pickUpItem({name: "suction-boots"});
-  pickUpItem({name: "fire-boots"});
-  pickUpItem({name: "flippers"});
+  pickUpItem(tiles['redKey']);
+  pickUpItem(tiles['blueKey']);
+  pickUpItem(tiles['yellowKey']);
+  pickUpItem(tiles['greenKey']);
+  pickUpItem(tiles['iceSkates']);
+  pickUpItem(tiles['suctionBoots']);
+  pickUpItem(tiles['fireBoots']);
+  pickUpItem(tiles['flippers']);
+
+  // removeItem(tiles['blueKey']);
+  // removeItem(tiles['iceSkates']);
 }
 
 /**
@@ -63,7 +69,7 @@ function startLevel() {
  */
 function startLevelTimer() {
   // update time remaining
-  level_timer = Meteor.setInterval(updateTimeRemaining, 1000);
+  levelTimer = Meteor.setInterval(updateTimeRemaining, 1000);
 }
 
 /**
@@ -71,16 +77,17 @@ function startLevelTimer() {
  * @return {[type]} [description]
  */
 function updateTimeRemaining() {
-  if (!Session.get("level")) {
+  if (!Session.get('currentLevel')) {
     return;
   }
 
-  var level = Session.get("level");
-  level.time_remaining--;
-  Session.set("level", level);
+  // decrement time remaining by 1
+  var timeRemaining = Session.get('timeRemaining');
+  timeRemaining--;
+  Session.set('timeRemaining', timeRemaining);
 
-  if (level.time_remaining <= 0) {
-    Meteor.clearInterval(level_timer);
+  if (timeRemaining <= 0) {
+    Meteor.clearInterval(levelTimer);
   }
 }
 
@@ -91,7 +98,7 @@ function updateTimeRemaining() {
  */
 function pickUpItem(item) {
   var inv = Session.get('inventory');
-  inv[item.name] = true;
+  inv[item.name] = item;
   Session.set('inventory', inv);
 }
 
@@ -122,40 +129,40 @@ function pad(n, width, z) {
 /**
  * Display template.
  */
-Template.displays.displayTypes = display_types;
+Template.displays.displayTypes = displayTypes;
 Template.displays.digits = function() {
-  if (!Session.get("level")) {
+  if (!Session.get('currentLevel')) {
     return;
   }
 
   // get display value for given display type
-  var display_type = String(this);
-  var display_value;
-  switch (display_type) {
-    case "level":
-      display_value = Session.get("level").level_number;
+  var displayType = String(this);
+  var displayValue;
+  switch (displayType) {
+    case 'level':
+      displayValue = Session.get('currentLevel').levelNumber;
       break;
-    case "time":
-      display_value = Session.get("level").time_remaining;
+    case 'time':
+      displayValue = Session.get('timeRemaining');
       break;
-    case "chips-left":
-      display_value = Session.get("level").chips_left;
+    case 'chipsLeft':
+      displayValue = Session.get('chipsLeft');
       break;
   }
 
-  var padded_value_string = pad(display_value, 3, '-');
-  var digits = padded_value_string.split('').map(function(digit) {
-    if (digit === "-") {
-      return "none";
+  var paddedValueString = pad(displayValue, 3, '-');
+  var digits = paddedValueString.split('').map(function(digit) {
+    if (digit === '-') {
+      return 'none';
     } else {
       return digit;
     }
   });
 
-  var low = "";
-  if (LOW_DIGIT_THRESHOLDS[display_type]) {
-    if (display_value <= LOW_DIGIT_THRESHOLDS[display_type]) {
-      low = " low";
+  var low = '';
+  if (LOW_DIGIT_THRESHOLDS[displayType]) {
+    if (displayValue <= LOW_DIGIT_THRESHOLDS[displayType]) {
+      low = ' low';
     }
   }
 
@@ -170,7 +177,9 @@ Template.inventory.inventoryItems = function() {
   if (typeof inv === 'undefined') {
     return []
   } else {
-    return Object.keys(inv);
+    return Object.keys(inv).map(function(key, index) {
+      return inv[key];
+    });
   }
 };
 
@@ -178,5 +187,7 @@ Template.inventory.inventoryItems = function() {
  * Tile check template.
  */
 Template.tilecheck.tiles = function() {
-  return Object.keys(tiles);
+  return Object.keys(tiles).map(function(key, index) {
+    return tiles[key];
+  });
 };

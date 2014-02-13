@@ -47,7 +47,7 @@ body {
   top: 125px;
 }
 
-.display-chips-left {
+.display-chipsLeft {
   top: 215px;
 }
 
@@ -243,6 +243,10 @@ body {
   background: url(/images/tiles.png) no-repeat 0px -128px;
 }
 
+.tile-invisible-wall {
+  background: url(/images/tiles.png) no-repeat 0px -160px;
+}
+
 .tile-thin-wall-top {
   background: url(/images/tiles.png) no-repeat 0px -192px;
 }
@@ -371,11 +375,11 @@ body {
   background: url(/images/tiles.png) no-repeat -64px -192px;
 }
 
-.tile-brown-switch {
+.tile-brown-button {
   background: url(/images/tiles.png) no-repeat -64px -224px;
 }
 
-.tile-blue-switch {
+.tile-blue-button {
   background: url(/images/tiles.png) no-repeat -64px -256px;
 }
 
@@ -633,4 +637,20 @@ body {
 
 .tile-suction-boots {
   background: url(/images/tiles.png) no-repeat -288px -352px;
+}
+
+.tile-chip-up {
+  background: url(/images/tiles.png) no-repeat -288px -384px;
+}
+
+.tile-chip-left {
+  background: url(/images/tiles.png) no-repeat -288px -416px;
+}
+
+.tile-chip-down {
+  background: url(/images/tiles.png) no-repeat -288px -448px;
+}
+
+.tile-chip-right {
+  background: url(/images/tiles.png) no-repeat -288px -480px;
 }
