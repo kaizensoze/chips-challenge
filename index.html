@@ -8,23 +8,41 @@
 </body>
 
 <template name="game">
-  <div class="tilecheck">{{> tilecheck}}</div>
+  {{!> tilecheck}}
+
   <div class="container">
-    <div class="menu"></div>
+    {{> menu }}
     <div class="game-container">
-      <div class="level-map"></div>
-      <div class="displays">{{> displays}}</div>
-      <div class="inventory">{{> inventory}}</div>
+      {{> levelMap}}
+      {{> displays}}
+      {{> inventory}}
     </div>
   </div>
 </template>
 
+<template name="levelMap">
+  <div id="level-map">
+  {{#each mapTiles}}
+    {{#each this.tileStack}}
+      <div class="tile tile-{{this.cssClass}}" style="{{mapTilePositionCSS ../this.x ../this.y}}"></div>
+    {{/each}}
+  {{/each}}
+  </div>
+</template>
+
+<template name="menu">
+  <div class="menu">
+  </div>
+</template>
+
 <template name="displays">
+  <div class="displays">
   {{#each displayTypes}}
     <div class="display display-{{this}}">
       {{{digits}}}
     </div>
   {{/each}}
+  </div>
 </template>
 
 <template name="digits">
@@ -34,13 +52,17 @@
 </template>
 
 <template name="inventory">
+  <div class="inventory">
   {{#each inventoryItems}}
     <div class="tile tile-{{this.cssClass}} inventory-{{this.cssClass}}"></div>
   {{/each}}
+  </div>
 </template>
 
 <template name="tilecheck">
+  <div class="tilecheck">
   {{#each tiles}}
-    <div class="tile tile-{{this.cssClass}}"></div>
+    <div class="debug-tile tile-{{this.cssClass}}"></div>
   {{/each}}
+  </div>
 </template>

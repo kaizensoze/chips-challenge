@@ -11,8 +11,7 @@ Meteor.startup(function () {
   Levels.remove({});
 
   // add first level
-  var adjustedLevel = autofill(firstLevel);
-  Levels.insert(adjustedLevel);
+  Levels.insert(firstLevel);
 
   Meteor.methods({
     getLevel: function(levelPassword) {
@@ -30,30 +29,6 @@ Meteor.startup(function () {
     }
   });
 });
-
-function autofill(level) {
-  var levelDataMatrix = matrixified(level.levelData);
-
-  console.log(levelDataMatrix);
-  return level;
-
-  var maxY = _.max(level.levelData, function(mapTile) { return mapTile.y; }).y;
-  var minY = _.min(level.levelData, function(mapTile) { return mapTile.y; }).y;
-
-  var maxX = _.max(level.levelData, function(mapTile) { return mapTile.x; }).x;
-  var minX = _.min(level.levelData, function(mapTile) { return mapTile.x; }).x;
-
-  // iterate over tiles and fill in any missing tiles with normal floor tile
-  for (var y = minY; y < maxY; y++) {
-    for (var x = minX; x < maxX; x++) {
-      if (!levelDataMatrix[y][x]) {
-        level.levelData.push({ "y": y, "x": x, "tileStack": [tiles["floor"]] });
-      }
-    }
-  }
-
-  return level;
-}
 
 function matrixified(levelData) {
   var matrix = {};

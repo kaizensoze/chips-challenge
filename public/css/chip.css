@@ -28,6 +28,15 @@ body {
   background: url(/images/background.png) no-repeat left top;
   width: 514px;
   height: 353px;
+  overflow: hidden;
+}
+
+/* Level map. */
+#level-map {
+  position: relative;
+  left: 33px; /* 494 */
+  top: 32px; /* 169 */
+  z-index: -1;
 }
 
 /* Displays */
@@ -209,6 +218,12 @@ body {
 
 /** Tiles. */
 .tile {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+}
+
+.debug-tile {
   display: inline-block;
   width: 32px;
   height: 32px;
@@ -653,4 +668,9 @@ body {
 
 .tile-chip-right {
   background: url(/images/tiles.png) no-repeat -288px -480px;
+}
+
+/* Map tiles. */
+.map-tile {
+  position: absolute;
 }
