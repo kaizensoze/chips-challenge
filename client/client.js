@@ -8,14 +8,21 @@ var DirectionEnum = {
   LEFT: 1,
   DOWN: 2,
   RIGHT: 3
-}
+};
+
+var DIRECTION_LABELS = {
+  0: 'Up',
+  1: 'Left',
+  2: 'Down',
+  3: 'Right'
+};
 
 var DIRECTION_KEY_CODES = {
   38: DirectionEnum.UP,
   37: DirectionEnum.LEFT,
   40: DirectionEnum.DOWN,
   39: DirectionEnum.RIGHT
-}
+};
 
 /** Display types (Level, Time, Chips Left) */
 var DISPLAY_TYPES = ['level', 'time', 'chipsLeft'];
@@ -143,7 +150,7 @@ function move(keyCode) {
   }
 
   var currentPosition = Session.get('currentPosition');
-  var newPosition = currentPosition;
+  var newPosition = clone(currentPosition);
 
   switch(direction) {
     case DirectionEnum.UP:
@@ -162,12 +169,31 @@ function move(keyCode) {
 
   // TODO: check if move allowed
   
-  Session.set('currentPosition', newPosition);
-
-  // set random variable just to trigger map data re-render for now
   var currentLevel = Session.get('currentLevel');
-  currentLevel.blah = Math.random();
+
+  // remove old chip position
+  var currentTile = _.find(currentLevel.levelData, function(mapTile) {
+    return mapTile.x == currentPosition.x && mapTile.y == currentPosition.y;
+  });
+
+  var currentChipTile = _.find(currentTile.tileStack, function(tile) {
+    return typeof tile.types !== 'undefined' && tile.types.indexOf('chip') !== -1;
+  });
+
+  var currentChipTileIndex = currentTile.tileStack.indexOf(currentChipTile);
+  currentTile.tileStack.splice(currentChipTileIndex, 1);
+  
+  // add new chip position
+  var newTile = _.find(currentLevel.levelData, function(mapTile) {
+    return mapTile.x == newPosition.x && mapTile.y == newPosition.y;
+  });
+
+  newTile.tileStack.push(tiles['chip' + DIRECTION_LABELS[direction]]);
+  
+  // update current level
   Session.set('currentLevel', currentLevel);
+
+  Session.set('currentPosition', newPosition);
 }
 
 /**
@@ -191,10 +217,6 @@ Template.levelMap.mapTiles = function() {
   if (!Session.get('currentLevel')) {
     return;
   }
-
-  // Session.get('currentLevel').levelData.forEach(function(mapTile) {
-  //   console.log(mapTile);
-  // });
 
   return Session.get('currentLevel').levelData;
 };
@@ -295,4 +317,11 @@ function pad(n, width, z) {
   z = z || '0';
   n = n + '';
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+/**
+ * Clone. Does a deep clone.
+ */
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
 }
