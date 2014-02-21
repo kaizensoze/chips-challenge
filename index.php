@@ -11,6 +11,7 @@
   <script type="text/javascript" src="js/chip_data.js"></script>
   <script type="text/javascript" src="js/chip.js"></script>
 
+  <!--
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-9204423-5']);
@@ -22,12 +23,13 @@
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
+  -->
 </head>
 <body>
   <a href="..">Home</a><br /><br />
   <div id="explanation" style="display: inline-block; border: 2px solid; padding: 5px; margin-bottom: 20px;">
   This is a prototype of an HTML 5 implementation of Chip's Challenge.<br />
-  To test the prototype, <span style="color: blue;">select map 1 to the right and click the PLAY button</span>.
+  <span style="color: blue;">Select map 1 to the right and click PLAY.</span>
   </div><br />
 
   <!-- Save map. -->
