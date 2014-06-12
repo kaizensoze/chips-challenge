@@ -51,9 +51,12 @@ Meteor.startup(function () {
 function setLevel(levelPassword) {
   Meteor.call('getLevel', function(error, level) {
     if (!error) {
+      // pad the map
+      var adjustedLevel = levelWithPaddedMap(level);
+
       // store in session
-      Session.set('currentPosition', level.startPosition);
-      Session.set('currentLevel', level);
+      Session.set('currentPosition', adjustedLevel.startPosition);
+      Session.set('currentLevel', adjustedLevel);
 
       startLevel();
     }
@@ -61,10 +64,61 @@ function setLevel(levelPassword) {
 }
 
 /**
+ * Take level data, pad the map, and adjust start position.
+ * @return padded map
+ */
+function levelWithPaddedMap(levelData) {
+  var padding = 4;
+
+  // get map dimensions
+  var xVals = levelData.levelData.map(function(tile) { return tile.x; });
+  var numCols = Math.max.apply(null, xVals) + 1;
+
+  var yVals = levelData.levelData.map(function(tile) { return tile.y; });
+  var numRows = Math.max.apply(null, yVals) + 1;
+
+  // adjust positions of existing map tiles
+  for (var tileIndex in levelData.levelData) {
+    levelData.levelData[tileIndex].x += padding;
+    levelData.levelData[tileIndex].y += padding;
+  }
+
+  // add new tiles
+  for (var i=0; i < padding; i++) {
+    for (var j=padding; j < padding+numCols; j++) {
+      // top padding
+      levelData.levelData.push({ "y": i, "x": j, "tileStack": [tiles["floor"]] });
+
+      // bottom padding
+      levelData.levelData.push({ "y": padding+numRows+i, "x": j, "tileStack": [tiles["floor"]] });
+    }
+  }
+
+  for (var i=0; i < numRows+(2*padding); i++) {
+    for (var j=0; j < padding; j++) {
+      // left padding
+      levelData.levelData.push({ "y": i, "x": j, "tileStack": [tiles["floor"]] });
+
+      // right padding
+      levelData.levelData.push({ "y": i, "x": padding+numCols+j, "tileStack": [tiles["floor"]] });
+    }
+  }
+
+  // adjust start position
+  levelData.startPosition.x += padding;
+  levelData.startPosition.y += padding;
+
+  return levelData;
+}
+
+/**
  * Start the current level.
  * @return {[type]} [description]
  */
 function startLevel() {
+  // center chip
+  centerChip();
+
   // clear inventory
   Session.set('inventory', {});
 
@@ -189,11 +243,33 @@ function move(keyCode) {
   });
 
   newTile.tileStack.push(tiles['chip' + DIRECTION_LABELS[direction]]);
-  
-  // update current level
+
+  // update map data and chip position
   Session.set('currentLevel', currentLevel);
 
   Session.set('currentPosition', newPosition);
+  centerChip();
+}
+
+/**
+ * Center chip.
+ */
+function centerChip() {
+  if (!Session.get('currentLevel')) {
+    return;
+  }
+
+  var position = Session.get("currentPosition");
+
+  var xOffset = 33;
+  var yOffset = 32;
+
+  var left = xOffset + (-1 * (position.x - 4) * TILE_WIDTH);
+  var top = yOffset + (-1 * (position.y - 4) * TILE_HEIGHT);
+
+  var map = document.getElementById('level-map');
+  map.style.left = left + "px";
+  map.style.top = top + "px";
 }
 
 /**
@@ -226,18 +302,6 @@ Template.levelMap.mapTilePositionCSS = function(x, y) {
 };
 
 Template.levelMap.rendered = function() {
-  if (!Session.get('currentLevel')) {
-    return;
-  }
-
-  var position = Session.get("currentPosition");
-
-  var left = 33 + (-1 * (position.x - 4) * TILE_WIDTH);
-  var top = 32 + (-1 * (position.y - 4) * TILE_HEIGHT);
-
-  var map = document.getElementById('level-map');
-  map.style.left = left + "px";
-  map.style.top = top + "px";
 }
 
 /**
@@ -245,6 +309,9 @@ Template.levelMap.rendered = function() {
  */
 Template.displays.displayTypes = DISPLAY_TYPES;
 Template.displays.digits = function() {
+  return Template['digits'];
+};
+Template.displays.digitsData = function() {
   if (!Session.get('currentLevel')) {
     return;
   }
@@ -280,7 +347,7 @@ Template.displays.digits = function() {
     }
   }
 
-  return Template.digits({digits: digits, low: low});
+  return {digits: digits, low: low};
 };
 
 /**

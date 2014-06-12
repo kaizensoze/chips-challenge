@@ -8,7 +8,7 @@
 </body>
 
 <template name="game">
-  {{!> tilecheck}}
+  <!-- {{> tilecheck}} -->
 
   <div class="container">
     {{> menu }}
@@ -24,7 +24,7 @@
   <div id="level-map">
   {{#each mapTiles}}
     {{#each this.tileStack}}
-      <div class="tile tile-{{this.cssClass}}" style="{{mapTilePositionCSS ../this.x ../this.y}}"></div>
+      <div class="tile tile-{{this.cssClass}}" style="{{mapTilePositionCSS ../x ../y}}"></div>
     {{/each}}
   {{/each}}
   </div>
@@ -39,7 +39,7 @@
   <div class="displays">
   {{#each displayTypes}}
     <div class="display display-{{this}}">
-      {{{digits}}}
+      {{> digits digitsData}}
     </div>
   {{/each}}
   </div>
