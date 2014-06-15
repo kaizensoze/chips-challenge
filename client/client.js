@@ -53,66 +53,17 @@ Meteor.startup(function () {
  */
 function setLevel(levelPassword) {
   Meteor.call('getLevel', function(error, level) {
-    if (!error) {
-      // pad the map
-      var adjustedLevel = levelWithPaddedMap(level);
-
+    if (!error && typeof level !== 'undefined') {
       // store in session
-      Session.set('currentPosition', adjustedLevel.startPosition);
-      Session.set('currentLevel', adjustedLevel);
+      Session.set('currentPosition', level.startPosition);
+      Session.set('currentLevel', level);
       currentLevel = Session.get('currentLevel');
 
       startLevel();
+    } else {
+      console.log('No level found.');
     }
   });
-}
-
-/**
- * Take level data, pad the map, and adjust start position.
- * @return padded map
- */
-function levelWithPaddedMap(levelData) {
-  var padding = 4;
-
-  // get map dimensions
-  var xVals = levelData.levelData.map(function(tile) { return tile.x; });
-  var numCols = Math.max.apply(null, xVals) + 1;
-
-  var yVals = levelData.levelData.map(function(tile) { return tile.y; });
-  var numRows = Math.max.apply(null, yVals) + 1;
-
-  // adjust positions of existing map tiles
-  for (var tileIndex in levelData.levelData) {
-    levelData.levelData[tileIndex].x += padding;
-    levelData.levelData[tileIndex].y += padding;
-  }
-
-  // add new tiles
-  for (var i=0; i < padding; i++) {
-    for (var j=padding; j < padding+numCols; j++) {
-      // top padding
-      levelData.levelData.push({ "y": i, "x": j, "tileStack": [tiles["floor"]] });
-
-      // bottom padding
-      levelData.levelData.push({ "y": padding+numRows+i, "x": j, "tileStack": [tiles["floor"]] });
-    }
-  }
-
-  for (var i=0; i < numRows+(2*padding); i++) {
-    for (var j=0; j < padding; j++) {
-      // left padding
-      levelData.levelData.push({ "y": i, "x": j, "tileStack": [tiles["floor"]] });
-
-      // right padding
-      levelData.levelData.push({ "y": i, "x": padding+numCols+j, "tileStack": [tiles["floor"]] });
-    }
-  }
-
-  // adjust start position
-  levelData.startPosition.x += padding;
-  levelData.startPosition.y += padding;
-
-  return levelData;
 }
 
 /**
@@ -307,12 +258,16 @@ function move(keyCode) {
       } else {
         return;
       }
+    } else if (tileContainsTile(newTile, 'block')) {
+      console.log('block');
     } else {
       return;
     }
   } else if (tileContainsType(newTile, 'item')) {
     var item = getTileOfType(newTile, 'item');
     pickupItem(newTile, item);
+  } else if (tileContainsType(newTile, 'exit')) {
+    // advance to next level
   }
 
   // adjust chip's position
@@ -368,20 +323,22 @@ function centerChip() {
   map.style.top = top + "px";
 }
 
-/**
- * Check if a tile has a given type.
- */
 function tileContainsType(tile, type) {
-  var tiles = _.filter(tile.tileStack, function(tile) {
+  var tile = _.find(tile.tileStack, function(tile) {
     return 'types' in tile && _.contains(tile.types, type);
   });
-  return tiles.length > 0;
+  return typeof tile !== 'undefined';
+}
+
+function tileContainsTile(tile, name) {
+  var tile = _.find(tile.tileStack, function(tile) {
+    return tile.name === name;
+  });
+  return tile;
 }
 
 function getTileAtPosition(position) {
-  var tile = _.find(currentLevel.levelData, function(mapTile) {
-    return mapTile.x == position.x && mapTile.y == position.y;
-  });
+  var tile = currentLevel.levelData[position.y][position.x];
   return tile;
 }
 
@@ -439,7 +396,8 @@ Template.levelMap.mapTiles = function() {
     return;
   }
 
-  return Session.get('currentLevel').levelData;
+  var mapTiles = _.flatten(Session.get('currentLevel').levelData);
+  return mapTiles;
 };
 
 Template.levelMap.mapTilePositionCSS = function(x, y) {
