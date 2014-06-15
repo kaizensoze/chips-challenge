@@ -303,9 +303,10 @@ function move(keyCode) {
     } else if (tileContainsType(newTile, 'socket')) {
       if (Session.get('chipsLeft') === 0) {
         var socket = getTileOfType(newTile, 'socket');
-
+        removeTileFromStack(newTile.tileStack, socket);
+      } else {
+        return;
       }
-      return;
     } else {
       return;
     }
