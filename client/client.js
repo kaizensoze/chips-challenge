@@ -181,8 +181,7 @@ function updateTimeRemaining() {
  */
 function pickupItem(tile, item) {
   // remove item from tile
-  var itemIndex = tile.tileStack.indexOf(item);
-  tile.tileStack.splice(itemIndex, 1);
+  removeTileFromStack(tile.tileStack, item);
 
   // if chip item, decrement 'chips left'
   if (_.isEqual(item, tiles['chipItem'])) {
@@ -204,7 +203,11 @@ function pickupItem(tile, item) {
  */
 function removeItem(item) {
   var inv = Session.get('inventory');
-  var itemIndex = inv.indexOf(item);
+
+  var itemToRemove = _.find(inv, function(_item) {
+    return _.isEqual(_item, item);
+  });
+  var itemIndex = _.indexOf(inv, itemToRemove);
   inv.splice(itemIndex, 1);
   Session.set('inventory', inv);
 }
@@ -225,8 +228,7 @@ function unlockLock(tile, lock) {
 
   if (haveKey) {
     // remove lock from tile
-    var lockIndex = tile.tileStack.indexOf(lock);
-    tile.tileStack.splice(lockIndex, 1);
+    removeTileFromStack(tile.tileStack, lock);
 
     // NOTE: Green key is a special case in that you only need one of it
     //       to open all green locks. As a result, we need to check if we're
@@ -244,9 +246,7 @@ function unlockLock(tile, lock) {
 
     // remove key from inventory
     if (requiredKey.name !== 'greenKey' || (requiredKey.name === 'greenKey' && unlockingLastGreenLock)) {
-      var keyIndex = inv.indexOf(requiredKey);
-      inv.splice(keyIndex, 1);
-      Session.set('inventory', inv);
+      removeItem(requiredKey);
     }
     
     unlockSucceeded = true;
@@ -300,6 +300,12 @@ function move(keyCode) {
       if (!unlocked) {
         return;
       }
+    } else if (tileContainsType(newTile, 'socket')) {
+      if (Session.get('chipsLeft') === 0) {
+        var socket = getTileOfType(newTile, 'socket');
+
+      }
+      return;
     } else {
       return;
     }
@@ -317,9 +323,8 @@ function move(keyCode) {
  */
 function updateChipTile(currentTile, newTile, direction) {
   // remove chip from old tile
-  var chipTile = getTileOfType(currentTile, 'chip');
-  var chipTileIndex = currentTile.tileStack.indexOf(chipTile);
-  currentTile.tileStack.splice(chipTileIndex, 1);
+  var chip = getTileOfType(currentTile, 'chip');
+  removeTileFromStack(currentTile.tileStack, chip);
 
   // add chip to new tile
   newTile.tileStack.push(tiles['chip' + DIRECTION_LABELS[direction]]);
@@ -384,6 +389,11 @@ function getTileOfType(tile, type) {
     return 'types' in tile && _.contains(tile.types, type);
   });
   return tile;
+}
+
+function removeTileFromStack(tileStack, tileToRemove) {
+  var tileIndex = _.indexOf(tileStack, tileToRemove);
+  tileStack.splice(tileIndex, 1);
 }
 
 /**
