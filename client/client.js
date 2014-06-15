@@ -36,6 +36,9 @@ var LOW_DIGIT_THRESHOLDS = {
 /** Level timer. */
 var levelTimer;
 
+/** Current level. */
+var currentLevel;
+
 /**
  * Client startup.
  * @return {[type]} [description]
@@ -57,6 +60,7 @@ function setLevel(levelPassword) {
       // store in session
       Session.set('currentPosition', adjustedLevel.startPosition);
       Session.set('currentLevel', adjustedLevel);
+      currentLevel = Session.get('currentLevel');
 
       startLevel();
     }
@@ -119,12 +123,11 @@ function startLevel() {
   // center chip
   centerChip();
 
-  // clear inventory
+  // initialize session data
   Session.set('inventory', []);
-
-  // initialize session data for time remaining, chipsLeft
   Session.set('timeRemaining', Session.get('currentLevel').timeLimit);
   Session.set('chipsLeft', Session.get('currentLevel').chipsRequired);
+  Session.set('greenLocksLeft', Session.get('currentLevel').numGreenLocks);
 
   // start level timer
   startLevelTimer();
@@ -225,8 +228,22 @@ function unlockLock(tile, lock) {
     var lockIndex = tile.tileStack.indexOf(lock);
     tile.tileStack.splice(lockIndex, 1);
 
-    // remove key from inventory (exception for green key)
-    if (requiredKey.name !== 'greenKey' && /*!lastGreenLock*/) {  // TODO
+    // NOTE: Green key is a special case in that you only need one of it
+    //       to open all green locks. As a result, we need to check if we're
+    //       about to unlock the last green lock on the map. If so, we remove
+    //       the key from chip's inventory.
+    var unlockingLastGreenLock = false;
+    if (lock.name === 'greenLock') {
+      var greenLocksLeft = Session.get('greenLocksLeft');
+      greenLocksLeft--;
+      Session.set('greenLocksLeft', greenLocksLeft);
+      if (greenLocksLeft === 0) {
+        unlockingLastGreenLock = true;
+      }
+    }
+
+    // remove key from inventory
+    if (requiredKey.name !== 'greenKey' || (requiredKey.name === 'greenKey' && unlockingLastGreenLock)) {
       var keyIndex = inv.indexOf(requiredKey);
       inv.splice(keyIndex, 1);
       Session.set('inventory', inv);
@@ -265,18 +282,15 @@ function move(keyCode) {
       newPosition.x++;
       break;
   }
-  
-  var currentLevel = Session.get('currentLevel');
 
   // old tile
-  var currentTile = _.find(currentLevel.levelData, function(mapTile) {
-    return mapTile.x == currentPosition.x && mapTile.y == currentPosition.y;
-  });
+  var currentTile = getTileAtPosition(currentPosition);
+
+  // adjust chip's direction
+  updateChipTile(currentTile, currentTile, direction);
 
   // new tile
-  var newTile = _.find(currentLevel.levelData, function(mapTile) {
-    return mapTile.x == newPosition.x && mapTile.y == newPosition.y;
-  });
+  var newTile = getTileAtPosition(newPosition);
 
   // interact with new tile
   if (tileContainsType(newTile, 'wall')) {
@@ -287,8 +301,6 @@ function move(keyCode) {
         return;
       }
     } else {
-      // newTile = clone(currentTile);
-      // newPosition = clone(currentPosition);
       return;
     }
   } else if (tileContainsType(newTile, 'item')) {
@@ -296,22 +308,37 @@ function move(keyCode) {
     pickupItem(newTile, item);
   }
 
-  // remove old chip from map
-  var chipTile = _.find(currentTile.tileStack, function(tile) {
-    return 'types' in tile && _.contains(tile.types, 'chip');
-  });
+  // adjust chip's position
+  updateChipTile(currentTile, newTile, direction);
+}
 
+/**
+ * Update chip tile.
+ */
+function updateChipTile(currentTile, newTile, direction) {
+  // remove chip from old tile
+  var chipTile = getTileOfType(currentTile, 'chip');
   var chipTileIndex = currentTile.tileStack.indexOf(chipTile);
   currentTile.tileStack.splice(chipTileIndex, 1);
 
-  // add new chip to map
+  // add chip to new tile
   newTile.tileStack.push(tiles['chip' + DIRECTION_LABELS[direction]]);
 
-  // update level data: map, chip position
-  Session.set('currentLevel', currentLevel);
+  // update current position
+  Session.set('currentPosition', {'x':newTile.x, 'y':newTile.y});
 
-  Session.set('currentPosition', newPosition);
+  // update level data
+  updateLevelData();
+
+  // center chip
   centerChip();
+}
+
+/**
+ * Update level data.
+ */
+function updateLevelData() {
+  Session.set('currentLevel', currentLevel);
 }
 
 /**
@@ -343,6 +370,13 @@ function tileContainsType(tile, type) {
     return 'types' in tile && _.contains(tile.types, type);
   });
   return tiles.length > 0;
+}
+
+function getTileAtPosition(position) {
+  var tile = _.find(currentLevel.levelData, function(mapTile) {
+    return mapTile.x == position.x && mapTile.y == position.y;
+  });
+  return tile;
 }
 
 function getTileOfType(tile, type) {
