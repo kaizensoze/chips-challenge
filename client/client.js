@@ -253,14 +253,19 @@ function move(keyCode) {
         return;
       }
 
-      var tileType = 'block';
-
+      // // block + water = dirt
+      // if (tileContainsType(newBlockTile, 'water')) {
+      //   tileType = 'dirt';
+      // }
+      // 
+      
       // block + water = dirt
       if (tileContainsType(newBlockTile, 'water')) {
-        tileType = 'dirt';
+        swapTiles(newBlockTile, 'water', 'dirt');
+        removeTileFromStack(newTile.tileStack, blockTile);
+      } else {
+        moveTile(blockTile, newBlockTile, 'block');
       }
-
-      moveTile(blockTile, newBlockTile, tileType);
     } else {
       return;
     }
@@ -269,6 +274,8 @@ function move(keyCode) {
     pickupItem(newTile, item);
   } else if (tileContainsType(newTile, 'exit')) {
     // advance to next level
+  } else if (tileContainsType(newTile, 'dirt')) {
+    swapTiles(newTile, 'dirt', 'floor');
   }
 
   // adjust chip's position
@@ -303,6 +310,11 @@ function moveTile(currentTile, newTile, tileNameOrType, direction) {
 
   // update level data
   updateLevelData();
+}
+
+function swapTiles(tile, tileNameA, tileNameB) {
+  removeTileFromStack(tile.tileStack, tiles[tileNameA]);
+  tile.tileStack.push(tiles[tileNameB]);
 }
 
 /**
