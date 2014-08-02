@@ -58,7 +58,6 @@ function setLevel(levelPassword) {
       Session.set('currentPosition', level.startPosition);
       Session.set('currentLevel', level);
       currentLevel = Session.get('currentLevel');
-      printCurrentLevel();
 
       startLevel();
     } else {
@@ -244,10 +243,17 @@ function move(keyCode) {
         return;
       }
     } else if (tileContainsTile(newTile, 'block')) {
-      var blockTile = clone(newTile);
-      var newBlockPosition = getNewPosition(currentPosition, direction);
+      var blockTile = newTile;
+      var blockPosition = {x:blockTile.x, y:blockTile.y};
+
+      var newBlockPosition = getNewPosition(blockPosition, direction);
       var newBlockTile = getTileAtPosition(newBlockPosition);
-      moveTile(blockTile, newBlockTile, 'block');
+
+      if (tileContainsType(newBlockTile, 'wall')) {
+        return;
+      } else {
+        moveTile(blockTile, newBlockTile, 'block');
+      }
     } else {
       return;
     }
@@ -260,10 +266,13 @@ function move(keyCode) {
 
   // adjust chip's position
   moveTile(currentTile, newTile, 'chip', direction);
+
+  // check map state
+  // printCurrentLevel();
 }
 
 /**
- * Update chip tile.
+ * Update tile.
  */
 function moveTile(currentTile, newTile, tileNameOrType, direction) {
   // remove old tile
@@ -308,6 +317,7 @@ function printCurrentLevel() {
 
     console.log(x.join());
   }
+  console.log('');
 }
 
 function tileString(tile) {
