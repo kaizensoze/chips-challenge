@@ -58,6 +58,7 @@ function setLevel(levelPassword) {
       Session.set('currentPosition', level.startPosition);
       Session.set('currentLevel', level);
       currentLevel = Session.get('currentLevel');
+      printCurrentLevel();
 
       startLevel();
     } else {
@@ -216,83 +217,76 @@ function move(keyCode) {
     return;
   }
 
-  var currentPosition = Session.get('currentPosition');
-  var newPosition = clone(currentPosition);
-
-  switch(direction) {
-    case DirectionEnum.UP:
-      newPosition.y--;
-      break;
-    case DirectionEnum.LEFT:
-      newPosition.x--;
-      break;
-    case DirectionEnum.DOWN:
-      newPosition.y++;
-      break;
-    case DirectionEnum.RIGHT:
-      newPosition.x++;
-      break;
-  }
-
   // old tile
+  var currentPosition = Session.get('currentPosition');
   var currentTile = getTileAtPosition(currentPosition);
 
-  // adjust chip's direction
-  updateChipTile(currentTile, currentTile, direction);
-
   // new tile
+  var newPosition = getNewPosition(currentPosition, direction);
   var newTile = getTileAtPosition(newPosition);
 
   // interact with new tile
   if (tileContainsType(newTile, 'wall')) {
+    // adjust chip's direction even if he can't move past the wall object
+    moveTile(currentTile, currentTile, 'chip', direction);
+
     if (tileContainsType(newTile, 'lock')) {
-      var lock = getTileOfType(newTile, 'lock');
+      var lock = getTileByType(newTile, 'lock');
       var unlocked = unlockLock(newTile, lock);
       if (!unlocked) {
         return;
       }
     } else if (tileContainsType(newTile, 'socket')) {
       if (Session.get('chipsLeft') === 0) {
-        var socket = getTileOfType(newTile, 'socket');
+        var socket = getTileByType(newTile, 'socket');
         removeTileFromStack(newTile.tileStack, socket);
       } else {
         return;
       }
     } else if (tileContainsTile(newTile, 'block')) {
-      console.log('block');
+      var blockTile = clone(newTile);
+      var newBlockPosition = getNewPosition(currentPosition, direction);
+      var newBlockTile = getTileAtPosition(newBlockPosition);
+      moveTile(blockTile, newBlockTile, 'block');
     } else {
       return;
     }
   } else if (tileContainsType(newTile, 'item')) {
-    var item = getTileOfType(newTile, 'item');
+    var item = getTileByType(newTile, 'item');
     pickupItem(newTile, item);
   } else if (tileContainsType(newTile, 'exit')) {
     // advance to next level
   }
 
   // adjust chip's position
-  updateChipTile(currentTile, newTile, direction);
+  moveTile(currentTile, newTile, 'chip', direction);
 }
 
 /**
  * Update chip tile.
  */
-function updateChipTile(currentTile, newTile, direction) {
-  // remove chip from old tile
-  var chip = getTileOfType(currentTile, 'chip');
-  removeTileFromStack(currentTile.tileStack, chip);
+function moveTile(currentTile, newTile, tileNameOrType, direction) {
+  // remove old tile
+  var tile = getTileByName(currentTile, tileNameOrType);
+  if (!tile) {
+    tile = getTileByType(currentTile, tileNameOrType);
+  }
+  removeTileFromStack(currentTile.tileStack, tile);
 
-  // add chip to new tile
-  newTile.tileStack.push(tiles['chip' + DIRECTION_LABELS[direction]]);
+  // add new tile
+  var directionLabel = (typeof direction !== 'undefined') ? DIRECTION_LABELS[direction] : '';
+  newTile.tileStack.push(tiles[tileNameOrType + directionLabel]);
 
-  // update current position
-  Session.set('currentPosition', {'x':newTile.x, 'y':newTile.y});
+  // if we're moving chip, update his position
+  if (tileNameOrType === 'chip') {
+    Session.set('currentPosition', {'x':newTile.x, 'y':newTile.y});
+
+    // center chip
+    centerChip();
+  }
 
   // update level data
   updateLevelData();
-
-  // center chip
-  centerChip();
 }
 
 /**
@@ -300,6 +294,53 @@ function updateChipTile(currentTile, newTile, direction) {
  */
 function updateLevelData() {
   Session.set('currentLevel', currentLevel);
+}
+
+function printCurrentLevel() {
+  var levelRows = currentLevelDataWithoutPadding();
+  for (var row = 0; row < levelRows.length; row++) {
+    var rowArray = levelRows[row];
+
+    var x = rowArray.map(function(x) {
+      var topTile = x.tileStack[x.tileStack.length - 1];
+      return tileString(topTile);
+    });
+
+    console.log(x.join());
+  }
+}
+
+function tileString(tile) {
+  if (!tile.hasOwnProperty('types')) {
+    return ' ';
+  }
+
+  if (_.contains(tile.types, 'chip')) {
+    return 'C';
+  } else if (_.contains(tile.types, 'block')) {
+    return 'B';
+  } else if (_.contains(tile.types, 'wall')) {
+    return 'W';
+  } else if (_.contains(tile.types, 'item')) {
+    return 'I';
+  } else if (_.contains(tile.types, 'monster')) {
+    return 'E';
+  } else if (_.contains(tile.types, 'lock')) {
+    return 'L';
+  } else if (_.contains(tile.types, 'exit')) {
+    return 'G';
+  } else {
+    return ' ';
+  }
+}
+
+function currentLevelDataWithoutPadding() {
+  var levelData = Session.get('currentLevel').levelData;
+  var levelRows = levelData.slice(4, levelData.length-4);
+  var trimmedLevelData = levelRows.map(function(row) {
+    return row.slice(4, row.length-4);
+  });
+  return trimmedLevelData;
 }
 
 /**
@@ -323,6 +364,33 @@ function centerChip() {
   map.style.top = top + "px";
 }
 
+function getNewPosition(oldPosition, direction) {
+  if (typeof direction === 'undefined') {
+    return oldPosition;
+  }
+
+  var newPosition = clone(oldPosition);
+
+  switch(direction) {
+    case DirectionEnum.UP:
+      newPosition.y--;
+      break;
+    case DirectionEnum.LEFT:
+      newPosition.x--;
+      break;
+    case DirectionEnum.DOWN:
+      newPosition.y++;
+      break;
+    case DirectionEnum.RIGHT:
+      newPosition.x++;
+      break;
+  }
+
+  return newPosition;
+}
+
+/* Checks */
+
 function tileContainsType(tile, type) {
   var tile = _.find(tile.tileStack, function(tile) {
     return 'types' in tile && _.contains(tile.types, type);
@@ -337,12 +405,21 @@ function tileContainsTile(tile, name) {
   return tile;
 }
 
+/* Getters */
+
 function getTileAtPosition(position) {
   var tile = currentLevel.levelData[position.y][position.x];
   return tile;
 }
 
-function getTileOfType(tile, type) {
+function getTileByName(tile, name) {
+  var tile = _.find(tile.tileStack, function(tile) {
+    return tile.name === name;
+  });
+  return tile;
+}
+
+function getTileByType(tile, type) {
   var tile = _.find(tile.tileStack, function(tile) {
     return 'types' in tile && _.contains(tile.types, type);
   });

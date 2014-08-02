@@ -13,7 +13,7 @@ Meteor.startup(function () {
   Levels.insert(filledIn(level1));
   Levels.insert(filledIn(level2));
 
-  var levelNumber = 2;
+  var levelNumber = LEVEL_TO_TEST;
 
   Meteor.methods({
     getLevel: function(levelPassword) {
@@ -47,7 +47,7 @@ function filledIn(level) {
 
   var emptyLevelData = [];
 
-  var padding = 4;
+  var padding = LEVEL_MAP_PADDING;
 
   var numRows = levelData.length;
   var numCols = levelData[0].length;
