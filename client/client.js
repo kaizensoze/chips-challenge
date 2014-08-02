@@ -251,9 +251,16 @@ function move(keyCode) {
 
       if (tileContainsType(newBlockTile, 'wall')) {
         return;
-      } else {
-        moveTile(blockTile, newBlockTile, 'block');
       }
+
+      var tileType = 'block';
+
+      // block + water = dirt
+      if (tileContainsType(newBlockTile, 'water')) {
+        tileType = 'dirt';
+      }
+
+      moveTile(blockTile, newBlockTile, tileType);
     } else {
       return;
     }
