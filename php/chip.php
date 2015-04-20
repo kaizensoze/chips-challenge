@@ -52,6 +52,7 @@ function show_tiles() {
 
     $col_limit = 10;
     $i = 0;
+    $tile_str = '';
     foreach ($tiles as $tile) {
         if ($i % $col_limit == 0 && $i > 0) {
             $tile_str .= '<br />';
