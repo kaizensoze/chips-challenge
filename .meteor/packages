@@ -5,4 +5,4 @@
 
 standard-app-packages
 insecure
-lodash
+erasaur:meteor-lodash
