@@ -478,10 +478,10 @@ function sync_canvas_stuff() {
 }
 
 function load_config_options() {
+	$('#color').append($("<option></option>").attr("value", "").text(""));
 	for (var color in Color) {
 		$('#color').append($("<option></option>").attr("value", color).text(color));
 	}
-	$('#color').prepend($("<option></option>").attr("value", "").text(""));
 
 	for (var orientation in Orientation) {
 		$('#orientation').append($("<option></option>").attr("value", orientation).text(orientation));
