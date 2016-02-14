@@ -16,9 +16,6 @@ td {
 }
 
 #maps {
-    float: right;
-    width: 500;
-    height: 250;
     overflow: auto;
 }
 
@@ -43,3 +40,4 @@ td {
 #viewport {
     display: none;
 }
+
