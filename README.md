@@ -1,1 +1,2 @@
-Chip's Challenge implementation using HTML5 canvas.
+This is just a prototype of the first level. Maybe some day I'll get around to
+implementing more levels...
