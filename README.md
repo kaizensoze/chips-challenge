@@ -1,2 +1,1 @@
-This is just a prototype of the first level. Maybe some day I'll get around to
-implementing more levels...
+A prototype of the first level of [Chip's Challenge](https://en.wikipedia.org/wiki/Chip's_Challenge).
