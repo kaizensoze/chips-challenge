@@ -9,18 +9,11 @@ $(document).ready(function() {
     show_tiles();
     set_editor_event_handlers();
     show_maps();
-
-    // clean up demo
-    $('.explanation').hide();
-    $('.map-info').hide();
-    $('#map-editor').hide();
-    $('#maps').hide();
 });
 
 $(window).load(function() {
     // need to call this again in window.load to wait for all images to load to draw default tiles on canvas
-    init_map();
-    load_map('1');
+    init_map(); 
 });
 
 function init_map() {
@@ -49,7 +42,7 @@ function set_editor_event_handlers() {
             var map_region_top = map_region.position().top;
             var map_region_left = map_region.position().left;
             var map_region_border_width = parseInt(map_region.css('borderLeftWidth'));
-
+ 
 			var top = ui.position.top - map_region_top + tile_width/2 - map_region_border_width;
 			var left = ui.position.left - map_region_left + tile_width/2 - map_region_border_width;
 
@@ -369,7 +362,7 @@ function draw_tile_part(position, tile_src, orientation_input, color_input) {
 
     var orientation = Orientation[orientation_input];
     var color = Color[color_input];
-
+    
     ctx.save();
 
     /* Rotate. */
@@ -717,7 +710,7 @@ function interact(direction) {
             left = chip.position.left;
             top = chip.position.top - 1;
             break;
-        case Direction.RIGHT:
+        case Direction.RIGHT: 
             left = chip.position.left + 1;
             top = chip.position.top;
             break;
@@ -842,3 +835,4 @@ function update_viewport() {
 
     viewport_ctx.drawImage(map_canvas, sx, sy, s_width, s_height, 0, 0, d_width, d_height);
 }
+
