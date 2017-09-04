@@ -3,7 +3,8 @@ const Router = require('koa-router');
 const send = require('koa-send');
 const serve = require('koa-static');
 
-const fs = require('fs');
+const path = require('path');
+const fs = require('fs-promise');
 
 const app = new Koa();
 const router = new Router();
@@ -24,10 +25,19 @@ router.get('/editor', async (ctx, next) => {
 });
 
 router.get('/levels', async (ctx, next) => {
-  ctx.body = 'here';
+  const paths = await fs.readdir('data/levels');
+  const pathMap = new Map();
+  for (var _path of paths) {
+    pathMap.set(path.basename(_path, '.json'), _path);
+  }
+  const pathMapJSON = JSON.stringify(...pathMap);
+
+  ctx.type = 'application/json';
+  ctx.body = pathMapJSON;
 });
 
 router.get('/levels/:id', async (ctx, next) => {
+  ctx.type = 'application/json';
   await send(ctx, `/data/levels/${ctx.params.id}.json`);
 });
 

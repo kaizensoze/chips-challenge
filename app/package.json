@@ -4,11 +4,13 @@
   "description": "",
   "main": "app/app.js",
   "dependencies": {
+    "fs-promise": "^2.0.3",
     "koa": "^2.3.0",
     "koa-router": "^7.2.1",
     "koa-send": "^4.1.0",
     "koa-serve": "^0.1.7",
-    "koa-static": "^4.0.1"
+    "koa-static": "^4.0.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {},
   "scripts": {
