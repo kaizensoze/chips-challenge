@@ -1,2 +1,2 @@
 # chips-challenge
-A Chip's Challenge implementation using HTML5 canvas.
+A prototype of the first level of [Chip's Challenge](https://en.wikipedia.org/wiki/Chip's_Challenge).
