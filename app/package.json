@@ -2,7 +2,7 @@
   "name": "map-editor",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "app/app.js",
   "dependencies": {
     "koa": "^2.3.0",
     "koa-router": "^7.2.1",
