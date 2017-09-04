@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>Chip's Challenge</title>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" type="text/css" href="../game/css/chip.css">
+
+  <script src="../game/js/chip_data.js"></script>
+  <script src="editor.js"></script>
+</head>
+<body>
+  <!-- Save map. -->
+  Level #: <input id="level_number" size="5" type="text" />
+  Chips: <input id="chips" size="5" type="text" />
+  Time: <input id="time" size="5" type="text" />
+  Password: <input id="password" size="5" type="text" />
+  <input type="button" id="button_save_map" value="Save" disabled /><br /></br>
+
+  <!-- Map. -->
+  <div id="map_region"><canvas id="map" width="288" height="288"></canvas></div>
+  <div id="temp_region"><canvas id="temp" width="288" height="288"></canvas></div>
+  <div id="viewport_container"><canvas id="viewport" width="288" height="288"></canvas></div><br />
+
+  <!-- Item configuration -->
+  Orientation: <select id="orientation"></select>
+  Color: <select id="color"></select><br /><br />
+
+  <!-- Load tile images. -->
+  <div id="tile_section"></div>
+</body>
+</html>
