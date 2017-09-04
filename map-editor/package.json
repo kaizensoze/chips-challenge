@@ -6,7 +6,9 @@
   "dependencies": {
     "koa": "^2.3.0",
     "koa-router": "^7.2.1",
-    "koa-views": "^6.0.2"
+    "koa-send": "^4.1.0",
+    "koa-serve": "^0.1.7",
+    "koa-static": "^4.0.1"
   },
   "devDependencies": {},
   "scripts": {
